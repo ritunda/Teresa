@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Teresa · supabase replica</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Supabase JS client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Favicon (square T logo) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cstyle%3E.accent-icon%7Bstroke:%23C72A4C;stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;%7D%3C/style%3E%3Cpath class='accent-icon' d='M70 50 L100 30 L130 70 L115 130 L85 130 L70 70 L70 50'/%3E%3Ccircle cx='100' cy='55' r='12' fill='%23C72A4C' opacity='0.9'/%3E%3C/svg%3E">
+    <style>
+        /* (same styles as before – unchanged) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f1f3f4;
+        }
+        :root {
+            --tokped-green: #03ac0e;
+            --tokped-green-light: #e6f7e6;
+            --tokped-border: #e0e0e0;
+            --tokped-text: #212121;
+            --tokped-price: #03ac0e;
+            --brand-magenta: #C72A4C;
+        }
+        .app {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            position: relative;
+            padding-bottom: 70px;
+        }
+        .header {
+            background-color: white;
+            padding: 12px 16px 8px;
+            border-bottom: 1px solid var(--tokped-border);
+            position: sticky;
+            top: 0;
+            z-index: 15;
+        }
+        .top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .logo-area svg {
+            display: block;
+            height: 45px;
+            width: auto;
+        }
+        .action-icons {
+            display: flex;
+            gap: 18px;
+            color: #424242;
+            align-items: center;
+        }
+        .action-icons i {
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+        .cart-icon {
+            position: relative;
+        }
+        #cartCount {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: #e53935;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 30px;
+            min-width: 18px;
+            text-align: center;
+        }
+        .search-bar {
+            display: flex;
+            background-color: #f1f3f4;
+            border-radius: 8px;
+            padding: 10px 16px;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-bar i {
+            font-size: 1rem;
+            color: #9e9e9e;
+        }
+        .search-bar input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .banner-carousel {
+            margin: 12px 16px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            display: flex;
+            gap: 10px;
+            scrollbar-width: none;
+            border-radius: 16px;
+        }
+        .banner-carousel::-webkit-scrollbar { display: none; }
+        .banner-item {
+            flex: 0 0 90%;
+            scroll-snap-align: start;
+            background: #e0e0e0;
+            border-radius: 16px;
+            height: 130px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .banner-item a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            padding: 16px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+        }
+        .banner-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin: 4px 0 8px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ccc;
+        }
+        .dot.active { background: var(--tokped-green); }
+        .categories {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 8px 16px 12px;
+            white-space: nowrap;
+            scrollbar-width: none;
+            border-bottom: 1px solid var(--tokped-border);
+        }
+        .categories::-webkit-scrollbar { display: none; }
+        .chip {
+            background-color: #f1f3f4;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #3c3c3c;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .chip img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .chip i {
+            color: var(--tokped-green);
+        }
+        .chip.active {
+            background-color: var(--tokped-green);
+            color: white;
+        }
+        .chip.active i { color: white; }
+        .admin-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px 0;
+        }
+        .admin-login-btn {
+            background: white;
+            border: 1px solid var(--tokped-green);
+            color: var(--tokped-green);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .admin-badge {
+            background: #fdecea;
+            color: #b85c5c;
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 16px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--tokped-border);
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .image-section {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            background-color: #f7f7f7;
+            border-bottom: 1px solid #eee;
+        }
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .product-badge {
+            display: flex;
+            align-items: center;
+            background: #fef7e6;
+            padding: 4px 8px;
+            border-bottom: 1px solid #ffecd1;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: #a86800;
+            min-height: 32px;
+        }
+        .product-badge img {
+            height: 20px;
+            width: auto;
+            max-width: 60px;
+            object-fit: contain;
+        }
+        .product-badge span {
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .product-info {
+            padding: 10px 8px 12px;
+        }
+        .product-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.4rem;
+        }
+        .price-discount {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 5px 0 4px;
+        }
+        .product-price {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--tokped-price);
+        }
+        .original-price {
+            font-size: 0.75rem;
+            color: #9e9e9e;
+            text-decoration: line-through;
+        }
+        .discount-badge {
+            background: #ff5722;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 30px;
+        }
+        .product-rating {
+            font-size: 0.7rem;
+            color: #757575;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .product-rating i { color: #f9a825; }
+        .add-to-cart-btn {
+            background: var(--tokped-green);
+            border: none;
+            color: white;
+            padding: 8px 0;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            width: 100%;
+            border: 1px solid #02940c;
+        }
+        .admin-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 8px;
+            border-top: 1px dashed #ddd;
+            padding-top: 6px;
+        }
+        .admin-controls i {
+            font-size: 1rem;
+            padding: 6px;
+            border-radius: 50%;
+            background: #f1f1f1;
+            cursor: pointer;
+        }
+        .admin-controls .fa-edit { color: #2c3e50; }
+        .admin-controls .fa-trash { color: #c0392b; }
+        .btn-add-product {
+            background: white;
+            border: 1px dashed var(--tokped-green);
+            color: var(--tokped-green);
+            padding: 14px;
+            margin: 0 16px 16px;
+            border-radius: 60px;
+            width: calc(100% - 32px);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px;
+            border-top: 1px solid var(--tokped-border);
+            z-index: 20;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #757575;
+            font-size: 0.65rem;
+        }
+        .nav-item i { font-size: 1.3rem; }
+        .nav-item.active { color: var(--tokped-green); }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 24px;
+            padding: 24px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-card h3 { margin-bottom: 18px; }
+        .modal-field { margin-bottom: 16px; }
+        .modal-field label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+        .modal-field input, .modal-field select, .modal-field textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dadada;
+            border-radius: 12px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        .modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-save { background: var(--tokped-green); color: white; }
+        .btn-cancel { background: #f1f3f4; color: #3c3c3c; }
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 12px 0;
+        }
+        .cart-item-img { width: 50px; height: 50px; background: #f1f1f1; border-radius: 8px; object-fit: cover; }
+        .cart-item-details { flex: 1; }
+        .cart-item-name { font-weight: 600; font-size: 0.9rem; }
+        .cart-item-price { color: var(--tokped-price); font-weight: 600; }
+        .cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+        .cart-item-qty button {
+            background: #f1f1f1;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .wa-checkout-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 30px;
+            font-weight: 600;
+            width: 100%;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .admin-tab {
+            background: #f1f3f4;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .admin-tab.active { background: var(--tokped-green); color: white; }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        .banner-list-item, .cat-list-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+        .cat-list-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .cat-list-item i { font-size: 1.2rem; width: 30px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="app" id="app">
+        <!-- header with custom SVG logo (unchanged) -->
+        <div class="header">
+            <div class="top-row">
+                <div class="logo-area">
+                    <svg width="100%" height="45" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            .brand-main { font-family: 'Segoe Script', 'Brush Script MT', cursive; font-size: 52px; fill: #2C2C2C; }
+                            .accent-main { stroke: #C72A4C; stroke-width: 4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+                        </style>
+                        <path class="accent-main" d="M60 50 L80 40 L100 70 L90 110 L70 110 L60 70 L60 50" />
+                        <circle cx="80" cy="60" r="8" fill="#C72A4C" opacity="0.9" />
+                        <text x="120" y="95" class="brand-main">Teresa</text>
+                    </svg>
+                </div>
+                <div class="action-icons">
+                    <i class="fas fa-bell"></i>
+                    <div class="cart-icon" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cartCount">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search in Teresa...">
+            </div>
+        </div>
+
+        <div id="bannerCarousel" class="banner-carousel"></div>
+        <div id="bannerDots" class="banner-dots"></div>
+        <div id="categoryContainer" class="categories"></div>
+
+        <div class="admin-bar">
+            <button class="admin-login-btn" id="adminLoginBtn"><i class="fas fa-lock"></i> Admin</button>
+            <span id="adminModeBadge" class="admin-badge" style="display: none;"><i class="fas fa-unlock-alt"></i> edit mode (dashboard)</span>
+        </div>
+
+        <div id="productGrid" class="product-grid"></div>
+        <button id="addProductBtn" class="btn-add-product" style="display: none;"><i class="fas fa-plus-circle"></i> Add new product</button>
+
+        <div class="bottom-nav">
+            <div class="nav-item active"><i class="fas fa-home"></i><span>Home</span></div>
+            <div class="nav-item"><i class="fas fa-tags"></i><span>Promo</span></div>
+            <div class="nav-item"><i class="fas fa-clipboard-list"></i><span>Orders</span></div>
+            <div class="nav-item"><i class="fas fa-bell"></i><span>Notif</span></div>
+            <div class="nav-item"><i class="fas fa-user"></i><span>Me</span></div>
+        </div>
+    </div>
+
+    <!-- cart modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-card">
+            <h3><i class="fas fa-shopping-cart"></i> Your cart</h3>
+            <div id="cartItemsList"></div>
+            <div id="cartTotal" class="cart-total" style="font-weight:700; margin:16px 0; text-align:right;">Total: KSh 0</div>
+            <button class="wa-checkout-btn" id="cartWhatsappBtn"><i class="fab fa-whatsapp"></i> Order via WhatsApp</button>
+            <div class="modal-actions" style="margin-top:12px;">
+                <button class="btn-cancel" id="closeCartBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- admin dashboard modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-card">
+            <h3><i class="fas fa-cog"></i> Admin dashboard</h3>
+            <div class="admin-tabs">
+                <div class="admin-tab active" data-tab="categories">Categories</div>
+                <div class="admin-tab" data-tab="banners">Banners</div>
+                <div class="admin-tab" data-tab="products">Products</div>
+            </div>
+            <div id="tab-categories" class="tab-pane active">
+                <div id="categoriesList"></div>
+                <button class="btn-add-product" id="addCategoryBtn" style="margin:10px 0;"><i class="fas fa-plus"></i> Add category</button>
+            </div>
+            <div id="tab-banners" class="tab-pane">
+                <div id="bannersList"></div>
+                <button class="btn-add-product" id="addBannerBtn" style="margin:10px 0;"><i class="fas fa-plus"></i> Add banner</button>
+            </div>
+            <div id="tab-products" class="tab-pane">
+                <p>Use "Add new product" button on main page. For bulk edit, use product edit modal.</p>
+            </div>
+            <div class="modal-actions"><button class="btn-cancel" id="closeAdminModal">Close</button></div>
+        </div>
+    </div>
+
+    <!-- edit product modal -->
+    <div id="productEditModal" class="modal">
+        <div class="modal-card">
+            <h3 id="productModalTitle">Edit product</h3>
+            <div class="modal-field"><label>Product name</label><input type="text" id="prodName"></div>
+            <div class="modal-field"><label>Price (KSh)</label><input type="number" id="prodPrice"></div>
+            <div class="modal-field"><label>Original price (for discount)</label><input type="number" id="prodOriginalPrice" placeholder="0 = no discount"></div>
+            <div class="modal-field"><label>Image URL</label><input type="text" id="prodImage"></div>
+            <div class="modal-field"><label>Category</label><select id="prodCategory"></select></div>
+            <div class="modal-field"><label>Rating</label><input type="number" step="0.1" id="prodRating" value="4.5"></div>
+            <div class="modal-field"><label>Sold count</label><input type="number" id="prodSold" value="0"></div>
+            <div class="modal-field"><label>Small badge image URL (optional)</label><input type="text" id="prodBadgeImage" placeholder="https://..."></div>
+            <div class="modal-field"><label>Badge text (e.g. RAMADAN EKSTRASERU)</label><input type="text" id="prodBadgeText" placeholder="Ramadan EKSTRASERU"></div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="productModalCancel">Cancel</button>
+                <button class="btn-save" id="productModalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- edit category modal -->
+    <div id="categoryEditModal" class="modal">
+        <div class="modal-card">
+            <h3>Edit category</h3>
+            <div class="modal-field"><label>Category name</label><input type="text" id="catNameInput"></div>
+            <div class="modal-field"><label>Icon class (Font Awesome fallback, e.g. fa-mobile-alt)</label><input type="text" id="catIconInput" placeholder="fa-mobile-alt"></div>
+            <div class="modal-field"><label>Category image URL (optional, will replace icon)</label><input type="text" id="catImageInput" placeholder="https://..."></div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="catModalCancel">Cancel</button>
+                <button class="btn-save" id="catModalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- edit banner modal -->
+    <div id="bannerEditModal" class="modal">
+        <div class="modal-card">
+            <h3>Edit banner</h3>
+            <div class="modal-field"><label>Image URL</label><input type="text" id="bannerImageInput"></div>
+            <div class="modal-field"><label>Link (optional)</label><input type="text" id="bannerLinkInput"></div>
+            <div class="modal-field"><label>Title text</label><input type="text" id="bannerTitleInput"></div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="bannerModalCancel">Cancel</button>
+                <button class="btn-save" id="bannerModalSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (async function() {
+            // Supabase setup
+            const SUPABASE_URL = 'https://tkoapgytfddbgircfurd.supabase.co';
+            const SUPABASE_ANON_KEY = 'sb_publishable_O6rav5WM-_6Tfnq4uncE6A_3z7zznvb';
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+            // Default data (used only if tables are empty)
+            const DEFAULT_CATEGORIES = [
+                { id: 'cat1', name: 'Gadgets', icon: 'fa-mobile-alt', image: '' },
+                { id: 'cat2', name: 'Beauty', icon: 'fa-magic', image: '' },
+                { id: 'cat3', name: 'Ladies', icon: 'fa-gem', image: '' },
+                { id: 'cat4', name: 'Earrings', icon: 'fa-earrings', image: '' },
+                { id: 'cat5', name: 'Nose ring', icon: 'fa-ring', image: '' }
+            ];
+            const DEFAULT_BANNERS = [
+                { id: 'ban1', image: 'https://placehold.co/600x200/03ac0e/white?text=Gadgets+Sale', link: '', title: 'Gadgets Sale' },
+                { id: 'ban2', image: 'https://placehold.co/600x200/f9a825/white?text=Beauty+Special', link: '', title: 'Beauty Special' }
+            ];
+            const DEFAULT_PRODUCTS = [
+                { id: 'p1', name: 'Smartphone Android 13', price: 25999, originalPrice: 29999, image: 'https://placehold.co/400x400/03ac0e/white?text=Smartphone', category: 'cat1', rating: 4.5, sold: 78, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU' },
+                { id: 'p2', name: 'TWS Wireless Earbuds Pro', price: 3999, originalPrice: 5999, image: 'https://placehold.co/400x400/03ac0e/white?text=Earbuds', category: 'cat1', rating: 4.3, sold: 124, badgeImage: '', badgeText: '' },
+                { id: 'p3', name: 'Matte Lipstick Set (6 pcs)', price: 1299, originalPrice: 1899, image: 'https://placehold.co/400x400/03ac0e/white?text=Lipstick', category: 'cat2', rating: 4.7, sold: 312, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU' },
+                { id: 'p4', name: 'Gold Plated Hoop Earrings', price: 3499, originalPrice: 4499, image: 'https://placehold.co/400x400/03ac0e/white?text=Earrings', category: 'cat4', rating: 4.8, sold: 56, badgeImage: '', badgeText: '' },
+                { id: 'p5', name: 'Silver Nose Ring', price: 899, originalPrice: 1199, image: 'https://placehold.co/400x400/03ac0e/white?text=Nose+Ring', category: 'cat5', rating: 4.4, sold: 103, badgeImage: '', badgeText: '' }
+            ];
+
+            // In‑memory data (synced with Supabase)
+            let categories = [];
+            let banners = [];
+            let products = [];
+
+            // Cart (localStorage only)
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            let isAdmin = false;
+            const ADMIN_PASSWORD = 'admin123';
+            let activeCategory = null;
+            let currentProductId = null, currentCategoryId = null, currentBannerId = null;
+
+            // DOM elements (same as before)
+            const categoryContainer = document.getElementById('categoryContainer');
+            const bannerCarousel = document.getElementById('bannerCarousel');
+            const bannerDots = document.getElementById('bannerDots');
+            const productGrid = document.getElementById('productGrid');
+            const adminLoginBtn = document.getElementById('adminLoginBtn');
+            const adminBadge = document.getElementById('adminModeBadge');
+            const addProductBtn = document.getElementById('addProductBtn');
+            const cartIcon = document.getElementById('cartIcon');
+            const cartCountSpan = document.getElementById('cartCount');
+            const cartModal = document.getElementById('cartModal');
+            const cartItemsList = document.getElementById('cartItemsList');
+            const cartTotalSpan = document.getElementById('cartTotal');
+            const cartWhatsappBtn = document.getElementById('cartWhatsappBtn');
+            const closeCartBtn = document.getElementById('closeCartBtn');
+            const adminModal = document.getElementById('adminModal');
+            const closeAdminModal = document.getElementById('closeAdminModal');
+            const categoriesListDiv = document.getElementById('categoriesList');
+            const bannersListDiv = document.getElementById('bannersList');
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            const addBannerBtn = document.getElementById('addBannerBtn');
+            const productEditModal = document.getElementById('productEditModal');
+            const prodName = document.getElementById('prodName');
+            const prodPrice = document.getElementById('prodPrice');
+            const prodOriginalPrice = document.getElementById('prodOriginalPrice');
+            const prodImage = document.getElementById('prodImage');
+            const prodCategory = document.getElementById('prodCategory');
+            const prodRating = document.getElementById('prodRating');
+            const prodSold = document.getElementById('prodSold');
+            const prodBadgeImage = document.getElementById('prodBadgeImage');
+            const prodBadgeText = document.getElementById('prodBadgeText');
+            const productModalCancel = document.getElementById('productModalCancel');
+            const productModalSave = document.getElementById('productModalSave');
+            const categoryEditModal = document.getElementById('categoryEditModal');
+            const catNameInput = document.getElementById('catNameInput');
+            const catIconInput = document.getElementById('catIconInput');
+            const catImageInput = document.getElementById('catImageInput');
+            const catModalCancel = document.getElementById('catModalCancel');
+            const catModalSave = document.getElementById('catModalSave');
+            const bannerEditModal = document.getElementById('bannerEditModal');
+            const bannerImageInput = document.getElementById('bannerImageInput');
+            const bannerLinkInput = document.getElementById('bannerLinkInput');
+            const bannerTitleInput = document.getElementById('bannerTitleInput');
+            const bannerModalCancel = document.getElementById('bannerModalCancel');
+            const bannerModalSave = document.getElementById('bannerModalSave');
+
+            // ---------- Supabase fetch & seed ----------
+            async function loadAllData() {
+                // Categories
+                let { data: catData, error: catErr } = await supabase.from('categories').select('*');
+                if (catErr) console.error('categories error', catErr);
+                if (!catData || catData.length === 0) {
+                    // Insert defaults
+                    const { data: inserted } = await supabase.from('categories').insert(DEFAULT_CATEGORIES).select();
+                    categories = inserted || DEFAULT_CATEGORIES;
+                } else {
+                    categories = catData;
+                }
+
+                // Banners
+                let { data: banData, error: banErr } = await supabase.from('banners').select('*');
+                if (banErr) console.error('banners error', banErr);
+                if (!banData || banData.length === 0) {
+                    const { data: inserted } = await supabase.from('banners').insert(DEFAULT_BANNERS).select();
+                    banners = inserted || DEFAULT_BANNERS;
+                } else {
+                    banners = banData;
+                }
+
+                // Products
+                let { data: prodData, error: prodErr } = await supabase.from('products').select('*');
+                if (prodErr) console.error('products error', prodErr);
+                if (!prodData || prodData.length === 0) {
+                    const { data: inserted } = await supabase.from('products').insert(DEFAULT_PRODUCTS).select();
+                    products = inserted || DEFAULT_PRODUCTS;
+                } else {
+                    products = prodData;
+                }
+
+                refreshUI();
+            }
+
+            // Save functions (now async Supabase operations)
+            async function saveCategories() {
+                // For simplicity, we just reload after each change.
+                // But we could also upsert. Here we reload.
+            }
+
+            async function saveBanners() {}
+            async function saveProducts() {}
+
+            // After any modification, call loadAllData() to refresh
+
+            // Helper: update cart count
+            function updateCartCount() {
+                const total = cart.reduce((acc, item) => acc + item.quantity, 0);
+                cartCountSpan.innerText = total;
+            }
+
+            // Render functions (mostly unchanged, but use global arrays)
+            function renderCategories() {
+                let html = '';
+                categories.forEach(cat => {
+                    const activeClass = activeCategory === cat.id ? 'active' : '';
+                    html += `<span class="chip ${activeClass}" data-cat-id="${cat.id}">`;
+                    if (cat.image) {
+                        html += `<img src="${cat.image}" alt="${cat.name}">`;
+                    } else {
+                        html += `<i class="fas ${cat.icon}"></i>`;
+                    }
+                    html += ` ${cat.name}</span>`;
+                });
+                html += `<span class="chip ${activeCategory === null ? 'active' : ''}" data-cat-id="all"><i class="fas fa-th-large"></i> All</span>`;
+                categoryContainer.innerHTML = html;
+            }
+
+            function renderBanners() {
+                let carouselHtml = '', dotsHtml = '';
+                banners.forEach((banner, idx) => {
+                    carouselHtml += `<div class="banner-item" style="background-image: url('${banner.image}');"><a href="${banner.link || '#'}" target="_blank">${banner.title}</a></div>`;
+                    dotsHtml += `<span class="dot ${idx === 0 ? 'active' : ''}" data-index="${idx}"></span>`;
+                });
+                bannerCarousel.innerHTML = carouselHtml;
+                bannerDots.innerHTML = dotsHtml;
+                bannerCarousel.addEventListener('scroll', () => {
+                    const scrollPos = bannerCarousel.scrollLeft;
+                    const itemWidth = bannerCarousel.clientWidth * 0.9 + 10;
+                    const activeIndex = Math.round(scrollPos / itemWidth);
+                    document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === activeIndex));
+                });
+            }
+
+            function renderProducts() {
+                let filtered = products;
+                if (activeCategory) filtered = products.filter(p => p.category === activeCategory);
+                let html = '';
+                filtered.forEach(prod => {
+                    const discount = prod.originalPrice && prod.originalPrice > prod.price ? Math.round((1 - prod.price/prod.originalPrice)*100) : 0;
+                    const hasBadge = prod.badgeImage || prod.badgeText;
+                    html += `<div class="product-card" data-product-id="${prod.id}">`;
+                    html += `<div class="image-section"><img src="${prod.image}" class="product-image" onerror="this.src='https://placehold.co/400x400/eeeeee/aaaaaa?text=Product'">`;
+                    if (hasBadge) {
+                        html += `<div class="product-badge">`;
+                        if (prod.badgeImage) html += `<img src="${prod.badgeImage}" alt="badge">`;
+                        if (prod.badgeText) html += `<span>${prod.badgeText}</span>`;
+                        html += `</div>`;
+                    }
+                    html += `</div>`;
+                    html += `<div class="product-info">
+                        <div class="product-name">${prod.name}</div>
+                        <div class="price-discount">`;
+                    if (discount > 0) {
+                        html += `<span class="product-price">KSh ${prod.price.toLocaleString()}</span>
+                            <span class="original-price">KSh ${prod.originalPrice.toLocaleString()}</span>
+                            <span class="discount-badge">-${discount}%</span>`;
+                    } else {
+                        html += `<span class="product-price">KSh ${prod.price.toLocaleString()}</span>`;
+                    }
+                    html += `</div><div class="product-rating"><i class="fas fa-star"></i> ${prod.rating} (${prod.sold}+ sold)</div>
+                        <button class="add-to-cart-btn" data-id="${prod.id}"><i class="fas fa-cart-plus"></i> Add to cart</button>`;
+                    if (isAdmin) {
+                        html += `<div class="admin-controls"><i class="fas fa-edit edit-btn" data-id="${prod.id}"></i><i class="fas fa-trash delete-btn" data-id="${prod.id}"></i></div>`;
+                    }
+                    html += `</div></div>`;
+                });
+                if (filtered.length === 0) html = '<div style="grid-column:span 2; text-align:center; padding:40px;">No products</div>';
+                productGrid.innerHTML = html;
+            }
+
+            function renderCartModal() {
+                if (cart.length === 0) { cartItemsList.innerHTML = '<p style="text-align:center;color:#aaa;">Cart empty</p>'; cartTotalSpan.innerText = 'Total: KSh 0'; return; }
+                let itemsHtml = '', total = 0;
+                cart.forEach(item => {
+                    const prod = products.find(p => p.id === item.id);
+                    if (!prod) return;
+                    total += prod.price * item.quantity;
+                    itemsHtml += `<div class="cart-item" data-id="${item.id}"><img src="${prod.image}" class="cart-item-img"><div class="cart-item-details"><div class="cart-item-name">${prod.name}</div><div class="cart-item-price">KSh ${prod.price}</div><div class="cart-item-qty"><button class="cart-qty-minus" data-id="${item.id}">-</button><span>${item.quantity}</span><button class="cart-qty-plus" data-id="${item.id}">+</button><i class="fas fa-trash" style="margin-left:auto; color:#c0392b; cursor:pointer;" data-id="${item.id}" data-remove></i></div></div></div>`;
+                });
+                cartItemsList.innerHTML = itemsHtml;
+                cartTotalSpan.innerText = `Total: KSh ${total}`;
+            }
+
+            function refreshUI() {
+                renderCategories();
+                renderBanners();
+                renderProducts();
+                updateCartCount();
+            }
+
+            // ---------- Event listeners (now async) ----------
+            categoryContainer.addEventListener('click', (e) => {
+                const chip = e.target.closest('.chip');
+                if (!chip) return;
+                const catId = chip.dataset.catId;
+                activeCategory = catId === 'all' ? null : catId;
+                renderCategories();
+                renderProducts();
+            });
+
+            productGrid.addEventListener('click', async (e) => {
+                const btn = e.target.closest('.add-to-cart-btn');
+                if (btn) {
+                    const prodId = btn.dataset.id;
+                    const existing = cart.find(item => item.id === prodId);
+                    if (existing) existing.quantity++; else cart.push({ id: prodId, quantity: 1 });
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCartModal();
+                    updateCartCount();
+                }
+                if (isAdmin) {
+                    if (e.target.closest('.edit-btn')) {
+                        const prodId = e.target.closest('.edit-btn').dataset.id;
+                        const prod = products.find(p => p.id === prodId);
+                        if (prod) {
+                            currentProductId = prodId;
+                            prodName.value = prod.name;
+                            prodPrice.value = prod.price;
+                            prodOriginalPrice.value = prod.originalPrice || '';
+                            prodImage.value = prod.image || '';
+                            prodRating.value = prod.rating || 4.5;
+                            prodSold.value = prod.sold || 0;
+                            prodBadgeImage.value = prod.badgeImage || '';
+                            prodBadgeText.value = prod.badgeText || '';
+                            let catOptions = '';
+                            categories.forEach(c => catOptions += `<option value="${c.id}" ${prod.category === c.id ? 'selected' : ''}>${c.name}</option>`);
+                            prodCategory.innerHTML = catOptions;
+                            productEditModal.style.display = 'flex';
+                        }
+                    }
+                    if (e.target.closest('.delete-btn')) {
+                        const prodId = e.target.closest('.delete-btn').dataset.id;
+                        if (confirm('Delete product?')) {
+                            await supabase.from('products').delete().eq('id', prodId);
+                            await loadAllData(); // refresh from server
+                        }
+                    }
+                }
+            });
+
+            cartIcon.addEventListener('click', () => { renderCartModal(); cartModal.style.display = 'flex'; });
+            closeCartBtn.addEventListener('click', () => cartModal.style.display = 'none');
+
+            cartItemsList.addEventListener('click', (e) => {
+                const itemDiv = e.target.closest('.cart-item');
+                if (!itemDiv) return;
+                const prodId = itemDiv.dataset.id;
+                const cartItem = cart.find(c => c.id === prodId);
+                if (!cartItem) return;
+                if (e.target.classList.contains('cart-qty-minus')) {
+                    if (cartItem.quantity > 1) cartItem.quantity--; else cart = cart.filter(c => c.id !== prodId);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCartModal();
+                } else if (e.target.classList.contains('cart-qty-plus')) {
+                    cartItem.quantity++;
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCartModal();
+                } else if (e.target.classList.contains('fa-trash')) {
+                    cart = cart.filter(c => c.id !== prodId);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCartModal();
+                }
+            });
+
+            cartWhatsappBtn.addEventListener('click', () => {
+                if (cart.length === 0) return alert('Cart empty');
+                let msg = 'Hello, I want to order:%0A';
+                let total = 0;
+                cart.forEach(item => {
+                    const prod = products.find(p => p.id === item.id);
+                    if (prod) { msg += `- ${prod.name} x${item.quantity} = KSh ${prod.price * item.quantity}%0A`; total += prod.price * item.quantity; }
+                });
+                msg += `Total: KSh ${total}%0AThank you.`;
+                window.open(`https://wa.me/254700000000?text=${msg}`, '_blank');
+            });
+
+            adminLoginBtn.addEventListener('click', () => {
+                if (isAdmin) { isAdmin = false; adminBadge.style.display = 'none'; addProductBtn.style.display = 'none'; refreshUI(); }
+                else {
+                    const pwd = prompt('Enter admin password:');
+                    if (pwd === ADMIN_PASSWORD) { isAdmin = true; adminBadge.style.display = 'inline-flex'; addProductBtn.style.display = 'flex'; refreshUI(); }
+                    else alert('Wrong password');
+                }
+            });
+
+            adminBadge.addEventListener('click', async () => {
+                if (!isAdmin) return;
+                await renderCategoriesList();
+                await renderBannersList();
+                adminModal.style.display = 'flex';
+            });
+            closeAdminModal.addEventListener('click', () => adminModal.style.display = 'none');
+
+            // Admin tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                });
+            });
+
+            async function renderCategoriesList() {
+                let html = '';
+                categories.forEach(cat => {
+                    html += `<div class="cat-list-item">`;
+                    if (cat.image) {
+                        html += `<img src="${cat.image}" alt="${cat.name}">`;
+                    } else {
+                        html += `<i class="fas ${cat.icon}"></i>`;
+                    }
+                    html += `<span>${cat.name}</span>
+                        <button class="edit-cat-btn" data-id="${cat.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
+                        <button class="delete-cat-btn" data-id="${cat.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
+                    </div>`;
+                });
+                categoriesListDiv.innerHTML = html;
+            }
+
+            async function renderBannersList() {
+                let html = '';
+                banners.forEach(b => {
+                    html += `<div class="banner-list-item"><img src="${b.image}" style="width:50px; height:30px; object-fit:cover;"> <span>${b.title}</span>
+                        <button class="edit-banner-btn" data-id="${b.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
+                        <button class="delete-banner-btn" data-id="${b.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
+                    </div>`;
+                });
+                bannersListDiv.innerHTML = html;
+            }
+
+            // Category edit
+            addCategoryBtn.addEventListener('click', () => {
+                currentCategoryId = null;
+                catNameInput.value = ''; catIconInput.value = 'fa-tag'; catImageInput.value = '';
+                categoryEditModal.style.display = 'flex';
+            });
+
+            categoriesListDiv.addEventListener('click', async (e) => {
+                if (e.target.closest('.edit-cat-btn')) {
+                    const id = e.target.closest('.edit-cat-btn').dataset.id;
+                    const cat = categories.find(c => c.id === id);
+                    if (cat) { currentCategoryId = id; catNameInput.value = cat.name; catIconInput.value = cat.icon; catImageInput.value = cat.image || ''; categoryEditModal.style.display = 'flex'; }
+                }
+                if (e.target.closest('.delete-cat-btn')) {
+                    const id = e.target.closest('.delete-cat-btn').dataset.id;
+                    if (confirm('Delete category?')) {
+                        await supabase.from('categories').delete().eq('id', id);
+                        await loadAllData();
+                        renderCategoriesList();
+                    }
+                }
+            });
+
+            catModalSave.addEventListener('click', async () => {
+                const name = catNameInput.value.trim(), icon = catIconInput.value.trim(), image = catImageInput.value.trim();
+                if (!name || !icon) return alert('Fill name and icon');
+                if (currentCategoryId) {
+                    await supabase.from('categories').update({ name, icon, image }).eq('id', currentCategoryId);
+                } else {
+                    const newId = 'cat_' + Date.now();
+                    await supabase.from('categories').insert([{ id: newId, name, icon, image }]);
+                }
+                await loadAllData();
+                categoryEditModal.style.display = 'none';
+                renderCategoriesList();
+            });
+            catModalCancel.addEventListener('click', () => categoryEditModal.style.display = 'none');
+
+            // Banner edit
+            addBannerBtn.addEventListener('click', () => {
+                currentBannerId = null;
+                bannerImageInput.value = ''; bannerLinkInput.value = ''; bannerTitleInput.value = '';
+                bannerEditModal.style.display = 'flex';
+            });
+
+            bannersListDiv.addEventListener('click', async (e) => {
+                if (e.target.closest('.edit-banner-btn')) {
+                    const id = e.target.closest('.edit-banner-btn').dataset.id;
+                    const ban = banners.find(b => b.id === id);
+                    if (ban) { currentBannerId = id; bannerImageInput.value = ban.image; bannerLinkInput.value = ban.link || ''; bannerTitleInput.value = ban.title || ''; bannerEditModal.style.display = 'flex'; }
+                }
+                if (e.target.closest('.delete-banner-btn')) {
+                    const id = e.target.closest('.delete-banner-btn').dataset.id;
+                    await supabase.from('banners').delete().eq('id', id);
+                    await loadAllData();
+                    renderBannersList();
+                }
+            });
+
+            bannerModalSave.addEventListener('click', async () => {
+                const img = bannerImageInput.value.trim(), link = bannerLinkInput.value.trim(), title = bannerTitleInput.value.trim();
+                if (!img) return alert('Image URL required');
+                if (currentBannerId) {
+                    await supabase.from('banners').update({ image: img, link, title }).eq('id', currentBannerId);
+                } else {
+                    const newId = 'ban_' + Date.now();
+                    await supabase.from('banners').insert([{ id: newId, image: img, link, title }]);
+                }
+                await loadAllData();
+                bannerEditModal.style.display = 'none';
+                renderBannersList();
+            });
+            bannerModalCancel.addEventListener('click', () => bannerEditModal.style.display = 'none');
+
+            // Add product button
+            addProductBtn.addEventListener('click', () => {
+                currentProductId = null;
+                prodName.value = ''; prodPrice.value = ''; prodOriginalPrice.value = ''; prodImage.value = ''; prodRating.value = '4.5'; prodSold.value = '0'; prodBadgeImage.value = ''; prodBadgeText.value = '';
+                let catOptions = '';
+                categories.forEach(c => catOptions += `<option value="${c.id}">${c.name}</option>`);
+                prodCategory.innerHTML = catOptions;
+                productEditModal.style.display = 'flex';
+            });
+
+            productModalSave.addEventListener('click', async () => {
+                const name = prodName.value.trim(), price = parseFloat(prodPrice.value), originalPrice = parseFloat(prodOriginalPrice.value) || 0;
+                if (!name || isNaN(price)) return alert('Name and price required');
+                const productData = {
+                    name,
+                    price,
+                    originalPrice: originalPrice || undefined,
+                    image: prodImage.value.trim() || 'https://placehold.co/400x400/03ac0e/white?text=Product',
+                    category: prodCategory.value,
+                    rating: parseFloat(prodRating.value) || 4.5,
+                    sold: parseInt(prodSold.value) || 0,
+                    badgeImage: prodBadgeImage.value.trim() || '',
+                    badgeText: prodBadgeText.value.trim() || ''
+                };
+                if (currentProductId) {
+                    await supabase.from('products').update(productData).eq('id', currentProductId);
+                } else {
+                    const newId = 'prod_' + Date.now();
+                    await supabase.from('products').insert([{ id: newId, ...productData }]);
+                }
+                await loadAllData();
+                productEditModal.style.display = 'none';
+            });
+            productModalCancel.addEventListener('click', () => productEditModal.style.display = 'none');
+
+            // Initial load from Supabase
+            await loadAllData();
+            updateCartCount();
+        })();
+    </script>
+</body>
+  </html>
