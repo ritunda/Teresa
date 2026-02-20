@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Teresa · complete marketplace + referrals</title>
+    <title>Teresa · complete marketplace</title>
     <!-- SEO meta tags -->
     <meta name="description" content="Teresa – your everyday style and gadgets. Shop the latest trends in beauty, electronics, and accessories.">
     <meta name="keywords" content="Teresa, online shop, gadgets, beauty, earrings, nose ring, Kenya">
@@ -27,7 +27,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cstyle%3E.accent-icon%7Bstroke:%23C72A4C;stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;%7D%3C/style%3E%3Cpath class='accent-icon' d='M70 50 L100 30 L130 70 L115 130 L85 130 L70 70 L70 50'/%3E%3Ccircle cx='100' cy='55' r='12' fill='%23C72A4C' opacity='0.9'/%3E%3C/svg%3E">
     <style>
-        /* (same styles as before, plus a few new ones) */
+        /* ========== GLOBAL STYLES ========== */
         * {
             margin: 0;
             padding: 0;
@@ -54,6 +54,7 @@
             position: relative;
             padding-bottom: 70px;
         }
+        /* ========== HEADER ========== */
         .header {
             background-color: white;
             padding: 12px 16px 8px;
@@ -118,6 +119,7 @@
             outline: none;
             font-size: 0.95rem;
         }
+        /* ========== BANNER CAROUSEL ========== */
         .banner-carousel {
             margin: 12px 16px;
             overflow-x: auto;
@@ -164,6 +166,7 @@
             background: #ccc;
         }
         .dot.active { background: var(--tokped-green); }
+        /* ========== CATEGORIES ========== */
         .categories {
             display: flex;
             gap: 8px;
@@ -201,6 +204,7 @@
             color: white;
         }
         .chip.active i { color: white; }
+        /* ========== ADMIN BAR ========== */
         .admin-bar {
             display: flex;
             align-items: center;
@@ -218,6 +222,7 @@
             gap: 5px;
             cursor: pointer;
         }
+        /* ========== PRODUCT GRID ========== */
         .product-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -397,6 +402,7 @@
             justify-content: center;
             gap: 8px;
         }
+        /* ========== BOTTOM NAVIGATION ========== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -421,6 +427,7 @@
         }
         .nav-item i { font-size: 1.3rem; }
         .nav-item.active { color: var(--tokped-green); }
+        /* ========== MODALS ========== */
         .modal {
             display: none;
             position: fixed;
@@ -468,6 +475,7 @@
         }
         .btn-save { background: var(--tokped-green); color: white; }
         .btn-cancel { background: #f1f3f4; color: #3c3c3c; }
+        /* ========== CART ITEMS ========== */
         .cart-item {
             display: flex;
             gap: 12px;
@@ -504,6 +512,7 @@
             gap: 8px;
             cursor: pointer;
         }
+        /* ========== ADMIN TABS ========== */
         .admin-tabs {
             display: flex;
             gap: 8px;
@@ -520,7 +529,8 @@
         .admin-tab.active { background: var(--tokped-green); color: white; }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
-        .banner-list-item, .cat-list-item, .prod-list-item {
+        /* ========== LIST ITEMS (categories, banners, products, users, reviews) ========== */
+        .banner-list-item, .cat-list-item, .prod-list-item, .user-list-item, .review-list-item {
             display: flex;
             gap: 10px;
             align-items: center;
@@ -537,8 +547,9 @@
         }
         .cat-list-item i { font-size: 1.2rem; width: 30px; text-align: center; }
         .prod-list-item span { flex: 1; }
+        .user-list-item, .review-list-item { flex-direction: column; align-items: flex-start; }
 
-        /* Notification item style */
+        /* ========== NOTIFICATIONS ========== */
         .notif-item {
             display: flex;
             align-items: center;
@@ -562,7 +573,7 @@
             color: #999;
         }
 
-        /* Image gallery in product detail modal */
+        /* ========== IMAGE GALLERY ========== */
         .image-gallery {
             display: flex;
             gap: 8px;
@@ -586,7 +597,7 @@
             margin-bottom: 10px;
         }
 
-        /* Order status badges */
+        /* ========== ORDER STATUS BADGES ========== */
         .status-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -599,7 +610,7 @@
         .status-shipped { background: #b3e5fc; color: #01579b; }
         .status-delivered { background: #c8e6c9; color: #1b5e20; }
 
-        /* Analytics cards */
+        /* ========== ANALYTICS CARDS ========== */
         .analytics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -621,11 +632,31 @@
             font-size: 0.8rem;
             color: #666;
         }
+
+        /* ========== ORDER DETAILS ========== */
+        .order-detail-item {
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        /* ========== STAR RATING ========== */
+        .star-rating {
+            display: flex;
+            gap: 4px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .star-rating .fa-star {
+            color: #ddd;
+        }
+        .star-rating .fa-star.selected {
+            color: #f9a825;
+        }
     </style>
 </head>
 <body>
     <div class="app" id="app">
-        <!-- header -->
+        <!-- HEADER -->
         <div class="header">
             <div class="top-row">
                 <div class="logo-area">
@@ -653,19 +684,25 @@
             </div>
         </div>
 
+        <!-- BANNER CAROUSEL -->
         <div id="bannerCarousel" class="banner-carousel"></div>
         <div id="bannerDots" class="banner-dots"></div>
+
+        <!-- CATEGORIES -->
         <div id="categoryContainer" class="categories"></div>
 
-        <!-- admin badge (visible when admin) -->
+        <!-- ADMIN BAR -->
         <div class="admin-bar">
             <span id="adminModeBadge" class="admin-badge" style="display: none;"><i class="fas fa-unlock-alt"></i> edit mode (dashboard)</span>
         </div>
 
+        <!-- PRODUCT GRID -->
         <div id="productGrid" class="product-grid"></div>
+
+        <!-- ADD PRODUCT BUTTON (admin only) -->
         <button id="addProductBtn" class="btn-add-product" style="display: none;"><i class="fas fa-plus-circle"></i> Add new product</button>
 
-        <!-- bottom nav -->
+        <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
             <div class="nav-item" data-nav="home"><i class="fas fa-home"></i><span>Home</span></div>
             <div class="nav-item" data-nav="promo"><i class="fas fa-tags"></i><span>Promo</span></div>
@@ -675,7 +712,7 @@
         </div>
     </div>
 
-    <!-- cart modal -->
+    <!-- CART MODAL -->
     <div id="cartModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-shopping-cart"></i> Your cart</h3>
@@ -689,7 +726,34 @@
         </div>
     </div>
 
-    <!-- user authentication modal (login / signup) -->
+    <!-- CHECKOUT DETAILS MODAL -->
+    <div id="checkoutDetailsModal" class="modal">
+        <div class="modal-card">
+            <h3><i class="fas fa-truck"></i> Shipping details</h3>
+            <div class="modal-field">
+                <label>Full name</label>
+                <input type="text" id="checkoutName" placeholder="John Doe">
+            </div>
+            <div class="modal-field">
+                <label>Phone number</label>
+                <input type="tel" id="checkoutPhone" placeholder="0712345678">
+            </div>
+            <div class="modal-field">
+                <label>Shipping address</label>
+                <textarea id="checkoutAddress" rows="2" placeholder="Street, city, building..."></textarea>
+            </div>
+            <div class="modal-field">
+                <label>Order notes (optional)</label>
+                <textarea id="checkoutNotes" rows="2" placeholder="Any special instructions"></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="checkoutCancel">Cancel</button>
+                <button class="btn-save" id="checkoutConfirm">Confirm order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH MODAL (login / signup) -->
     <div id="authModal" class="modal">
         <div class="modal-card">
             <h3 id="authModalTitle">Login</h3>
@@ -711,7 +775,7 @@
         </div>
     </div>
 
-    <!-- user profile / orders / referral dashboard modal -->
+    <!-- PROFILE MODAL (orders & referral dashboard) -->
     <div id="profileModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-user"></i> My Account</h3>
@@ -720,7 +784,6 @@
             <h4>My Orders</h4>
             <div id="userOrdersList"></div>
 
-            <!-- Referral Dashboard -->
             <h4 style="margin-top:20px;">Referral Dashboard</h4>
             <div>Total Clicks: <span id="totalClicks">0</span></div>
             <div>Total Conversions: <span id="totalConversions">0</span></div>
@@ -731,7 +794,33 @@
         </div>
     </div>
 
-    <!-- admin dashboard modal (now with Analytics tab) -->
+    <!-- REVIEW MODAL -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-card">
+            <h3><i class="fas fa-star"></i> Write a review</h3>
+            <div class="modal-field">
+                <label>Rating</label>
+                <div class="star-rating" id="starRating">
+                    <i class="fas fa-star" data-value="1"></i>
+                    <i class="fas fa-star" data-value="2"></i>
+                    <i class="fas fa-star" data-value="3"></i>
+                    <i class="fas fa-star" data-value="4"></i>
+                    <i class="fas fa-star" data-value="5"></i>
+                </div>
+                <input type="hidden" id="reviewRating" value="0">
+            </div>
+            <div class="modal-field">
+                <label>Comment</label>
+                <textarea id="reviewComment" rows="3" placeholder="Share your experience..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="reviewCancel">Cancel</button>
+                <button class="btn-save" id="reviewSubmit">Submit review</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD MODAL -->
     <div id="adminModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-cog"></i> Admin dashboard</h3>
@@ -740,24 +829,46 @@
                 <div class="admin-tab" data-tab="banners">Banners</div>
                 <div class="admin-tab" data-tab="products">Products</div>
                 <div class="admin-tab" data-tab="orders">Orders</div>
+                <div class="admin-tab" data-tab="users">Users</div>
+                <div class="admin-tab" data-tab="reviews">Reviews</div>
                 <div class="admin-tab" data-tab="analytics">Analytics</div>
                 <div class="admin-tab" data-tab="settings">Settings</div>
             </div>
+
+            <!-- Categories tab -->
             <div id="tab-categories" class="tab-pane active">
                 <div id="categoriesList"></div>
                 <button class="btn-add-product" id="addCategoryBtn" style="margin:10px 0;"><i class="fas fa-plus"></i> Add category</button>
             </div>
+
+            <!-- Banners tab -->
             <div id="tab-banners" class="tab-pane">
                 <div id="bannersList"></div>
                 <button class="btn-add-product" id="addBannerBtn" style="margin:10px 0;"><i class="fas fa-plus"></i> Add banner</button>
             </div>
+
+            <!-- Products tab -->
             <div id="tab-products" class="tab-pane">
                 <div id="productsList"></div>
                 <p style="text-align:center; margin-top:10px;">Use "Add new product" on main page</p>
             </div>
+
+            <!-- Orders tab -->
             <div id="tab-orders" class="tab-pane">
                 <div id="adminOrdersList"></div>
             </div>
+
+            <!-- Users tab -->
+            <div id="tab-users" class="tab-pane">
+                <div id="usersList"></div>
+            </div>
+
+            <!-- Reviews tab -->
+            <div id="tab-reviews" class="tab-pane">
+                <div id="reviewsList"></div>
+            </div>
+
+            <!-- Analytics tab -->
             <div id="tab-analytics" class="tab-pane">
                 <div class="analytics-grid">
                     <div class="analytics-card">
@@ -782,6 +893,8 @@
                     <div id="statusBreakdown"></div>
                 </div>
             </div>
+
+            <!-- Settings tab -->
             <div id="tab-settings" class="tab-pane">
                 <div class="modal-field">
                     <label>WhatsApp number (with country code, no +)</label>
@@ -789,11 +902,12 @@
                 </div>
                 <button class="btn-save" id="saveWABtn" style="width:100%;">Save WhatsApp number</button>
             </div>
+
             <div class="modal-actions"><button class="btn-cancel" id="closeAdminModal">Close</button></div>
         </div>
     </div>
 
-    <!-- product detail modal (with gallery, description, affiliate link, and referral link) -->
+    <!-- PRODUCT DETAIL MODAL (with gallery, affiliate link, referral link) -->
     <div id="productDetailModal" class="modal">
         <div class="modal-card">
             <h3 id="detailProductName"></h3>
@@ -812,7 +926,7 @@
         </div>
     </div>
 
-    <!-- edit product modal (enhanced with commission) -->
+    <!-- EDIT PRODUCT MODAL (with commission) -->
     <div id="productEditModal" class="modal">
         <div class="modal-card">
             <h3 id="productModalTitle">Edit product</h3>
@@ -837,7 +951,7 @@
         </div>
     </div>
 
-    <!-- edit category modal (unchanged) -->
+    <!-- EDIT CATEGORY MODAL -->
     <div id="categoryEditModal" class="modal">
         <div class="modal-card">
             <h3>Edit category</h3>
@@ -851,7 +965,7 @@
         </div>
     </div>
 
-    <!-- edit banner modal (unchanged) -->
+    <!-- EDIT BANNER MODAL -->
     <div id="bannerEditModal" class="modal">
         <div class="modal-card">
             <h3>Edit banner</h3>
@@ -865,7 +979,7 @@
         </div>
     </div>
 
-    <!-- notification modal (unchanged) -->
+    <!-- NOTIFICATION MODAL -->
     <div id="notifModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-bell"></i> Notifications</h3>
@@ -876,19 +990,17 @@
 
     <script>
         (async function() {
-            // Supabase setup
-            const SUPABASE_URL = 'https://tkoapgytfddbgircfurd.supabase.co';
-            const SUPABASE_ANON_KEY = 'sb_publishable_O6rav5WM-_6Tfnq4uncE6A_3z7zznvb';
+            // ========== SUPABASE SETUP ==========
+            const SUPABASE_URL = 'https://ykqhoacpopuiaupwoied.supabase.co';
+            const SUPABASE_ANON_KEY = 'sb_publishable_O_d-72K0nB0pyLF4y5YZWw_KSWWFB_f';
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            // ---------- Referral tracking ----------
-            // Check for referral parameter in URL
+            // ========== REFERRAL TRACKING ==========
             const urlParams = new URLSearchParams(window.location.search);
             const ref = urlParams.get('ref');
             const productParam = urlParams.get('product');
             if (ref && ref.length > 0) {
                 localStorage.setItem('referrer', ref);
-                // Optionally track the click
                 if (productParam) {
                     supabase.from('referral_clicks').insert([
                         { referrer_id: ref, product_id: productParam }
@@ -896,7 +1008,7 @@
                 }
             }
 
-            // Default data with commission_percent
+            // ========== DEFAULT DATA ==========
             const DEFAULT_CATEGORIES = [
                 { id: 'cat1', name: 'Gadgets', icon: 'fa-mobile-alt', image: '' },
                 { id: 'cat2', name: 'Beauty', icon: 'fa-magic', image: '' },
@@ -917,31 +1029,26 @@
             ];
             const DEFAULT_SETTINGS = { wa_number: '254700000000' };
 
-            // In‑memory data
+            // ========== STATE ==========
             let categories = [];
             let banners = [];
             let products = [];
             let settings = { ...DEFAULT_SETTINGS };
             let orders = [];
+            let reviews = [];
             let currentUser = null;
-
-            // Cart (localStorage)
+            let isAdmin = false;
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-            // Admin state
-            let isAdmin = false;
-
-            const ADMIN_PASSWORD = 'admin123'; // kept for legacy
-
-            // UI state
             let activeCategory = null;
             let activePromo = false;
             let searchTerm = '';
             let searchTimeout = null;
 
             let currentProductId = null, currentCategoryId = null, currentBannerId = null;
+            let currentOrderIdForReview = null;
 
-            // DOM elements
+            // ========== DOM ELEMENTS ==========
             const categoryContainer = document.getElementById('categoryContainer');
             const bannerCarousel = document.getElementById('bannerCarousel');
             const bannerDots = document.getElementById('bannerDots');
@@ -956,12 +1063,21 @@
             const cartWhatsappBtn = document.getElementById('cartWhatsappBtn');
             const checkoutBtn = document.getElementById('checkoutBtn');
             const closeCartBtn = document.getElementById('closeCartBtn');
+            const checkoutDetailsModal = document.getElementById('checkoutDetailsModal');
+            const checkoutName = document.getElementById('checkoutName');
+            const checkoutPhone = document.getElementById('checkoutPhone');
+            const checkoutAddress = document.getElementById('checkoutAddress');
+            const checkoutNotes = document.getElementById('checkoutNotes');
+            const checkoutCancel = document.getElementById('checkoutCancel');
+            const checkoutConfirm = document.getElementById('checkoutConfirm');
             const adminModal = document.getElementById('adminModal');
             const closeAdminModal = document.getElementById('closeAdminModal');
             const categoriesListDiv = document.getElementById('categoriesList');
             const bannersListDiv = document.getElementById('bannersList');
             const productsListDiv = document.getElementById('productsList');
             const adminOrdersListDiv = document.getElementById('adminOrdersList');
+            const usersListDiv = document.getElementById('usersList');
+            const reviewsListDiv = document.getElementById('reviewsList');
             const addCategoryBtn = document.getElementById('addCategoryBtn');
             const addBannerBtn = document.getElementById('addBannerBtn');
             const productEditModal = document.getElementById('productEditModal');
@@ -1000,7 +1116,6 @@
             const waNumberInput = document.getElementById('waNumberInput');
             const saveWABtn = document.getElementById('saveWABtn');
 
-            // Auth modals
             const authModal = document.getElementById('authModal');
             const authEmail = document.getElementById('authEmail');
             const authPassword = document.getElementById('authPassword');
@@ -1009,20 +1124,17 @@
             const showSignup = document.getElementById('showSignup');
             const authModalTitle = document.getElementById('authModalTitle');
 
-            // Profile modal
             const profileModal = document.getElementById('profileModal');
             const profileEmail = document.getElementById('profileEmail');
             const logoutBtn = document.getElementById('logoutBtn');
             const userOrdersList = document.getElementById('userOrdersList');
             const closeProfileBtn = document.getElementById('closeProfileBtn');
 
-            // Referral dashboard elements
             const totalClicksSpan = document.getElementById('totalClicks');
             const totalConversionsSpan = document.getElementById('totalConversions');
             const pendingEarningsSpan = document.getElementById('pendingEarnings');
             const paidEarningsSpan = document.getElementById('paidEarnings');
 
-            // Product detail modal
             const detailModal = document.getElementById('productDetailModal');
             const detailProductName = document.getElementById('detailProductName');
             const detailMainImage = document.getElementById('detailMainImage');
@@ -1036,50 +1148,60 @@
             const copyReferralLinkBtn = document.getElementById('copyReferralLink');
             const closeDetailBtn = document.getElementById('closeDetailBtn');
 
-            // Navigation items
+            const reviewModal = document.getElementById('reviewModal');
+            const starRatingDiv = document.getElementById('starRating');
+            const reviewRatingInput = document.getElementById('reviewRating');
+            const reviewComment = document.getElementById('reviewComment');
+            const reviewCancel = document.getElementById('reviewCancel');
+            const reviewSubmit = document.getElementById('reviewSubmit');
+
             const navItems = document.querySelectorAll('.nav-item');
 
-            // Sample notifications
-            const sampleNotifications = [
-                { id: 1, title: 'Your order #123 has been shipped', time: '2 hours ago', icon: 'fa-truck' },
-                { id: 2, title: 'New promo: 20% off on Beauty', time: '5 hours ago', icon: 'fa-tags' },
-                { id: 3, title: 'Rate your recent purchase', time: '1 day ago', icon: 'fa-star' },
-                { id: 4, title: 'System maintenance tonight at 2 AM', time: '2 days ago', icon: 'fa-wrench' }
-            ];
+            // ========== STAR RATING HANDLER ==========
+            const stars = starRatingDiv.querySelectorAll('.fa-star');
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const value = parseInt(star.dataset.value);
+                    reviewRatingInput.value = value;
+                    stars.forEach((s, i) => {
+                        if (i < value) s.classList.add('selected');
+                        else s.classList.remove('selected');
+                    });
+                });
+            });
 
-            // ---------- Supabase fetch & seed ----------
+            // ========== SUPABASE FETCH & SEED ==========
             async function loadAllData() {
-                // Categories
                 let { data: catData, error: catErr } = await supabase.from('categories').select('*');
                 if (catErr) console.error('categories error', catErr);
                 if (!catData || catData.length === 0) {
-                    const { data: inserted } = await supabase.from('categories').insert(DEFAULT_CATEGORIES).select();
+                    const { data: inserted, error: insertErr } = await supabase.from('categories').insert(DEFAULT_CATEGORIES).select();
+                    if (insertErr) console.error('insert categories error', insertErr);
                     categories = inserted || DEFAULT_CATEGORIES;
                 } else {
                     categories = catData;
                 }
 
-                // Banners
                 let { data: banData, error: banErr } = await supabase.from('banners').select('*');
                 if (banErr) console.error('banners error', banErr);
                 if (!banData || banData.length === 0) {
-                    const { data: inserted } = await supabase.from('banners').insert(DEFAULT_BANNERS).select();
+                    const { data: inserted, error: insertErr } = await supabase.from('banners').insert(DEFAULT_BANNERS).select();
+                    if (insertErr) console.error('insert banners error', insertErr);
                     banners = inserted || DEFAULT_BANNERS;
                 } else {
                     banners = banData;
                 }
 
-                // Products
                 let { data: prodData, error: prodErr } = await supabase.from('products').select('*');
                 if (prodErr) console.error('products error', prodErr);
                 if (!prodData || prodData.length === 0) {
-                    const { data: inserted } = await supabase.from('products').insert(DEFAULT_PRODUCTS).select();
+                    const { data: inserted, error: insertErr } = await supabase.from('products').insert(DEFAULT_PRODUCTS).select();
+                    if (insertErr) console.error('insert products error', insertErr);
                     products = inserted || DEFAULT_PRODUCTS;
                 } else {
                     products = prodData;
                 }
 
-                // Settings
                 let { data: settingsData, error: settingsErr } = await supabase.from('settings').select('*').eq('key', 'wa_number');
                 if (settingsErr) console.error('settings error', settingsErr);
                 if (!settingsData || settingsData.length === 0) {
@@ -1090,27 +1212,26 @@
                 }
                 waNumberInput.value = settings.wa_number;
 
-                // Orders
                 let { data: ordersData, error: ordersErr } = await supabase.from('orders').select('*');
                 if (ordersErr) console.error('orders error', ordersErr);
                 if (ordersData) {
                     orders = ordersData;
                 }
 
-                // Clean cart (remove deleted products)
+                let { data: reviewsData, error: reviewsErr } = await supabase.from('reviews').select('*');
+                if (reviewsErr) console.error('reviews error', reviewsErr);
+                if (reviewsData) {
+                    reviews = reviewsData;
+                }
+
                 cart = cart.filter(item => products.some(p => p.id === item.id));
                 localStorage.setItem('cart', JSON.stringify(cart));
 
-                // Check current user and admin status
                 const { data: { user } } = await supabase.auth.getUser();
                 currentUser = user;
-                if (user) {
-                    // Admin is user with email admin@teresa.com
-                    if (user.email === 'admin@teresa.com') {
-                        isAdmin = true;
-                    } else {
-                        isAdmin = false;
-                    }
+                // Admin check: you can change this email to your admin email
+                if (user && user.email === 'admin@teresa.com') {
+                    isAdmin = true;
                 } else {
                     isAdmin = false;
                 }
@@ -1118,7 +1239,7 @@
                 refreshUI();
             }
 
-            // ---------- Real‑time subscriptions ----------
+            // ========== REAL‑TIME SUBSCRIPTIONS ==========
             function setupSubscriptions() {
                 supabase.channel('categories')
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'categories' }, () => loadAllData())
@@ -1135,15 +1256,17 @@
                 supabase.channel('orders')
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => loadAllData())
                     .subscribe();
+                supabase.channel('reviews')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => loadAllData())
+                    .subscribe();
             }
 
-            // Helper: update cart count
+            // ========== HELPER FUNCTIONS ==========
             function updateCartCount() {
                 const total = cart.reduce((acc, item) => acc + item.quantity, 0);
                 cartCountSpan.innerText = total;
             }
 
-            // Filter products
             function getFilteredProducts() {
                 let filtered = products;
                 if (activeCategory) filtered = filtered.filter(p => p.category === activeCategory);
@@ -1155,7 +1278,7 @@
                 return filtered;
             }
 
-            // Render functions
+            // ========== RENDER FUNCTIONS ==========
             function renderCategories() {
                 let html = '';
                 categories.forEach(cat => {
@@ -1180,7 +1303,6 @@
                 });
                 bannerCarousel.innerHTML = carouselHtml;
                 bannerDots.innerHTML = dotsHtml;
-                // Remove old scroll listener and add new one
                 bannerCarousel.removeEventListener('scroll', bannerScrollHandler);
                 bannerCarousel.addEventListener('scroll', bannerScrollHandler);
             }
@@ -1241,18 +1363,9 @@
                 cartTotalSpan.innerText = `Total: KSh ${total}`;
             }
 
+            // ========== NOTIFICATIONS – REMOVED DUMMY DATA ==========
             function renderNotifications() {
-                let html = '';
-                sampleNotifications.forEach(n => {
-                    html += `<div class="notif-item">
-                        <i class="fas ${n.icon}"></i>
-                        <div>
-                            <div class="notif-title">${n.title}</div>
-                            <div class="notif-time">${n.time}</div>
-                        </div>
-                    </div>`;
-                });
-                notificationsList.innerHTML = html;
+                notificationsList.innerHTML = '<p style="text-align:center; color:#aaa;">No notifications</p>';
             }
 
             function refreshUI() {
@@ -1260,7 +1373,6 @@
                 renderBanners();
                 renderProducts();
                 updateCartCount();
-                // Update admin UI
                 if (isAdmin) {
                     adminBadge.style.display = 'inline-flex';
                     addProductBtn.style.display = 'flex';
@@ -1268,7 +1380,6 @@
                     adminBadge.style.display = 'none';
                     addProductBtn.style.display = 'none';
                 }
-                // Update active nav (simplified)
                 navItems.forEach(item => item.classList.remove('active'));
                 if (activePromo) {
                     document.querySelector('[data-nav="promo"]').classList.add('active');
@@ -1277,7 +1388,7 @@
                 }
             }
 
-            // ---------- Auth functions ----------
+            // ========== AUTH FUNCTIONS ==========
             async function signUp(email, password) {
                 const { data, error } = await supabase.auth.signUp({ email, password });
                 if (error) {
@@ -1312,8 +1423,8 @@
                 profileModal.style.display = 'none';
             }
 
-            // ---------- Order functions ----------
-            async function placeOrder() {
+            // ========== ORDER FUNCTIONS ==========
+            async function placeOrderWithDetails() {
                 if (!currentUser) {
                     alert('Please login to place an order');
                     openAuthModal();
@@ -1323,8 +1434,18 @@
                     alert('Cart is empty');
                     return;
                 }
+                checkoutDetailsModal.style.display = 'flex';
+            }
 
-                // Calculate total
+            checkoutConfirm.addEventListener('click', async () => {
+                const name = checkoutName.value.trim();
+                const phone = checkoutPhone.value.trim();
+                const address = checkoutAddress.value.trim();
+                if (!name || !phone || !address) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
                 let total = 0;
                 const orderItems = cart.map(item => {
                     const prod = products.find(p => p.id === item.id);
@@ -1336,9 +1457,13 @@
                     };
                 });
 
-                // Create order record
                 const newOrder = {
                     user_id: currentUser.id,
+                    user_email: currentUser.email,
+                    shipping_name: name,
+                    shipping_phone: phone,
+                    shipping_address: address,
+                    notes: checkoutNotes.value.trim(),
                     status: 'ordered',
                     total_amount: total,
                     created_at: new Date().toISOString(),
@@ -1352,10 +1477,8 @@
                 } else {
                     alert('Order placed successfully!');
 
-                    // ---------- Referral commission handling ----------
                     const referrerId = localStorage.getItem('referrer');
                     if (referrerId) {
-                        // Insert commissions for each product in the order
                         for (let item of orderItems) {
                             const prod = products.find(p => p.id === item.product_id);
                             if (prod && prod.commission_percent) {
@@ -1369,7 +1492,6 @@
                                 }]);
                             }
                         }
-                        // Optionally clear the referrer after use
                         localStorage.removeItem('referrer');
                     }
 
@@ -1377,11 +1499,66 @@
                     localStorage.setItem('cart', JSON.stringify(cart));
                     renderCartModal();
                     updateCartCount();
+                    checkoutDetailsModal.style.display = 'none';
                     cartModal.style.display = 'none';
                 }
+            });
+
+            checkoutCancel.addEventListener('click', () => {
+                checkoutDetailsModal.style.display = 'none';
+            });
+
+            // ========== REVIEW FUNCTIONS ==========
+            async function openReviewModal(orderId) {
+                currentOrderIdForReview = orderId;
+                reviewRatingInput.value = 0;
+                stars.forEach(s => s.classList.remove('selected'));
+                reviewComment.value = '';
+                reviewModal.style.display = 'flex';
             }
 
-            // Render user orders in profile modal
+            reviewSubmit.addEventListener('click', async () => {
+                if (!currentUser) {
+                    alert('You must be logged in');
+                    return;
+                }
+                const rating = parseInt(reviewRatingInput.value);
+                if (rating < 1 || rating > 5) {
+                    alert('Please select a rating');
+                    return;
+                }
+                const comment = reviewComment.value.trim();
+                if (!comment) {
+                    alert('Please enter a comment');
+                    return;
+                }
+
+                const order = orders.find(o => o.id === currentOrderIdForReview);
+                if (!order) return;
+                const items = JSON.parse(order.items || '[]');
+                const productId = items.length > 0 ? items[0].product_id : null;
+
+                const { error } = await supabase.from('reviews').insert([{
+                    user_id: currentUser.id,
+                    order_id: currentOrderIdForReview,
+                    product_id: productId,
+                    rating,
+                    comment
+                }]);
+
+                if (error) {
+                    alert('Error submitting review: ' + error.message);
+                } else {
+                    alert('Review submitted! Thank you.');
+                    reviewModal.style.display = 'none';
+                }
+            });
+
+            reviewCancel.addEventListener('click', () => {
+                reviewModal.style.display = 'none';
+            });
+
+            // Render user orders with review buttons
             async function renderUserOrders() {
                 if (!currentUser) return;
                 const { data: userOrders, error } = await supabase
@@ -1390,23 +1567,43 @@
                     .eq('user_id', currentUser.id)
                     .order('created_at', { ascending: false });
                 if (error) console.error(error);
+
+                const { data: userReviews } = await supabase
+                    .from('reviews')
+                    .select('order_id')
+                    .eq('user_id', currentUser.id);
+                const reviewedOrderIds = new Set((userReviews || []).map(r => r.order_id));
+
                 let html = '';
                 if (userOrders && userOrders.length > 0) {
                     userOrders.forEach(order => {
                         const statusClass = `status-${order.status.replace('_', '-')}`;
+                        const canReview = order.status === 'delivered' && !reviewedOrderIds.has(order.id);
                         html += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
                             <div><strong>Order #${order.id.slice(-6)}</strong> <span class="status-badge ${statusClass}">${order.status}</span></div>
                             <div>Total: KSh ${order.total_amount}</div>
-                            <div>${new Date(order.created_at).toLocaleDateString()}</div>
-                        </div>`;
+                            <div>${new Date(order.created_at).toLocaleDateString()}</div>`;
+                        if (canReview) {
+                            html += `<button class="btn-save review-order-btn" data-order-id="${order.id}" style="margin-top:8px; padding:4px 12px; font-size:0.8rem;">Write a Review</button>`;
+                        } else if (reviewedOrderIds.has(order.id)) {
+                            html += `<div style="margin-top:8px; font-style:italic; color:#888;">✓ Review submitted</div>`;
+                        }
+                        html += `</div>`;
                     });
                 } else {
                     html = '<p>No orders yet.</p>';
                 }
                 userOrdersList.innerHTML = html;
+
+                document.querySelectorAll('.review-order-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const orderId = e.target.dataset.orderId;
+                        openReviewModal(orderId);
+                    });
+                });
             }
 
-            // Render admin orders list
+            // ========== ADMIN RENDERING ==========
             async function renderAdminOrders() {
                 const { data: allOrders, error } = await supabase
                     .from('orders')
@@ -1418,8 +1615,12 @@
                     allOrders.forEach(order => {
                         const statusClass = `status-${order.status.replace('_', '-')}`;
                         html += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
-                            <div><strong>Order #${order.id.slice(-6)}</strong> (User: ${order.user_id.slice(-6)})</div>
-                            <div>Total: KSh ${order.total_amount}</div>
+                            <div><strong>Order #${order.id.slice(-6)}</strong></div>
+                            <div class="order-detail-item">Customer: ${order.user_email || 'N/A'} (${order.shipping_name})</div>
+                            <div class="order-detail-item">Phone: ${order.shipping_phone}</div>
+                            <div class="order-detail-item">Address: ${order.shipping_address}</div>
+                            ${order.notes ? `<div class="order-detail-item">Notes: ${order.notes}</div>` : ''}
+                            <div class="order-detail-item">Total: KSh ${order.total_amount}</div>
                             <div>
                                 <select class="order-status-select" data-order-id="${order.id}">
                                     <option value="ordered" ${order.status === 'ordered' ? 'selected' : ''}>Ordered</option>
@@ -1436,27 +1637,81 @@
                 }
                 adminOrdersListDiv.innerHTML = html;
 
-                // Attach event listeners to status selects
                 document.querySelectorAll('.order-status-select').forEach(select => {
                     select.addEventListener('change', async (e) => {
                         const orderId = e.target.dataset.orderId;
                         const newStatus = e.target.value;
-                        await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+                        const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
+                        if (error) {
+                            alert('Error updating status: ' + error.message);
+                        } else {
+                            // Refresh data to show updated status
+                            await loadAllData();
+                        }
                     });
                 });
             }
 
-            // Render analytics
+            async function renderUsersList() {
+                const userMap = new Map();
+                orders.forEach(order => {
+                    if (!order.user_id) return;
+                    if (!userMap.has(order.user_id)) {
+                        userMap.set(order.user_id, {
+                            user_id: order.user_id,
+                            email: order.user_email || 'Unknown',
+                            total_orders: 0,
+                            total_spent: 0,
+                            last_order: order.created_at
+                        });
+                    }
+                    const user = userMap.get(order.user_id);
+                    user.total_orders += 1;
+                    user.total_spent += order.total_amount;
+                    if (new Date(order.created_at) > new Date(user.last_order)) {
+                        user.last_order = order.created_at;
+                    }
+                });
+
+                let html = '';
+                for (let [_, user] of userMap) {
+                    html += `<div class="user-list-item">
+                        <div><strong>${user.email}</strong> (ID: ${user.user_id.slice(-6)})</div>
+                        <div>Orders: ${user.total_orders} | Total spent: KSh ${user.total_spent}</div>
+                        <div>Last order: ${new Date(user.last_order).toLocaleDateString()}</div>
+                    </div>`;
+                }
+                if (html === '') html = '<p>No users yet.</p>';
+                usersListDiv.innerHTML = html;
+            }
+
+            async function renderReviewsList() {
+                const reviewsWithEmail = await Promise.all(reviews.map(async (rev) => {
+                    const { data: order } = await supabase.from('orders').select('user_email').eq('id', rev.order_id).single();
+                    return { ...rev, user_email: order?.user_email || 'Unknown' };
+                }));
+
+                let html = '';
+                reviewsWithEmail.forEach(rev => {
+                    const stars = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
+                    html += `<div class="review-list-item">
+                        <div><strong>${rev.user_email}</strong> on ${new Date(rev.created_at).toLocaleDateString()}</div>
+                        <div>Rating: ${stars} (${rev.rating}/5)</div>
+                        <div>Comment: ${rev.comment}</div>
+                    </div>`;
+                });
+                if (html === '') html = '<p>No reviews yet.</p>';
+                reviewsListDiv.innerHTML = html;
+            }
+
             async function renderAnalytics() {
-                // Total revenue (sum of delivered orders total_amount)
-                const { data: deliveredOrders, error } = await supabase
+                const { data: deliveredOrders } = await supabase
                     .from('orders')
                     .select('total_amount')
                     .eq('status', 'delivered');
                 const revenue = deliveredOrders ? deliveredOrders.reduce((sum, o) => sum + o.total_amount, 0) : 0;
                 document.getElementById('totalRevenue').innerText = revenue.toLocaleString();
 
-                // Profit: need to calculate from order items using product cost
                 const { data: allOrders } = await supabase.from('orders').select('items, status');
                 let profit = 0;
                 if (allOrders) {
@@ -1474,7 +1729,6 @@
                 }
                 document.getElementById('totalProfit').innerText = profit.toLocaleString();
 
-                // Total products sold
                 const { data: allItems } = await supabase.from('orders').select('items, status');
                 let totalSold = 0;
                 if (allItems) {
@@ -1487,7 +1741,6 @@
                 }
                 document.getElementById('totalSold').innerText = totalSold;
 
-                // Orders by status counts
                 const statusCounts = {};
                 const { data: allOrdersStatus } = await supabase.from('orders').select('status');
                 if (allOrdersStatus) {
@@ -1497,7 +1750,6 @@
                 }
                 document.getElementById('ordersByStatus').innerText = statusCounts['ordered'] || 0;
 
-                // Breakdown HTML
                 let breakdownHtml = '';
                 for (let [status, count] of Object.entries(statusCounts)) {
                     breakdownHtml += `<div>${status}: ${count}</div>`;
@@ -1505,17 +1757,15 @@
                 document.getElementById('statusBreakdown').innerHTML = breakdownHtml;
             }
 
-            // ---------- Referral dashboard ----------
+            // ========== REFERRAL DASHBOARD ==========
             async function loadReferralStats() {
                 if (!currentUser) return;
-                // Total clicks
                 const { count: clicks } = await supabase
                     .from('referral_clicks')
                     .select('*', { count: 'exact', head: true })
                     .eq('referrer_id', currentUser.id);
                 totalClicksSpan.innerText = clicks || 0;
 
-                // Commissions
                 const { data: commissions } = await supabase
                     .from('referral_commissions')
                     .select('amount, status')
@@ -1532,7 +1782,7 @@
                 totalConversionsSpan.innerText = commissions ? commissions.length : 0;
             }
 
-            // ---------- Event listeners ----------
+            // ========== EVENT LISTENERS ==========
             categoryContainer.addEventListener('click', (e) => {
                 const chip = e.target.closest('.chip');
                 if (!chip) return;
@@ -1543,16 +1793,14 @@
                 renderProducts();
             });
 
-            // Open product detail on image click
+            // Open product detail
             productGrid.addEventListener('click', (e) => {
-                // If click on add-to-cart, handled separately
                 if (e.target.closest('.add-to-cart-btn')) return;
                 const card = e.target.closest('.product-card');
                 if (!card) return;
                 const prodId = card.dataset.productId;
                 const prod = products.find(p => p.id === prodId);
                 if (prod) {
-                    // Fill detail modal
                     detailProductName.innerText = prod.name;
                     detailMainImage.src = prod.image;
                     detailDescription.innerText = prod.description || 'No description';
@@ -1566,7 +1814,6 @@
                         detailOriginalPrice.innerText = '';
                         detailDiscount.style.display = 'none';
                     }
-                    // Gallery
                     let galleryHtml = '';
                     if (prod.images && Array.isArray(prod.images)) {
                         prod.images.forEach(img => {
@@ -1575,7 +1822,6 @@
                     }
                     detailGallery.innerHTML = galleryHtml;
 
-                    // Affiliate link
                     if (prod.affiliate_link) {
                         affiliateLinkBtn.href = prod.affiliate_link;
                         affiliateLinkBtn.style.display = 'flex';
@@ -1583,7 +1829,6 @@
                         affiliateLinkBtn.style.display = 'none';
                     }
 
-                    // Referral link (only if logged in)
                     if (currentUser) {
                         const refLink = `${window.location.origin}?ref=${currentUser.id}&product=${prod.id}`;
                         copyReferralLinkBtn.onclick = () => {
@@ -1645,6 +1890,7 @@
                         prodSold.value = prod.sold || 0;
                         prodBadgeImage.value = prod.badgeImage || '';
                         prodBadgeText.value = prod.badgeText || '';
+
                         let catOptions = '';
                         categories.forEach(c => catOptions += `<option value="${c.id}" ${prod.category === c.id ? 'selected' : ''}>${c.name}</option>`);
                         prodCategory.innerHTML = catOptions;
@@ -1683,7 +1929,6 @@
                 }
             });
 
-            // WhatsApp checkout (legacy)
             cartWhatsappBtn.addEventListener('click', () => {
                 if (cart.length === 0) return alert('Cart empty');
                 let msg = 'Hello, I want to order:%0A';
@@ -1696,23 +1941,22 @@
                 window.open(`https://wa.me/${settings.wa_number}?text=${msg}`, '_blank');
             });
 
-            // New trackable checkout
-            checkoutBtn.addEventListener('click', placeOrder);
+            checkoutBtn.addEventListener('click', placeOrderWithDetails);
 
-            // Admin badge click
             adminBadge.addEventListener('click', async () => {
                 if (!isAdmin) return;
                 await renderCategoriesList();
                 await renderBannersList();
                 await renderProductsList();
                 await renderAdminOrders();
+                await renderUsersList();
+                await renderReviewsList();
                 await renderAnalytics();
                 waNumberInput.value = settings.wa_number;
                 adminModal.style.display = 'flex';
             });
             closeAdminModal.addEventListener('click', () => adminModal.style.display = 'none');
 
-            // Admin tabs
             document.querySelectorAll('.admin-tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
@@ -1721,6 +1965,8 @@
                     document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
                     if (tab.dataset.tab === 'analytics') renderAnalytics();
                     if (tab.dataset.tab === 'orders') renderAdminOrders();
+                    if (tab.dataset.tab === 'users') renderUsersList();
+                    if (tab.dataset.tab === 'reviews') renderReviewsList();
                 });
             });
 
@@ -1765,10 +2011,12 @@
                 productsListDiv.innerHTML = html;
             }
 
-            // Category CRUD
+            // Category CRUD – FIXED: icon default and validation
             addCategoryBtn.addEventListener('click', () => {
                 currentCategoryId = null;
-                catNameInput.value = ''; catIconInput.value = 'fa-tag'; catImageInput.value = '';
+                catNameInput.value = ''; 
+                catIconInput.value = 'fa-tag'; 
+                catImageInput.value = '';
                 categoryEditModal.style.display = 'flex';
             });
 
@@ -1776,7 +2024,13 @@
                 if (e.target.closest('.edit-cat-btn')) {
                     const id = e.target.closest('.edit-cat-btn').dataset.id;
                     const cat = categories.find(c => c.id === id);
-                    if (cat) { currentCategoryId = id; catNameInput.value = cat.name; catIconInput.value = cat.icon; catImageInput.value = cat.image || ''; categoryEditModal.style.display = 'flex'; }
+                    if (cat) { 
+                        currentCategoryId = id; 
+                        catNameInput.value = cat.name; 
+                        catIconInput.value = cat.icon; 
+                        catImageInput.value = cat.image || ''; 
+                        categoryEditModal.style.display = 'flex'; 
+                    }
                 }
                 if (e.target.closest('.delete-cat-btn')) {
                     const id = e.target.closest('.delete-cat-btn').dataset.id;
@@ -1788,11 +2042,12 @@
 
             catModalSave.addEventListener('click', async () => {
                 const name = catNameInput.value.trim(), icon = catIconInput.value.trim(), image = catImageInput.value.trim();
-                if (!name || !icon) return alert('Fill name and icon');
+                if (!name) return alert('Category name is required');
+                if (!icon) return alert('Icon class is required (e.g., fa-mobile-alt)');
                 if (currentCategoryId) {
                     await supabase.from('categories').update({ name, icon, image }).eq('id', currentCategoryId);
                 } else {
-                    const newId = 'cat_' + Date.now();
+                    const newId = 'cat_' + Date.now() + Math.random().toString(36).substr(2, 4);
                     await supabase.from('categories').insert([{ id: newId, name, icon, image }]);
                 }
                 categoryEditModal.style.display = 'none';
@@ -1824,14 +2079,14 @@
                 if (currentBannerId) {
                     await supabase.from('banners').update({ image: img, link, title }).eq('id', currentBannerId);
                 } else {
-                    const newId = 'ban_' + Date.now();
+                    const newId = 'ban_' + Date.now() + Math.random().toString(36).substr(2, 4);
                     await supabase.from('banners').insert([{ id: newId, image: img, link, title }]);
                 }
                 bannerEditModal.style.display = 'none';
             });
             bannerModalCancel.addEventListener('click', () => bannerEditModal.style.display = 'none');
 
-            // Product list actions (admin)
+            // Product list actions
             productsListDiv.addEventListener('click', async (e) => {
                 if (e.target.closest('.edit-prod-btn')) {
                     const prodId = e.target.closest('.edit-prod-btn').dataset.id;
@@ -1866,24 +2121,40 @@
                 }
             });
 
-            // Add product button (main)
+            // Add product button (main) – FIXED: category dropdown populated
             addProductBtn.addEventListener('click', () => {
                 currentProductId = null;
-                prodName.value = ''; prodPrice.value = ''; prodCost.value = ''; prodOriginalPrice.value = ''; prodCommission.value = '10'; prodImage.value = ''; prodImages.value = ''; prodDescription.value = ''; prodAffiliateLink.value = ''; prodRating.value = '4.5'; prodSold.value = '0'; prodBadgeImage.value = ''; prodBadgeText.value = '';
+                prodName.value = ''; 
+                prodPrice.value = ''; 
+                prodCost.value = ''; 
+                prodOriginalPrice.value = ''; 
+                prodCommission.value = '10'; 
+                prodImage.value = ''; 
+                prodImages.value = ''; 
+                prodDescription.value = ''; 
+                prodAffiliateLink.value = ''; 
+                prodRating.value = '4.5'; 
+                prodSold.value = '0'; 
+                prodBadgeImage.value = ''; 
+                prodBadgeText.value = '';
+
                 let catOptions = '';
                 categories.forEach(c => catOptions += `<option value="${c.id}">${c.name}</option>`);
                 prodCategory.innerHTML = catOptions;
+                // Set first option as selected
+                if (prodCategory.options.length > 0) prodCategory.selectedIndex = 0;
                 productEditModal.style.display = 'flex';
             });
 
+            // Save product – FIXED: ensure images array
             productModalSave.addEventListener('click', async () => {
-                const name = prodName.value.trim(), price = parseFloat(prodPrice.value), cost = parseFloat(prodCost.value) || 0;
+                const name = prodName.value.trim(), price = parseFloat(prodPrice.value);
                 if (!name || isNaN(price)) return alert('Name and price required');
                 const imagesArray = prodImages.value.split(',').map(s => s.trim()).filter(s => s);
                 const productData = {
                     name,
                     price,
-                    costPrice: cost || undefined,
+                    costPrice: parseFloat(prodCost.value) || undefined,
                     originalPrice: parseFloat(prodOriginalPrice.value) || undefined,
                     commission_percent: parseInt(prodCommission.value) || 10,
                     image: prodImage.value.trim() || 'https://placehold.co/400x400/03ac0e/white?text=Product',
@@ -1897,10 +2168,12 @@
                     badgeText: prodBadgeText.value.trim() || ''
                 };
                 if (currentProductId) {
-                    await supabase.from('products').update(productData).eq('id', currentProductId);
+                    const { error } = await supabase.from('products').update(productData).eq('id', currentProductId);
+                    if (error) alert('Update error: ' + error.message);
                 } else {
-                    const newId = 'prod_' + Date.now();
-                    await supabase.from('products').insert([{ id: newId, ...productData }]);
+                    const newId = 'prod_' + Date.now() + Math.random().toString(36).substr(2, 4);
+                    const { error } = await supabase.from('products').insert([{ id: newId, ...productData }]);
+                    if (error) alert('Insert error: ' + error.message);
                 }
                 productEditModal.style.display = 'none';
             });
@@ -1924,7 +2197,7 @@
                 alert('WhatsApp number updated');
             });
 
-            // Notifications modal
+            // Notifications modal – FIXED: no dummy data
             function openNotifModal() {
                 renderNotifications();
                 notifModal.style.display = 'flex';
@@ -1969,7 +2242,7 @@
                 }
                 profileEmail.innerText = currentUser.email;
                 await renderUserOrders();
-                await loadReferralStats();  // Load referral dashboard
+                await loadReferralStats();
                 profileModal.style.display = 'flex';
             }
 
