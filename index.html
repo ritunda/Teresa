@@ -27,7 +27,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cstyle%3E.accent-icon%7Bstroke:%23C72A4C;stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;%7D%3C/style%3E%3Cpath class='accent-icon' d='M70 50 L100 30 L130 70 L115 130 L85 130 L70 70 L70 50'/%3E%3Ccircle cx='100' cy='55' r='12' fill='%23C72A4C' opacity='0.9'/%3E%3C/svg%3E">
     <style>
-        /* (Keep all existing styles – same as before) */
+        /* ========== GLOBAL STYLES (same as original, unchanged) ========== */
         * {
             margin: 0;
             padding: 0;
@@ -98,6 +98,9 @@
             border-radius: 30px;
             min-width: 18px;
             text-align: center;
+        }
+        .logout-icon {
+            color: #c0392b;
         }
         .search-bar {
             display: flex;
@@ -264,6 +267,7 @@
             overflow: hidden;
             position: relative;
             box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            cursor: pointer;
         }
         .image-section {
             position: relative;
@@ -746,15 +750,12 @@
         .also-viewed h4 {
             margin-bottom: 12px;
         }
-        .also-viewed-scroll {
-            display: flex;
+        .also-viewed-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
-            overflow-x: auto;
-            scrollbar-width: none;
         }
-        .also-viewed-scroll::-webkit-scrollbar { display: none; }
         .also-item {
-            flex: 0 0 120px;
             border: 1px solid var(--tokped-border);
             border-radius: 12px;
             padding: 8px;
@@ -767,7 +768,7 @@
             border-radius: 8px;
         }
         .also-item .name {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             margin-top: 4px;
             white-space: nowrap;
             overflow: hidden;
@@ -782,7 +783,7 @@
 </head>
 <body>
     <div class="app" id="app">
-        <!-- HEADER -->
+        <!-- HEADER (same as original, unchanged) -->
         <div class="header">
             <div class="top-row">
                 <div class="logo-area">
@@ -797,7 +798,8 @@
                     </svg>
                 </div>
                 <div class="action-icons">
-                    <i class="fas fa-bell"></i>
+                    <i class="fas fa-bell" id="notifIcon"></i>
+                    <i class="fas fa-sign-out-alt logout-icon" id="logoutIcon" style="display: none;"></i>
                     <div class="cart-icon" id="cartIcon">
                         <i class="fas fa-shopping-cart"></i>
                         <span id="cartCount">0</span>
@@ -838,16 +840,17 @@
         <!-- ADD PRODUCT BUTTON (admin or seller) -->
         <button id="addProductBtn" class="btn-add-product" style="display: none;"><i class="fas fa-plus-circle"></i> Add new product</button>
 
-        <!-- CUSTOMERS ALSO VIEWED -->
+        <!-- CUSTOMERS ALSO VIEWED (grid) -->
         <div id="alsoViewedSection" class="also-viewed" style="display: none;">
             <h4>Customers also viewed</h4>
-            <div class="also-viewed-scroll" id="alsoViewedList"></div>
+            <div class="also-viewed-grid" id="alsoViewedList"></div>
         </div>
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
             <div class="nav-item" data-nav="home"><i class="fas fa-home"></i><span>Home</span></div>
             <div class="nav-item" data-nav="promo"><i class="fas fa-tags"></i><span>Promo</span></div>
+            <div class="nav-item" data-nav="sell" id="sellNav" style="display: none;"><i class="fas fa-store"></i><span>Sell</span></div>
             <div class="nav-item" data-nav="orders"><i class="fas fa-clipboard-list"></i><span>Orders</span></div>
             <div class="nav-item" data-nav="notif"><i class="fas fa-bell"></i><span>Notif</span></div>
             <div class="nav-item" data-nav="me"><i class="fas fa-user"></i><span>Me</span></div>
@@ -968,10 +971,21 @@
             <div id="sellerRequestSection" style="margin: 16px 0;"></div>
             <button class="btn-cancel" id="logoutBtn" style="width:100%; margin-bottom:20px;">Logout</button>
 
+            <!-- Referral Stats -->
+            <div style="margin: 16px 0;">
+                <h4>Referral Stats</h4>
+                <div class="analytics-grid" style="grid-template-columns:1fr 1fr;">
+                    <div class="analytics-card"><span class="analytics-value" id="totalClicks">0</span><div class="analytics-label">Clicks</div></div>
+                    <div class="analytics-card"><span class="analytics-value" id="totalConversions">0</span><div class="analytics-label">Conversions</div></div>
+                    <div class="analytics-card"><span class="analytics-value" id="pendingEarnings">0</span><div class="analytics-label">Pending (KSh)</div></div>
+                    <div class="analytics-card"><span class="analytics-value" id="paidEarnings">0</span><div class="analytics-label">Paid (KSh)</div></div>
+                </div>
+            </div>
+
             <h4>My Orders</h4>
             <div id="userOrdersList"></div>
 
-            <!-- Seller Dashboard -->
+            <!-- Seller Dashboard (now also accessible via Sell tab) -->
             <div id="sellerDashboard" style="display: none; margin-top:20px;">
                 <h4>My Products</h4>
                 <div id="sellerProductsList"></div>
@@ -982,6 +996,22 @@
             </div>
 
             <div class="modal-actions"><button class="btn-cancel" id="closeProfileBtn">Close</button></div>
+        </div>
+    </div>
+
+    <!-- SELLER DASHBOARD MODAL (new, for dedicated seller view) -->
+    <div id="sellerDashboardModal" class="modal">
+        <div class="modal-card">
+            <h3><i class="fas fa-store"></i> Seller Dashboard</h3>
+            <div id="sellerDashboardContent">
+                <h4>My Products</h4>
+                <div id="sellerProductsListModal"></div>
+                <button class="btn-save" id="sellerAddProductBtnModal" style="margin-top:10px; width:100%;"><i class="fas fa-plus"></i> Add Product</button>
+                
+                <h4 style="margin-top:20px;">Orders for My Products</h4>
+                <div id="sellerOrdersListModal"></div>
+            </div>
+            <div class="modal-actions"><button class="btn-cancel" id="closeSellerModal">Close</button></div>
         </div>
     </div>
 
@@ -1133,7 +1163,7 @@
                 <span class="badge stock" id="detailInStock" style="display: none;">In stock</span>
                 <span class="badge outstock" id="detailOutStock" style="display: none;">Out of stock</span>
             </div>
-            <img id="detailMainImage" class="main-image" src="" alt="">
+            <img id="detailMainImage" class="main-image" src="" alt="" loading="lazy">
             <div class="image-gallery" id="detailGallery"></div>
             <p id="detailDescription" style="margin:12px 0;"></p>
             <div class="price-discount" style="margin-bottom:12px;">
@@ -1367,6 +1397,7 @@
             const deliveryFeeInput = document.getElementById('deliveryFeeInput');
             const pickupStationsInput = document.getElementById('pickupStationsInput');
             const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+            const logoutIcon = document.getElementById('logoutIcon');
 
             const authModal = document.getElementById('authModal');
             const authEmail = document.getElementById('authEmail');
@@ -1387,6 +1418,12 @@
             const logoutBtn = document.getElementById('logoutBtn');
             const userOrdersList = document.getElementById('userOrdersList');
             const closeProfileBtn = document.getElementById('closeProfileBtn');
+
+            const sellerDashboardModal = document.getElementById('sellerDashboardModal');
+            const sellerProductsListModal = document.getElementById('sellerProductsListModal');
+            const sellerOrdersListModal = document.getElementById('sellerOrdersListModal');
+            const sellerAddProductBtnModal = document.getElementById('sellerAddProductBtnModal');
+            const closeSellerModal = document.getElementById('closeSellerModal');
 
             const sellerApplyModal = document.getElementById('sellerApplyModal');
             const sellerApplyCancel = document.getElementById('sellerApplyCancel');
@@ -1427,6 +1464,7 @@
             const alsoViewedList = document.getElementById('alsoViewedList');
 
             const navItems = document.querySelectorAll('.nav-item');
+            const sellNav = document.getElementById('sellNav');
 
             // ========== STAR RATING HANDLER ==========
             const stars = starRatingDiv.querySelectorAll('.fa-star');
@@ -1451,10 +1489,8 @@
                     .single();
                 
                 if (error && error.code === 'PGRST116') {
-                    // Create new profile
                     let role = 'customer';
                     let seller_status = null;
-                    // If email is admin, set role to admin
                     if (user.email === 'admin@teresa.com') {
                         role = 'admin';
                     }
@@ -1475,7 +1511,6 @@
                 } else if (error) {
                     console.error('Profile fetch error', error);
                 } else {
-                    // If existing profile but email is admin and role is not admin, upgrade
                     if (user.email === 'admin@teresa.com' && profile.role !== 'admin') {
                         await supabase.from('profiles').update({ role: 'admin' }).eq('user_id', user.id);
                         profile.role = 'admin';
@@ -1487,7 +1522,7 @@
             // ========== DELIVERY DATE HELPER ==========
             function getDeliveryDates() {
                 const now = new Date();
-                const orderCutoff = new Date(now.getTime() + (3 * 60 * 60 * 1000) + (43 * 60 * 1000)); // 3hrs 43mins from now
+                const orderCutoff = new Date(now.getTime() + (3 * 60 * 60 * 1000) + (43 * 60 * 1000));
                 const today = new Date();
                 const startDoor = new Date(today);
                 startDoor.setDate(today.getDate() + 2);
@@ -1558,7 +1593,6 @@
                 if (settingsData) {
                     settingsData.forEach(s => settings[s.key] = s.value);
                 }
-                // Ensure defaults
                 if (!settings.wa_number) settings.wa_number = DEFAULT_SETTINGS.wa_number;
                 if (!settings.delivery_fee) settings.delivery_fee = DEFAULT_SETTINGS.delivery_fee;
                 if (!settings.pickup_stations) settings.pickup_stations = DEFAULT_SETTINGS.pickup_stations;
@@ -1582,11 +1616,9 @@
                 if (profilesErr) console.error('profiles error', profilesErr);
                 if (profilesData) profiles = profilesData;
 
-                // Clean cart
                 cart = cart.filter(item => products.some(p => p.id === item.id));
                 localStorage.setItem('cart', JSON.stringify(cart));
 
-                // Get current user and profile
                 const { data: { user } } = await supabase.auth.getUser();
                 currentUser = user;
                 if (user) {
@@ -1598,7 +1630,6 @@
                 refreshUI();
             }
 
-            // ========== REAL‑TIME SUBSCRIPTIONS ==========
             function setupSubscriptions() {
                 supabase.channel('categories').on('postgres_changes', { event: '*', schema: 'public', table: 'categories' }, () => loadAllData()).subscribe();
                 supabase.channel('banners').on('postgres_changes', { event: '*', schema: 'public', table: 'banners' }, () => loadAllData()).subscribe();
@@ -1609,7 +1640,6 @@
                 supabase.channel('profiles').on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => loadAllData()).subscribe();
             }
 
-            // ========== HELPER FUNCTIONS ==========
             function updateCartCount() {
                 const total = cart.reduce((acc, item) => acc + item.quantity, 0);
                 cartCountSpan.innerText = total;
@@ -1626,7 +1656,6 @@
                 return filtered;
             }
 
-            // ========== RENDER FUNCTIONS ==========
             function renderCategories() {
                 let html = '';
                 categories.forEach(cat => {
@@ -1671,7 +1700,7 @@
                     const inStock = prod.stock > 0;
                     html += `<div class="product-card" data-product-id="${prod.id}">`;
                     html += `<div class="image-section">`;
-                    html += `<img src="${prod.image}" class="product-image" onerror="this.src='https://placehold.co/400x400/eeeeee/aaaaaa?text=Product'">`;
+                    html += `<img src="${prod.image}" class="product-image" onerror="this.src='https://placehold.co/400x400/eeeeee/aaaaaa?text=Product'" loading="lazy">`;
                     html += `<div class="product-badges">`;
                     if (prod.is_official_store) html += `<span class="badge official">Official Store</span>`;
                     if (prod.is_non_returnable) html += `<span class="badge nonreturn">Non-returnable</span>`;
@@ -1698,7 +1727,6 @@
                     html += `<div class="stock-status ${inStock ? '' : 'out'}">${inStock ? 'In stock' : 'Out of stock'}</div>`;
                     html += `<button class="add-to-cart-btn" data-id="${prod.id}" ${!inStock ? 'disabled' : ''}><i class="fas fa-cart-plus"></i> Add to cart</button>`;
                     
-                    // Admin can edit/delete any product; sellers can edit/delete their own
                     if ((currentUserProfile?.role === 'admin') || (currentUserProfile?.role === 'seller' && prod.seller_id === currentUser?.id)) {
                         html += `<div class="admin-controls"><i class="fas fa-edit edit-btn" data-id="${prod.id}"></i><i class="fas fa-trash delete-btn" data-id="${prod.id}"></i></div>`;
                     }
@@ -1707,13 +1735,12 @@
                 if (filtered.length === 0) html = '<div style="grid-column:span 2; text-align:center; padding:40px;">No products</div>';
                 productGrid.innerHTML = html;
 
-                // Also viewed: random 5 products not in filtered
-                const otherProducts = products.filter(p => !filtered.includes(p)).sort(() => 0.5 - Math.random()).slice(0, 5);
+                const otherProducts = products.filter(p => !filtered.includes(p)).sort(() => 0.5 - Math.random()).slice(0, 4);
                 if (otherProducts.length > 0) {
                     let alsoHtml = '';
                     otherProducts.forEach(p => {
                         alsoHtml += `<div class="also-item" data-product-id="${p.id}">
-                            <img src="${p.image}" onerror="this.src='https://placehold.co/120x120'">
+                            <img src="${p.image}" onerror="this.src='https://placehold.co/120x120'" loading="lazy">
                             <div class="name">${p.name}</div>
                             <div class="price">KSh ${p.price}</div>
                         </div>`;
@@ -1732,7 +1759,7 @@
                     const prod = products.find(p => p.id === item.id);
                     if (!prod) return;
                     total += prod.price * item.quantity;
-                    itemsHtml += `<div class="cart-item" data-id="${item.id}"><img src="${prod.image}" class="cart-item-img"><div class="cart-item-details"><div class="cart-item-name">${prod.name}</div><div class="cart-item-price">KSh ${prod.price}</div><div class="cart-item-qty"><button class="cart-qty-minus" data-id="${item.id}">-</button><span>${item.quantity}</span><button class="cart-qty-plus" data-id="${item.id}">+</button><i class="fas fa-trash" style="margin-left:auto; color:#c0392b; cursor:pointer;" data-id="${item.id}" data-remove></i></div></div></div>`;
+                    itemsHtml += `<div class="cart-item" data-id="${item.id}"><img src="${prod.image}" class="cart-item-img" loading="lazy"><div class="cart-item-details"><div class="cart-item-name">${prod.name}</div><div class="cart-item-price">KSh ${prod.price}</div><div class="cart-item-qty"><button class="cart-qty-minus" data-id="${item.id}">-</button><span>${item.quantity}</span><button class="cart-qty-plus" data-id="${item.id}">+</button><i class="fas fa-trash" style="margin-left:auto; color:#c0392b; cursor:pointer;" data-id="${item.id}" data-remove></i></div></div></div>`;
                 });
                 cartItemsList.innerHTML = itemsHtml;
                 cartTotalSpan.innerText = `Total: KSh ${total}`;
@@ -1748,7 +1775,6 @@
                 renderProducts();
                 updateCartCount();
                 
-                // Update badges
                 if (currentUserProfile?.role === 'admin') {
                     adminBadge.style.display = 'inline-flex';
                     sellerBadge.style.display = 'none';
@@ -1763,6 +1789,12 @@
                     addProductBtn.style.display = 'none';
                 }
 
+                // Show/hide logout icon
+                logoutIcon.style.display = currentUser ? 'inline-block' : 'none';
+
+                // Show/hide sell nav
+                sellNav.style.display = (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') ? 'flex' : 'none';
+
                 navItems.forEach(item => item.classList.remove('active'));
                 if (activePromo) {
                     document.querySelector('[data-nav="promo"]').classList.add('active');
@@ -1770,7 +1802,6 @@
                     document.querySelector('[data-nav="home"]').classList.add('active');
                 }
 
-                // Update delivery dates in checkout modal (if open)
                 updateDeliveryDates();
             }
 
@@ -1783,7 +1814,6 @@
                 pickupEnd.innerText = dates.pickupEndStr;
             }
 
-            // ========== AUTH FUNCTIONS ==========
             async function signUp(email, password) {
                 const { data, error } = await supabase.auth.signUp({ email, password });
                 if (error) {
@@ -1812,7 +1842,10 @@
                 currentUserProfile = null;
                 refreshUI();
                 profileModal.style.display = 'none';
+                sellerDashboardModal.style.display = 'none';
             }
+
+            logoutIcon.addEventListener('click', signOut);
 
             // ========== ORDER FUNCTIONS ==========
             async function placeOrderWithDetails() {
@@ -1825,7 +1858,6 @@
                     alert('Cart is empty');
                     return;
                 }
-                // Reset delivery selection
                 document.querySelectorAll('.delivery-option').forEach(opt => opt.classList.remove('selected'));
                 deliveryDoor.classList.add('selected');
                 addressField.style.display = 'block';
@@ -1833,7 +1865,6 @@
                 checkoutDetailsModal.style.display = 'flex';
             }
 
-            // Delivery option click
             deliveryDoor.addEventListener('click', () => {
                 deliveryDoor.classList.add('selected');
                 deliveryPickup.classList.remove('selected');
@@ -1894,7 +1925,7 @@
                     payment_method: paymentMethod,
                     delivery_method: deliveryMethod,
                     delivery_fee: deliveryFee,
-                    estimated_delivery_start: estimatedStart.toISOString().split('T')[0], // store as YYYY-MM-DD
+                    estimated_delivery_start: estimatedStart.toISOString().split('T')[0],
                     estimated_delivery_end: estimatedEnd.toISOString().split('T')[0],
                     created_at: new Date().toISOString(),
                     items: JSON.stringify(orderItems)
@@ -1905,6 +1936,15 @@
                 if (error) {
                     alert('Order failed: ' + error.message);
                 } else {
+                    // Decrease stock for each product
+                    for (let item of orderItems) {
+                        const prod = products.find(p => p.id === item.product_id);
+                        if (prod) {
+                            const newStock = prod.stock - item.quantity;
+                            await supabase.from('products').update({ stock: newStock }).eq('id', item.product_id);
+                        }
+                    }
+
                     alert('Order placed successfully!');
 
                     const referrerId = localStorage.getItem('referrer');
@@ -1912,7 +1952,7 @@
                         for (let item of orderItems) {
                             const prod = products.find(p => p.id === item.product_id);
                             if (prod && prod.commission_percent) {
-                                const commissionAmount = Math.round(item.price * item.quantity * prod.commission_percent / 100);
+                                const commissionAmount = Math.round(item.price * item.quantity * (prod.commission_percent || 0) / 100);
                                 await supabase.from('referral_commissions').insert([{
                                     referrer_id: referrerId,
                                     order_id: data[0].id,
@@ -1938,7 +1978,6 @@
                 checkoutDetailsModal.style.display = 'none';
             });
 
-            // ========== REVIEW FUNCTIONS ==========
             async function openReviewModal(orderId) {
                 currentOrderIdForReview = orderId;
                 reviewRatingInput.value = 0;
@@ -1988,7 +2027,6 @@
                 reviewModal.style.display = 'none';
             });
 
-            // Render user orders with review buttons
             async function renderUserOrders() {
                 if (!currentUser) return;
                 const { data: userOrders, error } = await supabase
@@ -2038,11 +2076,36 @@
                 });
             }
 
-            // ========== SELLER FUNCTIONS ==========
-            async function renderSellerDashboard() {
+            // ========== REFERRAL STATS ==========
+            async function loadReferralStats() {
+                if (!currentUser) return;
+                // Get clicks
+                const { data: clicks, error: clicksErr } = await supabase
+                    .from('referral_clicks')
+                    .select('id', { count: 'exact', head: false })
+                    .eq('referrer_id', currentUser.id);
+                if (!clicksErr) totalClicksSpan.innerText = clicks.length || 0;
+
+                // Get commissions
+                const { data: commissions, error: commErr } = await supabase
+                    .from('referral_commissions')
+                    .select('amount, status')
+                    .eq('referrer_id', currentUser.id);
+                if (!commErr && commissions) {
+                    let pending = 0, paid = 0;
+                    commissions.forEach(c => {
+                        if (c.status === 'pending') pending += c.amount;
+                        else if (c.status === 'paid') paid += c.amount;
+                    });
+                    pendingEarningsSpan.innerText = pending;
+                    paidEarningsSpan.innerText = paid;
+                    totalConversionsSpan.innerText = commissions.length;
+                }
+            }
+
+            // ========== SELLER DASHBOARD ==========
+            async function renderSellerDashboard(modal = false) {
                 if (!currentUser || currentUserProfile?.role !== 'seller' || currentUserProfile.seller_status !== 'approved') return;
-                
-                sellerDashboard.style.display = 'block';
                 
                 const sellerProds = products.filter(p => p.seller_id === currentUser.id);
                 let prodHtml = '';
@@ -2055,7 +2118,6 @@
                     </div>`;
                 });
                 if (sellerProds.length === 0) prodHtml = '<p>You have no products yet.</p>';
-                sellerProductsList.innerHTML = prodHtml;
 
                 let ordersHtml = '';
                 for (let order of orders) {
@@ -2068,15 +2130,33 @@
                         ordersHtml += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
                             <div><strong>Order #${order.id.slice(-6)}</strong> <span class="status-badge status-${order.status.replace('_', '-')}">${order.status}</span></div>
                             <div>Customer: ${order.shipping_name}</div>
-                            <div>Items: ${sellerItems.map(i => `${i.quantity}x ${products.find(p => p.id === i.product_id)?.name}`).join(', ')}</div>
+                            <div>Items: ${sellerItems.map(i => `${i.quantity}x ${products.find(p => p.id === i.product_id)?.name || 'Deleted product'}`).join(', ')}</div>
                         </div>`;
                     }
                 }
                 if (ordersHtml === '') ordersHtml = '<p>No orders for your products yet.</p>';
-                sellerOrdersList.innerHTML = ordersHtml;
+
+                if (modal) {
+                    sellerProductsListModal.innerHTML = prodHtml;
+                    sellerOrdersListModal.innerHTML = ordersHtml;
+                } else {
+                    sellerProductsList.innerHTML = prodHtml;
+                    sellerOrdersList.innerHTML = ordersHtml;
+                }
             }
 
-            sellerAddProductBtn.addEventListener('click', () => {
+            function openSellerDashboard() {
+                renderSellerDashboard(true);
+                sellerDashboardModal.style.display = 'flex';
+            }
+
+            sellerAddProductBtn.addEventListener('click', () => openProductEditForSeller());
+            sellerAddProductBtnModal.addEventListener('click', () => {
+                sellerDashboardModal.style.display = 'none';
+                openProductEditForSeller();
+            });
+
+            function openProductEditForSeller() {
                 currentProductId = null;
                 prodName.value = ''; 
                 prodPrice.value = ''; 
@@ -2102,8 +2182,9 @@
                 if (prodCategory.options.length > 0) prodCategory.selectedIndex = 0;
                 
                 productEditModal.style.display = 'flex';
-                profileModal.style.display = 'none';
-            });
+            }
+
+            closeSellerModal.addEventListener('click', () => sellerDashboardModal.style.display = 'none');
 
             // ========== SELLER APPLICATION ==========
             function openSellerApplyModal() {
@@ -2130,188 +2211,287 @@
                 }
             });
 
-            // ========== ADMIN RENDERING ==========
-            async function renderAdminOrders() {
-                const { data: allOrders, error } = await supabase
-                    .from('orders')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-                if (error) console.error(error);
+            // ========== ADMIN RENDERING FUNCTIONS ==========
+            async function renderCategoriesList() {
                 let html = '';
-                if (allOrders && allOrders.length > 0) {
-                    allOrders.forEach(order => {
-                        const statusClass = `status-${order.status.replace('_', '-')}`;
-                        const startDate = order.estimated_delivery_start ? new Date(order.estimated_delivery_start).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
-                        const endDate = order.estimated_delivery_end ? new Date(order.estimated_delivery_end).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
-                        html += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
-                            <div><strong>Order #${order.id.slice(-6)}</strong></div>
-                            <div class="order-detail-item">Customer: ${order.user_email || 'N/A'} (${order.shipping_name})</div>
-                            <div class="order-detail-item">Phone: ${order.shipping_phone}</div>
-                            <div class="order-detail-item">Address: ${order.shipping_address}</div>
-                            <div class="order-detail-item">Delivery: ${order.delivery_method}, Payment: ${order.payment_method}</div>
-                            <div class="order-detail-item">Est. delivery: ${startDate} - ${endDate}</div>
-                            ${order.notes ? `<div class="order-detail-item">Notes: ${order.notes}</div>` : ''}
-                            <div class="order-detail-item">Total: KSh ${order.total_amount}</div>
-                            <div>
-                                <select class="order-status-select" data-order-id="${order.id}">
-                                    <option value="ordered" ${order.status === 'ordered' ? 'selected' : ''}>Ordered</option>
-                                    <option value="waiting_shipment" ${order.status === 'waiting_shipment' ? 'selected' : ''}>Waiting Shipment</option>
-                                    <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
-                                    <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
-                                </select>
-                            </div>
-                            <div>${new Date(order.created_at).toLocaleDateString()}</div>
-                        </div>`;
-                    });
-                } else {
-                    html = '<p>No orders.</p>';
-                }
-                adminOrdersListDiv.innerHTML = html;
+                categories.forEach(cat => {
+                    html += `<div class="cat-list-item">
+                        ${cat.image ? `<img src="${cat.image}">` : `<i class="fas ${cat.icon}"></i>`}
+                        <span>${cat.name}</span>
+                        <button class="edit-cat-btn" data-id="${cat.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
+                        <button class="delete-cat-btn" data-id="${cat.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
+                    </div>`;
+                });
+                categoriesListDiv.innerHTML = html;
+                attachCategoryListeners();
+            }
 
+            function attachCategoryListeners() {
+                document.querySelectorAll('.edit-cat-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        const cat = categories.find(c => c.id === id);
+                        if (cat) {
+                            currentCategoryId = id;
+                            catNameInput.value = cat.name;
+                            catIconInput.value = cat.icon;
+                            catImageInput.value = cat.image || '';
+                            categoryEditModal.style.display = 'flex';
+                        }
+                    });
+                });
+                document.querySelectorAll('.delete-cat-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        if (confirm('Delete category?')) {
+                            await supabase.from('categories').delete().eq('id', id);
+                        }
+                    });
+                });
+            }
+
+            async function renderBannersList() {
+                let html = '';
+                banners.forEach(banner => {
+                    html += `<div class="banner-list-item">
+                        <img src="${banner.image}" style="width:50px; height:30px; object-fit:cover; border-radius:4px;">
+                        <span>${banner.title}</span>
+                        <button class="edit-banner-btn" data-id="${banner.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
+                        <button class="delete-banner-btn" data-id="${banner.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
+                    </div>`;
+                });
+                bannersListDiv.innerHTML = html;
+                attachBannerListeners();
+            }
+
+            function attachBannerListeners() {
+                document.querySelectorAll('.edit-banner-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        const banner = banners.find(b => b.id === id);
+                        if (banner) {
+                            currentBannerId = id;
+                            bannerImageInput.value = banner.image;
+                            bannerLinkInput.value = banner.link || '';
+                            bannerTitleInput.value = banner.title;
+                            bannerEditModal.style.display = 'flex';
+                        }
+                    });
+                });
+                document.querySelectorAll('.delete-banner-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        if (confirm('Delete banner?')) {
+                            await supabase.from('banners').delete().eq('id', id);
+                        }
+                    });
+                });
+            }
+
+            async function renderProductsList() {
+                let html = '';
+                products.forEach(prod => {
+                    html += `<div class="prod-list-item">
+                        <img src="${prod.image}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
+                        <span>${prod.name} (KSh ${prod.price})</span>
+                        <button class="edit-prod-admin-btn" data-id="${prod.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
+                        <button class="delete-prod-admin-btn" data-id="${prod.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
+                    </div>`;
+                });
+                productsListDiv.innerHTML = html;
+                attachProductAdminListeners();
+            }
+
+            function attachProductAdminListeners() {
+                document.querySelectorAll('.edit-prod-admin-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        const prod = products.find(p => p.id === id);
+                        if (prod) {
+                            currentProductId = id;
+                            prodName.value = prod.name || '';
+                            prodPrice.value = prod.price || '';
+                            prodCost.value = prod.costPrice || '';
+                            prodOriginalPrice.value = prod.originalPrice || '';
+                            prodCommission.value = prod.commission_percent || 10;
+                            prodStock.value = prod.stock || 10;
+                            prodReturnPolicy.value = prod.return_policy || 'Free return within 7 days';
+                            prodOfficial.checked = prod.is_official_store || false;
+                            prodNonReturn.checked = prod.is_non_returnable || false;
+                            prodImage.value = prod.image || '';
+                            prodImages.value = (prod.images || []).join(', ');
+                            prodDescription.value = prod.description || '';
+                            prodAffiliateLink.value = prod.affiliate_link || '';
+                            prodRating.value = prod.rating || 4.5;
+                            prodSold.value = prod.sold || 0;
+                            prodBadgeImage.value = prod.badgeImage || '';
+                            prodBadgeText.value = prod.badgeText || '';
+
+                            let catOptions = '';
+                            categories.forEach(c => catOptions += `<option value="${c.id}" ${prod.category === c.id ? 'selected' : ''}>${c.name}</option>`);
+                            prodCategory.innerHTML = catOptions;
+                            productEditModal.style.display = 'flex';
+                        }
+                    });
+                });
+                document.querySelectorAll('.delete-prod-admin-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        if (confirm('Delete product?')) {
+                            await supabase.from('products').delete().eq('id', id);
+                        }
+                    });
+                });
+            }
+
+            async function renderAdminOrders() {
+                let html = '';
+                orders.forEach(order => {
+                    const statusClass = `status-${order.status.replace('_', '-')}`;
+                    html += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
+                        <div><strong>Order #${order.id.slice(-6)}</strong> <span class="status-badge ${statusClass}">${order.status}</span></div>
+                        <div>Customer: ${order.shipping_name} (${order.shipping_phone})</div>
+                        <div>Total: KSh ${order.total_amount}</div>
+                        <div>Payment: ${order.payment_method} / Delivery: ${order.delivery_method}</div>
+                        <select class="order-status-select" data-order-id="${order.id}" style="margin-top:8px; padding:4px;">
+                            <option value="ordered" ${order.status === 'ordered' ? 'selected' : ''}>Ordered</option>
+                            <option value="waiting_shipment" ${order.status === 'waiting_shipment' ? 'selected' : ''}>Waiting Shipment</option>
+                            <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                        </select>
+                    </div>`;
+                });
+                adminOrdersListDiv.innerHTML = html;
                 document.querySelectorAll('.order-status-select').forEach(select => {
                     select.addEventListener('change', async (e) => {
                         const orderId = e.target.dataset.orderId;
                         const newStatus = e.target.value;
-                        const { error } = await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
-                        if (error) {
-                            alert('Error updating status: ' + error.message);
-                        } else {
-                            await loadAllData();
-                        }
+                        await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
                     });
                 });
             }
 
             async function renderUsersList() {
-                const userMap = new Map();
-                orders.forEach(order => {
-                    if (!order.user_id) return;
-                    if (!userMap.has(order.user_id)) {
-                        userMap.set(order.user_id, {
-                            user_id: order.user_id,
-                            email: order.user_email || 'Unknown',
-                            total_orders: 0,
-                            total_spent: 0,
-                            last_order: order.created_at
-                        });
-                    }
-                    const user = userMap.get(order.user_id);
-                    user.total_orders += 1;
-                    user.total_spent += order.total_amount;
-                    if (new Date(order.created_at) > new Date(user.last_order)) {
-                        user.last_order = order.created_at;
-                    }
-                });
-
                 let html = '';
-                for (let [_, user] of userMap) {
+                profiles.forEach(prof => {
                     html += `<div class="user-list-item">
-                        <div><strong>${user.email}</strong> (ID: ${user.user_id.slice(-6)})</div>
-                        <div>Orders: ${user.total_orders} | Total spent: KSh ${user.total_spent}</div>
-                        <div>Last order: ${new Date(user.last_order).toLocaleDateString()}</div>
-                    </div>`;
-                }
-                if (html === '') html = '<p>No users yet.</p>';
-                usersListDiv.innerHTML = html;
-            }
-
-            async function renderSellerApplications() {
-                const pendingSellers = profiles.filter(p => p.seller_status === 'pending');
-                let html = '';
-                pendingSellers.forEach(prof => {
-                    html += `<div class="user-list-item">
-                        <div><strong>${prof.email}</strong></div>
-                        <div>Applied: ${new Date(prof.created_at).toLocaleDateString()}</div>
-                        <div>
-                            <button class="btn-save approve-seller" data-user-id="${prof.user_id}" style="padding:4px 12px;">Approve</button>
-                            <button class="btn-cancel reject-seller" data-user-id="${prof.user_id}" style="padding:4px 12px;">Reject</button>
+                        <div><strong>${prof.email}</strong> (role: ${prof.role}, seller: ${prof.seller_status || 'none'})</div>
+                        <div style="display:flex; gap:8px; margin-top:4px;">
+                            <button class="make-admin-btn" data-id="${prof.user_id}" style="background:none; border:1px solid var(--tokped-green); padding:4px 8px; border-radius:4px;">Make Admin</button>
+                            ${prof.seller_status === 'pending' ? 
+                                `<button class="approve-seller-btn" data-id="${prof.user_id}" style="background:green; color:white; border:none; padding:4px 8px; border-radius:4px;">Approve</button>
+                                 <button class="reject-seller-btn" data-id="${prof.user_id}" style="background:red; color:white; border:none; padding:4px 8px; border-radius:4px;">Reject</button>` : ''}
                         </div>
                     </div>`;
                 });
-                if (html === '') html = '<p>No pending applications.</p>';
-                sellerApplicationsListDiv.innerHTML = html;
-
-                document.querySelectorAll('.approve-seller').forEach(btn => {
+                usersListDiv.innerHTML = html;
+                document.querySelectorAll('.make-admin-btn').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
-                        const userId = e.target.dataset.userId;
-                        await supabase.from('profiles').update({ role: 'seller', seller_status: 'approved' }).eq('user_id', userId);
-                        loadAllData();
+                        const userId = e.target.dataset.id;
+                        await supabase.from('profiles').update({ role: 'admin' }).eq('user_id', userId);
                     });
                 });
-                document.querySelectorAll('.reject-seller').forEach(btn => {
+                document.querySelectorAll('.approve-seller-btn').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
-                        const userId = e.target.dataset.userId;
+                        const userId = e.target.dataset.id;
+                        await supabase.from('profiles').update({ role: 'seller', seller_status: 'approved' }).eq('user_id', userId);
+                    });
+                });
+                document.querySelectorAll('.reject-seller-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const userId = e.target.dataset.id;
                         await supabase.from('profiles').update({ seller_status: 'rejected' }).eq('user_id', userId);
-                        loadAllData();
+                    });
+                });
+            }
+
+            async function renderSellerApplications() {
+                const pending = profiles.filter(p => p.seller_status === 'pending');
+                let html = '';
+                pending.forEach(prof => {
+                    html += `<div class="user-list-item">
+                        <div>${prof.email} applied to become seller.</div>
+                        <div style="display:flex; gap:8px; margin-top:4px;">
+                            <button class="approve-seller-btn" data-id="${prof.user_id}" style="background:green; color:white; border:none; padding:4px 8px; border-radius:4px;">Approve</button>
+                            <button class="reject-seller-btn" data-id="${prof.user_id}" style="background:red; color:white; border:none; padding:4px 8px; border-radius:4px;">Reject</button>
+                        </div>
+                    </div>`;
+                });
+                if (pending.length === 0) html = '<p>No pending applications.</p>';
+                sellerApplicationsListDiv.innerHTML = html;
+                // Reattach listeners (same as above)
+                document.querySelectorAll('.approve-seller-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const userId = e.target.dataset.id;
+                        await supabase.from('profiles').update({ role: 'seller', seller_status: 'approved' }).eq('user_id', userId);
+                    });
+                });
+                document.querySelectorAll('.reject-seller-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const userId = e.target.dataset.id;
+                        await supabase.from('profiles').update({ seller_status: 'rejected' }).eq('user_id', userId);
                     });
                 });
             }
 
             async function renderReviewsList() {
-                const reviewsWithEmail = await Promise.all(reviews.map(async (rev) => {
-                    const { data: order } = await supabase.from('orders').select('user_email').eq('id', rev.order_id).single();
-                    return { ...rev, user_email: order?.user_email || 'Unknown' };
-                }));
-
                 let html = '';
-                reviewsWithEmail.forEach(rev => {
-                    const stars = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
+                reviews.forEach(rev => {
+                    const user = profiles.find(p => p.user_id === rev.user_id);
                     html += `<div class="review-list-item">
-                        <div><strong>${rev.user_email}</strong> on ${new Date(rev.created_at).toLocaleDateString()}</div>
-                        <div>Rating: ${stars} (${rev.rating}/5)</div>
-                        <div>Comment: ${rev.comment}</div>
+                        <div><strong>${user?.email || 'Unknown'}</strong> rated ${rev.rating} stars</div>
+                        <div>${rev.comment}</div>
+                        <div style="font-size:0.7rem; color:#999;">Order #${rev.order_id?.slice(-6)}</div>
+                        <button class="delete-review-btn" data-id="${rev.id}" style="background:none; border:none; color:#c0392b; align-self:flex-end;"><i class="fas fa-trash"></i></button>
                     </div>`;
                 });
-                if (html === '') html = '<p>No reviews yet.</p>';
+                if (reviews.length === 0) html = '<p>No reviews yet.</p>';
                 reviewsListDiv.innerHTML = html;
+                document.querySelectorAll('.delete-review-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.dataset.id;
+                        if (confirm('Delete review?')) {
+                            await supabase.from('reviews').delete().eq('id', id);
+                        }
+                    });
+                });
             }
 
             async function renderAnalytics() {
-                const { data: deliveredOrders } = await supabase
-                    .from('orders')
-                    .select('total_amount')
-                    .eq('status', 'delivered');
-                const revenue = deliveredOrders ? deliveredOrders.reduce((sum, o) => sum + o.total_amount, 0) : 0;
-                document.getElementById('totalRevenue').innerText = revenue.toLocaleString();
+                // Revenue = sum of total_amount of delivered orders
+                const deliveredOrders = orders.filter(o => o.status === 'delivered');
+                const revenue = deliveredOrders.reduce((acc, o) => acc + o.total_amount, 0);
+                document.getElementById('totalRevenue').innerText = revenue;
 
-                const { data: allOrders } = await supabase.from('orders').select('items, status');
+                // Profit = sum of (price - cost) for sold items
                 let profit = 0;
-                if (allOrders) {
-                    for (let order of allOrders) {
-                        if (order.status === 'delivered') {
-                            const items = JSON.parse(order.items || '[]');
-                            for (let item of items) {
-                                const prod = products.find(p => p.id === item.product_id);
-                                if (prod && prod.costPrice) {
-                                    profit += (prod.price - prod.costPrice) * item.quantity;
-                                }
-                            }
-                        }
-                    }
-                }
-                document.getElementById('totalProfit').innerText = profit.toLocaleString();
-
-                const { data: allItems } = await supabase.from('orders').select('items, status');
-                let totalSold = 0;
-                if (allItems) {
-                    allItems.forEach(order => {
-                        if (order.status === 'delivered') {
-                            const items = JSON.parse(order.items || '[]');
-                            items.forEach(item => totalSold += item.quantity);
+                deliveredOrders.forEach(order => {
+                    const items = JSON.parse(order.items || '[]');
+                    items.forEach(item => {
+                        const prod = products.find(p => p.id === item.product_id);
+                        if (prod && prod.costPrice) {
+                            profit += (prod.price - prod.costPrice) * item.quantity;
                         }
                     });
-                }
+                });
+                document.getElementById('totalProfit').innerText = profit;
+
+                // Total sold items
+                const totalSold = deliveredOrders.reduce((acc, o) => {
+                    const items = JSON.parse(o.items || '[]');
+                    return acc + items.reduce((sum, i) => sum + i.quantity, 0);
+                }, 0);
                 document.getElementById('totalSold').innerText = totalSold;
 
-                const statusCounts = {};
-                const { data: allOrdersStatus } = await supabase.from('orders').select('status');
-                if (allOrdersStatus) {
-                    allOrdersStatus.forEach(o => {
-                        statusCounts[o.status] = (statusCounts[o.status] || 0) + 1;
-                    });
-                }
-                document.getElementById('ordersByStatus').innerText = statusCounts['ordered'] || 0;
+                // Pending orders count
+                const pendingOrders = orders.filter(o => o.status === 'ordered').length;
+                document.getElementById('ordersByStatus').innerText = pendingOrders;
 
+                // Status breakdown
+                const statusCounts = orders.reduce((acc, o) => {
+                    acc[o.status] = (acc[o.status] || 0) + 1;
+                    return acc;
+                }, {});
                 let breakdownHtml = '';
                 for (let [status, count] of Object.entries(statusCounts)) {
                     breakdownHtml += `<div>${status}: ${count}</div>`;
@@ -2319,29 +2499,60 @@
                 document.getElementById('statusBreakdown').innerHTML = breakdownHtml;
             }
 
-            // ========== REFERRAL DASHBOARD ==========
-            async function loadReferralStats() {
-                if (!currentUser) return;
-                const { count: clicks } = await supabase
-                    .from('referral_clicks')
-                    .select('*', { count: 'exact', head: true })
-                    .eq('referrer_id', currentUser.id);
-                totalClicksSpan.innerText = clicks || 0;
+            // ========== PRODUCT DETAIL ==========
+            function openProductDetail(prodId) {
+                const prod = products.find(p => p.id === prodId);
+                if (!prod) return;
+                detailProductName.innerText = prod.name;
+                detailMainImage.src = prod.image;
+                detailDescription.innerText = prod.description || 'No description';
+                detailPrice.innerText = `KSh ${prod.price.toLocaleString()}`;
+                if (prod.originalPrice && prod.originalPrice > prod.price) {
+                    detailOriginalPrice.innerText = `KSh ${prod.originalPrice.toLocaleString()}`;
+                    const discount = Math.round((1 - prod.price/prod.originalPrice)*100);
+                    detailDiscount.innerText = `-${discount}%`;
+                    detailDiscount.style.display = 'inline-block';
+                } else {
+                    detailOriginalPrice.innerText = '';
+                    detailDiscount.style.display = 'none';
+                }
+                detailOfficial.style.display = prod.is_official_store ? 'inline-block' : 'none';
+                detailNonReturn.style.display = prod.is_non_returnable ? 'inline-block' : 'none';
+                const inStock = prod.stock > 0;
+                detailInStock.style.display = inStock ? 'inline-block' : 'none';
+                detailOutStock.style.display = !inStock ? 'inline-block' : 'none';
+                detailStock.innerText = inStock ? `In stock (${prod.stock} available)` : 'Out of stock';
+                detailReturnPolicy.innerText = prod.return_policy || 'Free return within 7 days';
 
-                const { data: commissions } = await supabase
-                    .from('referral_commissions')
-                    .select('amount, status')
-                    .eq('referrer_id', currentUser.id);
-                let pending = 0, paid = 0;
-                if (commissions) {
-                    commissions.forEach(c => {
-                        if (c.status === 'pending') pending += c.amount;
-                        else if (c.status === 'paid') paid += c.amount;
+                let galleryHtml = '';
+                if (prod.images && Array.isArray(prod.images)) {
+                    prod.images.forEach(img => {
+                        galleryHtml += `<img src="${img}" class="gallery-image" onclick="document.getElementById('detailMainImage').src='${img}'" loading="lazy">`;
                     });
                 }
-                pendingEarningsSpan.innerText = pending;
-                paidEarningsSpan.innerText = paid;
-                totalConversionsSpan.innerText = commissions ? commissions.length : 0;
+                detailGallery.innerHTML = galleryHtml;
+
+                if (prod.affiliate_link) {
+                    affiliateLinkBtn.href = prod.affiliate_link;
+                    affiliateLinkBtn.style.display = 'flex';
+                } else {
+                    affiliateLinkBtn.style.display = 'none';
+                }
+
+                if (currentUser) {
+                    const refLink = `${window.location.origin}${window.location.pathname}?ref=${currentUser.id}&product=${prod.id}`;
+                    copyReferralLinkBtn.onclick = () => {
+                        navigator.clipboard.writeText(refLink);
+                        alert('Referral link copied to clipboard!');
+                    };
+                    copyReferralLinkBtn.style.display = 'flex';
+                } else {
+                    copyReferralLinkBtn.style.display = 'none';
+                }
+
+                detailAddToCart.dataset.id = prodId;
+                detailAddToCart.disabled = !inStock;
+                detailModal.style.display = 'flex';
             }
 
             // ========== EVENT LISTENERS ==========
@@ -2355,163 +2566,82 @@
                 renderProducts();
             });
 
-            // Open product detail
             productGrid.addEventListener('click', (e) => {
-                if (e.target.closest('.add-to-cart-btn')) return;
-                const card = e.target.closest('.product-card');
-                if (!card) return;
-                const prodId = card.dataset.productId;
-                const prod = products.find(p => p.id === prodId);
-                if (prod) {
-                    detailProductName.innerText = prod.name;
-                    detailMainImage.src = prod.image;
-                    detailDescription.innerText = prod.description || 'No description';
-                    detailPrice.innerText = `KSh ${prod.price.toLocaleString()}`;
-                    if (prod.originalPrice && prod.originalPrice > prod.price) {
-                        detailOriginalPrice.innerText = `KSh ${prod.originalPrice.toLocaleString()}`;
-                        const discount = Math.round((1 - prod.price/prod.originalPrice)*100);
-                        detailDiscount.innerText = `-${discount}%`;
-                        detailDiscount.style.display = 'inline-block';
-                    } else {
-                        detailOriginalPrice.innerText = '';
-                        detailDiscount.style.display = 'none';
-                    }
-                    // Badges
-                    detailOfficial.style.display = prod.is_official_store ? 'inline-block' : 'none';
-                    detailNonReturn.style.display = prod.is_non_returnable ? 'inline-block' : 'none';
-                    const inStock = prod.stock > 0;
-                    detailInStock.style.display = inStock ? 'inline-block' : 'none';
-                    detailOutStock.style.display = !inStock ? 'inline-block' : 'none';
-                    detailStock.innerText = inStock ? `In stock (${prod.stock} available)` : 'Out of stock';
-                    detailReturnPolicy.innerText = prod.return_policy || 'Free return within 7 days';
-
-                    let galleryHtml = '';
-                    if (prod.images && Array.isArray(prod.images)) {
-                        prod.images.forEach(img => {
-                            galleryHtml += `<img src="${img}" class="gallery-image" onclick="document.getElementById('detailMainImage').src='${img}'">`;
-                        });
-                    }
-                    detailGallery.innerHTML = galleryHtml;
-
-                    if (prod.affiliate_link) {
-                        affiliateLinkBtn.href = prod.affiliate_link;
-                        affiliateLinkBtn.style.display = 'flex';
-                    } else {
-                        affiliateLinkBtn.style.display = 'none';
-                    }
-
-                    if (currentUser) {
-                        const refLink = `${window.location.origin}?ref=${currentUser.id}&product=${prod.id}`;
-                        copyReferralLinkBtn.onclick = () => {
-                            navigator.clipboard.writeText(refLink);
-                            alert('Referral link copied to clipboard!');
-                        };
-                        copyReferralLinkBtn.style.display = 'flex';
-                    } else {
-                        copyReferralLinkBtn.style.display = 'none';
-                    }
-
-                    detailAddToCart.dataset.id = prodId;
-                    detailAddToCart.disabled = !inStock;
-                    detailModal.style.display = 'flex';
-                }
-            });
-
-            detailAddToCart.addEventListener('click', () => {
-                const prodId = detailAddToCart.dataset.id;
-                const prod = products.find(p => p.id === prodId);
-                if (prod.stock <= 0) {
-                    alert('Out of stock');
-                    return;
-                }
-                const existing = cart.find(item => item.id === prodId);
-                if (existing) existing.quantity++; else cart.push({ id: prodId, quantity: 1 });
-                localStorage.setItem('cart', JSON.stringify(cart));
-                renderCartModal();
-                updateCartCount();
-                detailModal.style.display = 'none';
-            });
-
-            closeDetailBtn.addEventListener('click', () => detailModal.style.display = 'none');
-
-            // Also viewed click
-            alsoViewedList.addEventListener('click', (e) => {
-                const item = e.target.closest('.also-item');
-                if (!item) return;
-                const prodId = item.dataset.productId;
-                const prod = products.find(p => p.id === prodId);
-                if (prod) {
-                    // Trigger product detail
-                    const fakeEvent = { target: { closest: () => ({ dataset: { productId: prodId } }) } };
-                    productGrid.dispatchEvent(new CustomEvent('click', { detail: fakeEvent }));
-                }
-            });
-
-            // Add to cart buttons
-            productGrid.addEventListener('click', (e) => {
-                const btn = e.target.closest('.add-to-cart-btn');
-                if (!btn) return;
-                const prodId = btn.dataset.id;
-                const prod = products.find(p => p.id === prodId);
-                if (prod.stock <= 0) {
-                    alert('Out of stock');
-                    return;
-                }
-                const existing = cart.find(item => item.id === prodId);
-                if (existing) existing.quantity++; else cart.push({ id: prodId, quantity: 1 });
-                localStorage.setItem('cart', JSON.stringify(cart));
-                renderCartModal();
-                updateCartCount();
-            });
-
-            // Edit/delete product (admin or seller)
-            productGrid.addEventListener('click', async (e) => {
-                if (!currentUser) return;
-                if (e.target.closest('.edit-btn')) {
-                    const prodId = e.target.closest('.edit-btn').dataset.id;
+                // Handle edit button
+                const editBtn = e.target.closest('.edit-btn');
+                if (editBtn) {
+                    const prodId = editBtn.dataset.id;
                     const prod = products.find(p => p.id === prodId);
                     if (!prod) return;
-                    if (currentUserProfile?.role !== 'admin' && prod.seller_id !== currentUser.id) {
+                    if (currentUserProfile?.role !== 'admin' && prod.seller_id !== currentUser?.id) {
                         alert('You can only edit your own products.');
                         return;
                     }
-                    if (prod) {
-                        currentProductId = prodId;
-                        prodName.value = prod.name || '';
-                        prodPrice.value = prod.price || '';
-                        prodCost.value = prod.costPrice || '';
-                        prodOriginalPrice.value = prod.originalPrice || '';
-                        prodCommission.value = prod.commission_percent || 10;
-                        prodStock.value = prod.stock || 10;
-                        prodReturnPolicy.value = prod.return_policy || 'Free return within 7 days';
-                        prodOfficial.checked = prod.is_official_store || false;
-                        prodNonReturn.checked = prod.is_non_returnable || false;
-                        prodImage.value = prod.image || '';
-                        prodImages.value = (prod.images || []).join(', ');
-                        prodDescription.value = prod.description || '';
-                        prodAffiliateLink.value = prod.affiliate_link || '';
-                        prodRating.value = prod.rating || 4.5;
-                        prodSold.value = prod.sold || 0;
-                        prodBadgeImage.value = prod.badgeImage || '';
-                        prodBadgeText.value = prod.badgeText || '';
+                    // Open edit modal
+                    currentProductId = prodId;
+                    prodName.value = prod.name || '';
+                    prodPrice.value = prod.price || '';
+                    prodCost.value = prod.costPrice || '';
+                    prodOriginalPrice.value = prod.originalPrice || '';
+                    prodCommission.value = prod.commission_percent || 10;
+                    prodStock.value = prod.stock || 10;
+                    prodReturnPolicy.value = prod.return_policy || 'Free return within 7 days';
+                    prodOfficial.checked = prod.is_official_store || false;
+                    prodNonReturn.checked = prod.is_non_returnable || false;
+                    prodImage.value = prod.image || '';
+                    prodImages.value = (prod.images || []).join(', ');
+                    prodDescription.value = prod.description || '';
+                    prodAffiliateLink.value = prod.affiliate_link || '';
+                    prodRating.value = prod.rating || 4.5;
+                    prodSold.value = prod.sold || 0;
+                    prodBadgeImage.value = prod.badgeImage || '';
+                    prodBadgeText.value = prod.badgeText || '';
 
-                        let catOptions = '';
-                        categories.forEach(c => catOptions += `<option value="${c.id}" ${prod.category === c.id ? 'selected' : ''}>${c.name}</option>`);
-                        prodCategory.innerHTML = catOptions;
-                        productEditModal.style.display = 'flex';
-                    }
+                    let catOptions = '';
+                    categories.forEach(c => catOptions += `<option value="${c.id}" ${prod.category === c.id ? 'selected' : ''}>${c.name}</option>`);
+                    prodCategory.innerHTML = catOptions;
+                    productEditModal.style.display = 'flex';
+                    return;
                 }
-                if (e.target.closest('.delete-btn')) {
-                    const prodId = e.target.closest('.delete-btn').dataset.id;
+
+                // Handle delete button
+                const deleteBtn = e.target.closest('.delete-btn');
+                if (deleteBtn) {
+                    const prodId = deleteBtn.dataset.id;
                     const prod = products.find(p => p.id === prodId);
                     if (!prod) return;
-                    if (currentUserProfile?.role !== 'admin' && prod.seller_id !== currentUser.id) {
+                    if (currentUserProfile?.role !== 'admin' && prod.seller_id !== currentUser?.id) {
                         alert('You can only delete your own products.');
                         return;
                     }
                     if (confirm('Delete product?')) {
-                        await supabase.from('products').delete().eq('id', prodId);
+                        supabase.from('products').delete().eq('id', prodId);
                     }
+                    return;
+                }
+
+                // Handle add to cart button
+                const addBtn = e.target.closest('.add-to-cart-btn');
+                if (addBtn) {
+                    const prodId = addBtn.dataset.id;
+                    const prod = products.find(p => p.id === prodId);
+                    if (prod.stock <= 0) {
+                        alert('Out of stock');
+                        return;
+                    }
+                    const existing = cart.find(item => item.id === prodId);
+                    if (existing) existing.quantity++; else cart.push({ id: prodId, quantity: 1 });
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCartModal();
+                    updateCartCount();
+                    return;
+                }
+
+                // Handle product card click (open detail)
+                const card = e.target.closest('.product-card');
+                if (card) {
+                    const prodId = card.dataset.productId;
+                    openProductDetail(prodId);
                 }
             });
 
@@ -2584,198 +2714,73 @@
                 });
             });
 
-            async function renderCategoriesList() {
-                let html = '';
-                categories.forEach(cat => {
-                    html += `<div class="cat-list-item">`;
-                    if (cat.image) {
-                        html += `<img src="${cat.image}" alt="${cat.name}">`;
-                    } else {
-                        html += `<i class="fas ${cat.icon}"></i>`;
-                    }
-                    html += `<span>${cat.name}</span>
-                        <button class="edit-cat-btn" data-id="${cat.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
-                        <button class="delete-cat-btn" data-id="${cat.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
-                    </div>`;
-                });
-                categoriesListDiv.innerHTML = html;
-            }
-
-            async function renderBannersList() {
-                let html = '';
-                banners.forEach(b => {
-                    html += `<div class="banner-list-item"><img src="${b.image}" style="width:50px; height:30px; object-fit:cover;"> <span>${b.title}</span>
-                        <button class="edit-banner-btn" data-id="${b.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
-                        <button class="delete-banner-btn" data-id="${b.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
-                    </div>`;
-                });
-                bannersListDiv.innerHTML = html;
-            }
-
-            async function renderProductsList() {
-                let html = '';
-                products.forEach(prod => {
-                    html += `<div class="prod-list-item">`;
-                    html += `<img src="${prod.image || 'https://placehold.co/30x30'}" alt="${prod.name}">`;
-                    html += `<span>${prod.name} (KSh ${prod.price})</span>
-                        <button class="edit-prod-btn" data-id="${prod.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
-                        <button class="delete-prod-btn" data-id="${prod.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
-                    </div>`;
-                });
-                productsListDiv.innerHTML = html;
-            }
-
-            // Category CRUD
+            // Add category
             addCategoryBtn.addEventListener('click', () => {
                 currentCategoryId = null;
-                catNameInput.value = ''; 
-                catIconInput.value = 'fa-tag'; 
+                catNameInput.value = '';
+                catIconInput.value = '';
                 catImageInput.value = '';
                 categoryEditModal.style.display = 'flex';
             });
-
-            categoriesListDiv.addEventListener('click', async (e) => {
-                if (e.target.closest('.edit-cat-btn')) {
-                    const id = e.target.closest('.edit-cat-btn').dataset.id;
-                    const cat = categories.find(c => c.id === id);
-                    if (cat) { 
-                        currentCategoryId = id; 
-                        catNameInput.value = cat.name; 
-                        catIconInput.value = cat.icon; 
-                        catImageInput.value = cat.image || ''; 
-                        categoryEditModal.style.display = 'flex'; 
-                    }
-                }
-                if (e.target.closest('.delete-cat-btn')) {
-                    const id = e.target.closest('.delete-cat-btn').dataset.id;
-                    if (confirm('Delete category?')) {
-                        await supabase.from('categories').delete().eq('id', id);
-                    }
-                }
-            });
-
             catModalSave.addEventListener('click', async () => {
-                const name = catNameInput.value.trim(), icon = catIconInput.value.trim(), image = catImageInput.value.trim();
-                if (!name) return alert('Category name is required');
-                if (!icon) return alert('Icon class is required (e.g., fa-mobile-alt)');
+                const name = catNameInput.value.trim();
+                const icon = catIconInput.value.trim();
+                const image = catImageInput.value.trim();
+                if (!name) return alert('Category name required');
+                const catData = {
+                    name,
+                    icon: icon || 'fa-tag',
+                    image: image || ''
+                };
                 if (currentCategoryId) {
-                    await supabase.from('categories').update({ name, icon, image }).eq('id', currentCategoryId);
+                    await supabase.from('categories').update(catData).eq('id', currentCategoryId);
                 } else {
                     const newId = 'cat_' + Date.now() + Math.random().toString(36).substr(2, 4);
-                    await supabase.from('categories').insert([{ id: newId, name, icon, image }]);
+                    await supabase.from('categories').insert([{ id: newId, ...catData }]);
                 }
                 categoryEditModal.style.display = 'none';
             });
             catModalCancel.addEventListener('click', () => categoryEditModal.style.display = 'none');
 
-            // Banner CRUD
+            // Add banner
             addBannerBtn.addEventListener('click', () => {
                 currentBannerId = null;
-                bannerImageInput.value = ''; bannerLinkInput.value = ''; bannerTitleInput.value = '';
+                bannerImageInput.value = '';
+                bannerLinkInput.value = '';
+                bannerTitleInput.value = '';
                 bannerEditModal.style.display = 'flex';
             });
-
-            bannersListDiv.addEventListener('click', async (e) => {
-                if (e.target.closest('.edit-banner-btn')) {
-                    const id = e.target.closest('.edit-banner-btn').dataset.id;
-                    const ban = banners.find(b => b.id === id);
-                    if (ban) { currentBannerId = id; bannerImageInput.value = ban.image; bannerLinkInput.value = ban.link || ''; bannerTitleInput.value = ban.title || ''; bannerEditModal.style.display = 'flex'; }
-                }
-                if (e.target.closest('.delete-banner-btn')) {
-                    const id = e.target.closest('.delete-banner-btn').dataset.id;
-                    await supabase.from('banners').delete().eq('id', id);
-                }
-            });
-
             bannerModalSave.addEventListener('click', async () => {
-                const img = bannerImageInput.value.trim(), link = bannerLinkInput.value.trim(), title = bannerTitleInput.value.trim();
-                if (!img) return alert('Image URL required');
+                const image = bannerImageInput.value.trim();
+                const link = bannerLinkInput.value.trim();
+                const title = bannerTitleInput.value.trim();
+                if (!image || !title) return alert('Image and title required');
+                const bannerData = { image, link, title };
                 if (currentBannerId) {
-                    await supabase.from('banners').update({ image: img, link, title }).eq('id', currentBannerId);
+                    await supabase.from('banners').update(bannerData).eq('id', currentBannerId);
                 } else {
                     const newId = 'ban_' + Date.now() + Math.random().toString(36).substr(2, 4);
-                    await supabase.from('banners').insert([{ id: newId, image: img, link, title }]);
+                    await supabase.from('banners').insert([{ id: newId, ...bannerData }]);
                 }
                 bannerEditModal.style.display = 'none';
             });
             bannerModalCancel.addEventListener('click', () => bannerEditModal.style.display = 'none');
 
-            // Product list actions (from admin panel)
-            productsListDiv.addEventListener('click', async (e) => {
-                if (e.target.closest('.edit-prod-btn')) {
-                    const prodId = e.target.closest('.edit-prod-btn').dataset.id;
-                    const prod = products.find(p => p.id === prodId);
-                    if (prod) {
-                        currentProductId = prodId;
-                        prodName.value = prod.name;
-                        prodPrice.value = prod.price;
-                        prodCost.value = prod.costPrice || '';
-                        prodOriginalPrice.value = prod.originalPrice || '';
-                        prodCommission.value = prod.commission_percent || 10;
-                        prodStock.value = prod.stock || 10;
-                        prodReturnPolicy.value = prod.return_policy || 'Free return within 7 days';
-                        prodOfficial.checked = prod.is_official_store || false;
-                        prodNonReturn.checked = prod.is_non_returnable || false;
-                        prodImage.value = prod.image || '';
-                        prodImages.value = (prod.images || []).join(', ');
-                        prodDescription.value = prod.description || '';
-                        prodAffiliateLink.value = prod.affiliate_link || '';
-                        prodRating.value = prod.rating || 4.5;
-                        prodSold.value = prod.sold || 0;
-                        prodBadgeImage.value = prod.badgeImage || '';
-                        prodBadgeText.value = prod.badgeText || '';
-                        let catOptions = '';
-                        categories.forEach(c => catOptions += `<option value="${c.id}" ${prod.category === c.id ? 'selected' : ''}>${c.name}</option>`);
-                        prodCategory.innerHTML = catOptions;
-                        adminModal.style.display = 'none';
-                        productEditModal.style.display = 'flex';
-                    }
-                }
-                if (e.target.closest('.delete-prod-btn')) {
-                    const prodId = e.target.closest('.delete-prod-btn').dataset.id;
-                    if (confirm('Delete product?')) {
-                        await supabase.from('products').delete().eq('id', prodId);
-                    }
-                }
-            });
-
-            // Add product button (main)
+            // Add product button
             addProductBtn.addEventListener('click', () => {
                 if (!currentUser || (currentUserProfile?.role !== 'admin' && currentUserProfile?.role !== 'seller')) {
                     alert('You do not have permission to add products.');
                     return;
                 }
-                currentProductId = null;
-                prodName.value = ''; 
-                prodPrice.value = ''; 
-                prodCost.value = ''; 
-                prodOriginalPrice.value = ''; 
-                prodCommission.value = '10'; 
-                prodStock.value = '10';
-                prodReturnPolicy.value = 'Free return within 7 days';
-                prodOfficial.checked = false;
-                prodNonReturn.checked = false;
-                prodImage.value = ''; 
-                prodImages.value = ''; 
-                prodDescription.value = ''; 
-                prodAffiliateLink.value = ''; 
-                prodRating.value = '4.5'; 
-                prodSold.value = '0'; 
-                prodBadgeImage.value = ''; 
-                prodBadgeText.value = '';
-
-                let catOptions = '';
-                categories.forEach(c => catOptions += `<option value="${c.id}">${c.name}</option>`);
-                prodCategory.innerHTML = catOptions;
-                if (prodCategory.options.length > 0) prodCategory.selectedIndex = 0;
-                productEditModal.style.display = 'flex';
+                openProductEditForSeller();
             });
 
-            // Save product
             productModalSave.addEventListener('click', async () => {
                 const name = prodName.value.trim(), price = parseFloat(prodPrice.value);
                 if (!name || isNaN(price)) return alert('Name and price required');
                 const imagesArray = prodImages.value.split(',').map(s => s.trim()).filter(s => s);
+                // Determine seller_id: null for admin, current user for seller
+                const sellerId = (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') ? currentUser.id : null;
                 const productData = {
                     name,
                     price,
@@ -2795,7 +2800,7 @@
                     sold: parseInt(prodSold.value) || 0,
                     badgeImage: prodBadgeImage.value.trim() || '',
                     badgeText: prodBadgeText.value.trim() || '',
-                    seller_id: currentUser?.id
+                    seller_id: sellerId
                 };
                 if (currentProductId) {
                     const { error } = await supabase.from('products').update(productData).eq('id', currentProductId);
@@ -2809,7 +2814,6 @@
             });
             productModalCancel.addEventListener('click', () => productEditModal.style.display = 'none');
 
-            // Debounced search
             searchInput.addEventListener('input', (e) => {
                 if (searchTimeout) clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
@@ -2818,7 +2822,6 @@
                 }, 300);
             });
 
-            // Save settings
             saveSettingsBtn.addEventListener('click', async () => {
                 const newWa = waNumberInput.value.trim();
                 const newFee = deliveryFeeInput.value.trim();
@@ -2836,14 +2839,12 @@
                 alert('Settings updated');
             });
 
-            // Notifications modal
             function openNotifModal() {
                 renderNotifications();
                 notifModal.style.display = 'flex';
             }
             closeNotifBtn.addEventListener('click', () => notifModal.style.display = 'none');
 
-            // Auth modal functions
             function openAuthModal() {
                 authModal.style.display = 'flex';
                 authModalTitle.innerText = 'Login';
@@ -2873,7 +2874,6 @@
                 }
             });
 
-            // Profile modal
             async function openProfileModal() {
                 if (!currentUser) {
                     openAuthModal();
@@ -2896,7 +2896,8 @@
                 await loadReferralStats();
 
                 if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
-                    await renderSellerDashboard();
+                    await renderSellerDashboard(false);
+                    sellerDashboard.style.display = 'block';
                 } else {
                     sellerDashboard.style.display = 'none';
                 }
@@ -2907,7 +2908,6 @@
             logoutBtn.addEventListener('click', signOut);
             closeProfileBtn.addEventListener('click', () => profileModal.style.display = 'none');
 
-            // Bottom navigation
             navItems.forEach(item => {
                 item.addEventListener('click', () => {
                     const nav = item.dataset.nav;
@@ -2929,6 +2929,11 @@
                             renderCategories();
                             renderProducts();
                             break;
+                        case 'sell':
+                            if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
+                                openSellerDashboard();
+                            }
+                            break;
                         case 'orders':
                             renderCartModal();
                             cartModal.style.display = 'flex';
@@ -2943,11 +2948,19 @@
                 });
             });
 
-            // Initial load and subscriptions
+            // Also viewed click handler
+            alsoViewedList.addEventListener('click', (e) => {
+                const item = e.target.closest('.also-item');
+                if (!item) return;
+                const prodId = item.dataset.productId;
+                openProductDetail(prodId);
+            });
+
+            // Initial load
             await loadAllData();
             setupSubscriptions();
             updateCartCount();
         })();
     </script>
 </body>
-                            </html>
+            </html>
