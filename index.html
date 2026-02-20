@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Teresa · marketplace with sellers</title>
+    <title>Teresa · marketplace with payments & delivery</title>
     <!-- SEO meta tags -->
     <meta name="description" content="Teresa – your everyday style and gadgets. Shop the latest trends in beauty, electronics, and accessories.">
     <meta name="keywords" content="Teresa, online shop, gadgets, beauty, earrings, nose ring, Kenya">
     <meta name="author" content="Teresa">
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://yourdomain.com">
     <meta property="og:title" content="Teresa · style & gadgets">
@@ -27,7 +27,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cstyle%3E.accent-icon%7Bstroke:%23C72A4C;stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;%7D%3C/style%3E%3Cpath class='accent-icon' d='M70 50 L100 30 L130 70 L115 130 L85 130 L70 70 L70 50'/%3E%3Ccircle cx='100' cy='55' r='12' fill='%23C72A4C' opacity='0.9'/%3E%3C/svg%3E">
     <style>
-        /* (Keep all existing styles) */
+        /* ========== GLOBAL STYLES ========== */
         * {
             margin: 0;
             padding: 0;
@@ -118,6 +118,29 @@
             outline: none;
             font-size: 0.95rem;
         }
+        /* ========== EXPRESS BANNER ========== */
+        .express-banner {
+            background: linear-gradient(135deg, #f9a825, #f57c00);
+            color: white;
+            padding: 12px 16px;
+            margin: 8px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        .express-banner i {
+            font-size: 1.8rem;
+        }
+        .express-banner div {
+            flex: 1;
+        }
+        .express-banner .small {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        /* ========== BANNER CAROUSEL ========== */
         .banner-carousel {
             margin: 12px 16px;
             overflow-x: auto;
@@ -164,6 +187,7 @@
             background: #ccc;
         }
         .dot.active { background: var(--tokped-green); }
+        /* ========== CATEGORIES ========== */
         .categories {
             display: flex;
             gap: 8px;
@@ -201,11 +225,13 @@
             color: white;
         }
         .chip.active i { color: white; }
+        /* ========== ADMIN/SELLER BAR ========== */
         .admin-bar {
             display: flex;
             align-items: center;
             justify-content: flex-end;
             padding: 10px 16px 0;
+            gap: 8px;
         }
         .admin-badge {
             background: #fdecea;
@@ -218,6 +244,18 @@
             gap: 5px;
             cursor: pointer;
         }
+        .seller-badge {
+            background: #f39c12;
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        /* ========== PRODUCT GRID ========== */
         .product-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -245,7 +283,35 @@
             object-fit: cover;
             display: block;
         }
-        .product-badge {
+        .product-badges {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .badge {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .badge.official {
+            background: #1e88e5;
+        }
+        .badge.nonreturn {
+            background: #e53935;
+        }
+        .badge.stock {
+            background: #43a047;
+        }
+        .badge.outstock {
+            background: #757575;
+        }
+        .product-badge-bottom {
             display: flex;
             align-items: center;
             background: #fef7e6;
@@ -256,13 +322,13 @@
             color: #a86800;
             min-height: 32px;
         }
-        .product-badge img {
+        .product-badge-bottom img {
             height: 20px;
             width: auto;
             max-width: 60px;
             object-fit: contain;
         }
-        .product-badge span {
+        .product-badge-bottom span {
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
@@ -314,6 +380,14 @@
             margin-bottom: 8px;
         }
         .product-rating i { color: #f9a825; }
+        .stock-status {
+            font-size: 0.7rem;
+            color: #43a047;
+            margin-bottom: 8px;
+        }
+        .stock-status.out {
+            color: #e53935;
+        }
         .add-to-cart-btn {
             background: var(--tokped-green);
             border: none;
@@ -397,6 +471,7 @@
             justify-content: center;
             gap: 8px;
         }
+        /* ========== BOTTOM NAVIGATION ========== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -421,6 +496,7 @@
         }
         .nav-item i { font-size: 1.3rem; }
         .nav-item.active { color: var(--tokped-green); }
+        /* ========== MODALS ========== */
         .modal {
             display: none;
             position: fixed;
@@ -468,6 +544,43 @@
         }
         .btn-save { background: var(--tokped-green); color: white; }
         .btn-cancel { background: #f1f3f4; color: #3c3c3c; }
+        /* ========== DELIVERY OPTIONS ========== */
+        .delivery-option {
+            border: 1px solid var(--tokped-border);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        .delivery-option.selected {
+            border-color: var(--tokped-green);
+            background-color: var(--tokped-green-light);
+        }
+        .delivery-option-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+        .delivery-option-details {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 4px;
+        }
+        .delivery-option-time {
+            font-size: 0.75rem;
+            color: var(--tokped-green);
+            margin-top: 4px;
+        }
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border: 1px solid var(--tokped-border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        /* ========== CART ITEMS ========== */
         .cart-item {
             display: flex;
             gap: 12px;
@@ -504,6 +617,7 @@
             gap: 8px;
             cursor: pointer;
         }
+        /* ========== ADMIN TABS ========== */
         .admin-tabs {
             display: flex;
             gap: 8px;
@@ -520,6 +634,7 @@
         .admin-tab.active { background: var(--tokped-green); color: white; }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
+        /* ========== LIST ITEMS ========== */
         .banner-list-item, .cat-list-item, .prod-list-item, .user-list-item, .review-list-item {
             display: flex;
             gap: 10px;
@@ -538,6 +653,8 @@
         .cat-list-item i { font-size: 1.2rem; width: 30px; text-align: center; }
         .prod-list-item span { flex: 1; }
         .user-list-item, .review-list-item { flex-direction: column; align-items: flex-start; }
+
+        /* ========== NOTIFICATIONS ========== */
         .notif-item {
             display: flex;
             align-items: center;
@@ -560,6 +677,8 @@
             font-size: 0.7rem;
             color: #999;
         }
+
+        /* ========== IMAGE GALLERY ========== */
         .image-gallery {
             display: flex;
             gap: 8px;
@@ -582,6 +701,8 @@
             border-radius: 16px;
             margin-bottom: 10px;
         }
+
+        /* ========== ORDER STATUS BADGES ========== */
         .status-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -593,6 +714,8 @@
         .status-waiting_shipment { background: #ffe0b2; color: #bf360c; }
         .status-shipped { background: #b3e5fc; color: #01579b; }
         .status-delivered { background: #c8e6c9; color: #1b5e20; }
+
+        /* ========== ANALYTICS CARDS ========== */
         .analytics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -614,10 +737,14 @@
             font-size: 0.8rem;
             color: #666;
         }
+
+        /* ========== ORDER DETAILS ========== */
         .order-detail-item {
             font-size: 0.8rem;
             color: #555;
         }
+
+        /* ========== STAR RATING ========== */
         .star-rating {
             display: flex;
             gap: 4px;
@@ -630,14 +757,45 @@
         .star-rating .fa-star.selected {
             color: #f9a825;
         }
-        /* Seller specific */
-        .seller-badge {
-            background: #f39c12;
-            color: white;
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 30px;
-            margin-left: 8px;
+
+        /* ========== CUSTOMERS ALSO VIEWED ========== */
+        .also-viewed {
+            padding: 16px;
+            border-top: 8px solid #f1f3f4;
+        }
+        .also-viewed h4 {
+            margin-bottom: 12px;
+        }
+        .also-viewed-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .also-viewed-scroll::-webkit-scrollbar { display: none; }
+        .also-item {
+            flex: 0 0 120px;
+            border: 1px solid var(--tokped-border);
+            border-radius: 12px;
+            padding: 8px;
+        }
+        .also-item img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .also-item .name {
+            font-size: 0.75rem;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .also-item .price {
+            font-weight: 600;
+            color: var(--tokped-price);
+            font-size: 0.8rem;
         }
     </style>
 </head>
@@ -671,6 +829,15 @@
             </div>
         </div>
 
+        <!-- EXPRESS BANNER -->
+        <div class="express-banner">
+            <i class="fas fa-rocket"></i>
+            <div>
+                <div>Teresa Express</div>
+                <div class="small">The BEST products, delivered faster. Now PAY on DELIVERY, Cash or Bank Transfer Anywhere, Zero Wahala!</div>
+            </div>
+        </div>
+
         <!-- BANNER CAROUSEL -->
         <div id="bannerCarousel" class="banner-carousel"></div>
         <div id="bannerDots" class="banner-dots"></div>
@@ -681,7 +848,7 @@
         <!-- ADMIN/SELLER BAR -->
         <div class="admin-bar">
             <span id="adminModeBadge" class="admin-badge" style="display: none;"><i class="fas fa-unlock-alt"></i> admin</span>
-            <span id="sellerModeBadge" class="admin-badge" style="display: none; background: #f39c12;"><i class="fas fa-store"></i> seller</span>
+            <span id="sellerModeBadge" class="seller-badge" style="display: none;"><i class="fas fa-store"></i> seller</span>
         </div>
 
         <!-- PRODUCT GRID -->
@@ -689,6 +856,12 @@
 
         <!-- ADD PRODUCT BUTTON (admin or seller) -->
         <button id="addProductBtn" class="btn-add-product" style="display: none;"><i class="fas fa-plus-circle"></i> Add new product</button>
+
+        <!-- CUSTOMERS ALSO VIEWED -->
+        <div id="alsoViewedSection" class="also-viewed" style="display: none;">
+            <h4>Customers also viewed</h4>
+            <div class="also-viewed-scroll" id="alsoViewedList"></div>
+        </div>
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
@@ -714,10 +887,11 @@
         </div>
     </div>
 
-    <!-- CHECKOUT DETAILS MODAL -->
+    <!-- CHECKOUT DETAILS MODAL (with delivery & payment) -->
     <div id="checkoutDetailsModal" class="modal">
         <div class="modal-card">
-            <h3><i class="fas fa-truck"></i> Shipping details</h3>
+            <h3><i class="fas fa-truck"></i> Delivery & Payment</h3>
+            
             <div class="modal-field">
                 <label>Full name</label>
                 <input type="text" id="checkoutName" placeholder="John Doe">
@@ -726,14 +900,56 @@
                 <label>Phone number</label>
                 <input type="tel" id="checkoutPhone" placeholder="0712345678">
             </div>
+            
+            <!-- Delivery Method -->
             <div class="modal-field">
+                <label>Delivery Method</label>
+                <div id="deliveryOptions">
+                    <div class="delivery-option" data-method="door" id="deliveryDoor">
+                        <div class="delivery-option-header">
+                            <span><i class="fas fa-truck"></i> Door Delivery</span>
+                            <span>KSh 250</span>
+                        </div>
+                        <div class="delivery-option-details">Ready for delivery between <span id="doorStart"></span> and <span id="doorEnd"></span></div>
+                        <div class="delivery-option-time" id="doorTimer"></div>
+                    </div>
+                    <div class="delivery-option" data-method="pickup" id="deliveryPickup">
+                        <div class="delivery-option-header">
+                            <span><i class="fas fa-store"></i> Pickup Station</span>
+                            <span>Free</span>
+                        </div>
+                        <div class="delivery-option-details">Pickup at Teresa Hub, Nairobi</div>
+                        <div class="delivery-option-time">Ready for pickup between <span id="pickupStart"></span> and <span id="pickupEnd"></span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address (only for door delivery) -->
+            <div class="modal-field" id="addressField">
                 <label>Shipping address</label>
                 <textarea id="checkoutAddress" rows="2" placeholder="Street, city, building..."></textarea>
             </div>
+
+            <!-- Payment Method -->
+            <div class="modal-field">
+                <label>Payment Method</label>
+                <div id="paymentOptions">
+                    <div class="payment-option">
+                        <input type="radio" name="payment" value="cash" id="payCash" checked>
+                        <label for="payCash"><i class="fas fa-money-bill-wave"></i> Cash on Delivery</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="payment" value="bank" id="payBank">
+                        <label for="payBank"><i class="fas fa-university"></i> Bank Transfer (M-Pesa/Bank)</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="modal-field">
                 <label>Order notes (optional)</label>
                 <textarea id="checkoutNotes" rows="2" placeholder="Any special instructions"></textarea>
             </div>
+
             <div class="modal-actions">
                 <button class="btn-cancel" id="checkoutCancel">Cancel</button>
                 <button class="btn-save" id="checkoutConfirm">Confirm order</button>
@@ -768,15 +984,13 @@
         <div class="modal-card">
             <h3><i class="fas fa-user"></i> My Account</h3>
             <p><strong id="profileEmail"></strong> <span id="profileRole" class="seller-badge"></span></p>
-            <div id="sellerRequestSection" style="margin: 16px 0;">
-                <!-- Show different options based on role -->
-            </div>
+            <div id="sellerRequestSection" style="margin: 16px 0;"></div>
             <button class="btn-cancel" id="logoutBtn" style="width:100%; margin-bottom:20px;">Logout</button>
 
             <h4>My Orders</h4>
             <div id="userOrdersList"></div>
 
-            <!-- Seller Dashboard (visible to sellers) -->
+            <!-- Seller Dashboard -->
             <div id="sellerDashboard" style="display: none; margin-top:20px;">
                 <h4>My Products</h4>
                 <div id="sellerProductsList"></div>
@@ -828,7 +1042,7 @@
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD MODAL (updated with Seller Applications tab) -->
+    <!-- ADMIN DASHBOARD MODAL -->
     <div id="adminModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-cog"></i> Admin dashboard</h3>
@@ -913,17 +1127,31 @@
                     <label>WhatsApp number (with country code, no +)</label>
                     <input type="text" id="waNumberInput" placeholder="e.g. 254700000000">
                 </div>
-                <button class="btn-save" id="saveWABtn" style="width:100%;">Save WhatsApp number</button>
+                <div class="modal-field">
+                    <label>Door delivery fee (KSh)</label>
+                    <input type="number" id="deliveryFeeInput" value="250">
+                </div>
+                <div class="modal-field">
+                    <label>Pickup stations (comma separated)</label>
+                    <input type="text" id="pickupStationsInput" value="Teresa Hub Nairobi, Teresa Hub Mombasa">
+                </div>
+                <button class="btn-save" id="saveSettingsBtn" style="width:100%;">Save Settings</button>
             </div>
 
             <div class="modal-actions"><button class="btn-cancel" id="closeAdminModal">Close</button></div>
         </div>
     </div>
 
-    <!-- PRODUCT DETAIL MODAL -->
+    <!-- PRODUCT DETAIL MODAL (enhanced) -->
     <div id="productDetailModal" class="modal">
         <div class="modal-card">
             <h3 id="detailProductName"></h3>
+            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                <span class="badge official" id="detailOfficial" style="display: none;">Official Store</span>
+                <span class="badge nonreturn" id="detailNonReturn" style="display: none;">Non-returnable</span>
+                <span class="badge stock" id="detailInStock" style="display: none;">In stock</span>
+                <span class="badge outstock" id="detailOutStock" style="display: none;">Out of stock</span>
+            </div>
             <img id="detailMainImage" class="main-image" src="" alt="">
             <div class="image-gallery" id="detailGallery"></div>
             <p id="detailDescription" style="margin:12px 0;"></p>
@@ -932,6 +1160,8 @@
                 <span class="original-price" id="detailOriginalPrice"></span>
                 <span class="discount-badge" id="detailDiscount" style="display:none;"></span>
             </div>
+            <div class="stock-status" id="detailStock"></div>
+            <div style="font-size:0.8rem; margin-bottom:12px;" id="detailReturnPolicy"></div>
             <button class="add-to-cart-btn" id="detailAddToCart"><i class="fas fa-cart-plus"></i> Add to cart</button>
             <a href="#" target="_blank" rel="noopener" class="affiliate-btn" id="affiliateLinkBtn" style="display:none;"><i class="fas fa-external-link-alt"></i> Affiliate link</a>
             <button class="btn-copy-link" id="copyReferralLink" style="display:none;"><i class="fas fa-link"></i> Copy referral link</button>
@@ -939,7 +1169,7 @@
         </div>
     </div>
 
-    <!-- EDIT PRODUCT MODAL (with seller_id hidden) -->
+    <!-- EDIT PRODUCT MODAL (with new fields) -->
     <div id="productEditModal" class="modal">
         <div class="modal-card">
             <h3 id="productModalTitle">Edit product</h3>
@@ -948,6 +1178,14 @@
             <div class="modal-field"><label>Cost price (for profit)</label><input type="number" id="prodCost" placeholder="KSh"></div>
             <div class="modal-field"><label>Original price (for discount)</label><input type="number" id="prodOriginalPrice" placeholder="0 = no discount"></div>
             <div class="modal-field"><label>Commission (%)</label><input type="number" id="prodCommission" value="10" min="0" max="100"></div>
+            <div class="modal-field"><label>Stock</label><input type="number" id="prodStock" value="10"></div>
+            <div class="modal-field"><label>Return policy</label><input type="text" id="prodReturnPolicy" value="Free return within 7 days"></div>
+            <div class="modal-field">
+                <label><input type="checkbox" id="prodOfficial"> Official Store</label>
+            </div>
+            <div class="modal-field">
+                <label><input type="checkbox" id="prodNonReturn"> Non-returnable</label>
+            </div>
             <div class="modal-field"><label>Main image URL</label><input type="text" id="prodImage"></div>
             <div class="modal-field"><label>Additional image URLs (comma separated)</label><input type="text" id="prodImages" placeholder="url1, url2, url3"></div>
             <div class="modal-field"><label>Description</label><textarea id="prodDescription" rows="3"></textarea></div>
@@ -1034,13 +1272,13 @@
                 { id: 'ban2', image: 'https://placehold.co/600x200/f9a825/white?text=Beauty+Special', link: '', title: 'Beauty Special' }
             ];
             const DEFAULT_PRODUCTS = [
-                { id: 'p1', name: 'Smartphone Android 13', price: 25999, costPrice: 22000, originalPrice: 29999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Smartphone', images: [], description: 'Latest Android 13 smartphone with 128GB storage.', category: 'cat1', rating: 4.5, sold: 78, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null },
-                { id: 'p2', name: 'TWS Wireless Earbuds Pro', price: 3999, costPrice: 2500, originalPrice: 5999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earbuds', images: [], description: 'Noise cancelling earbuds with charging case.', category: 'cat1', rating: 4.3, sold: 124, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null },
-                { id: 'p3', name: 'Matte Lipstick Set (6 pcs)', price: 1299, costPrice: 800, originalPrice: 1899, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Lipstick', images: [], description: 'Set of 6 long-lasting matte lipsticks.', category: 'cat2', rating: 4.7, sold: 312, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null },
-                { id: 'p4', name: 'Gold Plated Hoop Earrings', price: 3499, costPrice: 2000, originalPrice: 4499, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earrings', images: [], description: 'Elegant gold plated hoop earrings.', category: 'cat4', rating: 4.8, sold: 56, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null },
-                { id: 'p5', name: 'Silver Nose Ring', price: 899, costPrice: 400, originalPrice: 1199, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Nose+Ring', images: [], description: 'Adjustable silver nose ring.', category: 'cat5', rating: 4.4, sold: 103, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null }
+                { id: 'p1', name: 'Smartphone Android 13', price: 25999, costPrice: 22000, originalPrice: 29999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Smartphone', images: [], description: 'Latest Android 13 smartphone with 128GB storage.', category: 'cat1', rating: 4.5, sold: 78, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null, stock: 10, return_policy: 'Free return within 7 days', is_official_store: true, is_non_returnable: false },
+                { id: 'p2', name: 'TWS Wireless Earbuds Pro', price: 3999, costPrice: 2500, originalPrice: 5999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earbuds', images: [], description: 'Noise cancelling earbuds with charging case.', category: 'cat1', rating: 4.3, sold: 124, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 5, return_policy: 'Free return within 7 days', is_official_store: false, is_non_returnable: false },
+                { id: 'p3', name: 'Matte Lipstick Set (6 pcs)', price: 1299, costPrice: 800, originalPrice: 1899, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Lipstick', images: [], description: 'Set of 6 long-lasting matte lipsticks.', category: 'cat2', rating: 4.7, sold: 312, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null, stock: 20, return_policy: 'Free return within 7 days', is_official_store: true, is_non_returnable: false },
+                { id: 'p4', name: 'Gold Plated Hoop Earrings', price: 3499, costPrice: 2000, originalPrice: 4499, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earrings', images: [], description: 'Elegant gold plated hoop earrings.', category: 'cat4', rating: 4.8, sold: 56, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 3, return_policy: 'Non-returnable', is_official_store: false, is_non_returnable: true },
+                { id: 'p5', name: 'Silver Nose Ring', price: 899, costPrice: 400, originalPrice: 1199, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Nose+Ring', images: [], description: 'Adjustable silver nose ring.', category: 'cat5', rating: 4.4, sold: 103, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 0, return_policy: 'Free return within 7 days', is_official_store: false, is_non_returnable: false }
             ];
-            const DEFAULT_SETTINGS = { wa_number: '254700000000' };
+            const DEFAULT_SETTINGS = { wa_number: '254700000000', delivery_fee: 250, pickup_stations: 'Teresa Hub Nairobi, Teresa Hub Mombasa' };
 
             // ========== STATE ==========
             let categories = [];
@@ -1049,9 +1287,9 @@
             let settings = { ...DEFAULT_SETTINGS };
             let orders = [];
             let reviews = [];
-            let profiles = []; // store user profiles
+            let profiles = [];
             let currentUser = null;
-            let currentUserProfile = null; // role, seller_status
+            let currentUserProfile = null;
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             let activeCategory = null;
@@ -1085,6 +1323,16 @@
             const checkoutNotes = document.getElementById('checkoutNotes');
             const checkoutCancel = document.getElementById('checkoutCancel');
             const checkoutConfirm = document.getElementById('checkoutConfirm');
+            const deliveryOptions = document.getElementById('deliveryOptions');
+            const deliveryDoor = document.getElementById('deliveryDoor');
+            const deliveryPickup = document.getElementById('deliveryPickup');
+            const addressField = document.getElementById('addressField');
+            const doorStart = document.getElementById('doorStart');
+            const doorEnd = document.getElementById('doorEnd');
+            const doorTimer = document.getElementById('doorTimer');
+            const pickupStart = document.getElementById('pickupStart');
+            const pickupEnd = document.getElementById('pickupEnd');
+            const paymentOptions = document.querySelectorAll('input[name="payment"]');
             const adminModal = document.getElementById('adminModal');
             const closeAdminModal = document.getElementById('closeAdminModal');
             const categoriesListDiv = document.getElementById('categoriesList');
@@ -1102,6 +1350,10 @@
             const prodCost = document.getElementById('prodCost');
             const prodOriginalPrice = document.getElementById('prodOriginalPrice');
             const prodCommission = document.getElementById('prodCommission');
+            const prodStock = document.getElementById('prodStock');
+            const prodReturnPolicy = document.getElementById('prodReturnPolicy');
+            const prodOfficial = document.getElementById('prodOfficial');
+            const prodNonReturn = document.getElementById('prodNonReturn');
             const prodImage = document.getElementById('prodImage');
             const prodImages = document.getElementById('prodImages');
             const prodDescription = document.getElementById('prodDescription');
@@ -1130,7 +1382,9 @@
             const notificationsList = document.getElementById('notificationsList');
             const closeNotifBtn = document.getElementById('closeNotifBtn');
             const waNumberInput = document.getElementById('waNumberInput');
-            const saveWABtn = document.getElementById('saveWABtn');
+            const deliveryFeeInput = document.getElementById('deliveryFeeInput');
+            const pickupStationsInput = document.getElementById('pickupStationsInput');
+            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
 
             const authModal = document.getElementById('authModal');
             const authEmail = document.getElementById('authEmail');
@@ -1163,12 +1417,18 @@
 
             const detailModal = document.getElementById('productDetailModal');
             const detailProductName = document.getElementById('detailProductName');
+            const detailOfficial = document.getElementById('detailOfficial');
+            const detailNonReturn = document.getElementById('detailNonReturn');
+            const detailInStock = document.getElementById('detailInStock');
+            const detailOutStock = document.getElementById('detailOutStock');
             const detailMainImage = document.getElementById('detailMainImage');
             const detailGallery = document.getElementById('detailGallery');
             const detailDescription = document.getElementById('detailDescription');
             const detailPrice = document.getElementById('detailPrice');
             const detailOriginalPrice = document.getElementById('detailOriginalPrice');
             const detailDiscount = document.getElementById('detailDiscount');
+            const detailStock = document.getElementById('detailStock');
+            const detailReturnPolicy = document.getElementById('detailReturnPolicy');
             const detailAddToCart = document.getElementById('detailAddToCart');
             const affiliateLinkBtn = document.getElementById('affiliateLinkBtn');
             const copyReferralLinkBtn = document.getElementById('copyReferralLink');
@@ -1180,6 +1440,9 @@
             const reviewComment = document.getElementById('reviewComment');
             const reviewCancel = document.getElementById('reviewCancel');
             const reviewSubmit = document.getElementById('reviewSubmit');
+
+            const alsoViewedSection = document.getElementById('alsoViewedSection');
+            const alsoViewedList = document.getElementById('alsoViewedList');
 
             const navItems = document.querySelectorAll('.nav-item');
 
@@ -1199,15 +1462,13 @@
             // ========== PROFILE FUNCTIONS ==========
             async function getOrCreateProfile(user) {
                 if (!user) return null;
-                // Check if profile exists
                 let { data: profile, error } = await supabase
                     .from('profiles')
                     .select('*')
                     .eq('user_id', user.id)
                     .single();
                 
-                if (error && error.code === 'PGRST116') { // not found
-                    // Create new profile
+                if (error && error.code === 'PGRST116') {
                     const newProfile = {
                         user_id: user.id,
                         email: user.email,
@@ -1226,6 +1487,38 @@
                     console.error('Profile fetch error', error);
                 }
                 return profile;
+            }
+
+            // ========== DELIVERY DATE HELPER ==========
+            function getDeliveryDates() {
+                const now = new Date();
+                const orderCutoff = new Date(now.setHours(now.getHours() + 3, now.getMinutes() + 43, 0, 0)); // 3hrs 43mins from now
+                const today = new Date();
+                const startDoor = new Date(today);
+                startDoor.setDate(today.getDate() + 2); // 2 days later
+                const endDoor = new Date(today);
+                endDoor.setDate(today.getDate() + 4);
+                const startPickup = new Date(today);
+                startPickup.setDate(today.getDate() + 1);
+                const endPickup = new Date(today);
+                endPickup.setDate(today.getDate() + 2);
+
+                const formatDate = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                const formatTimeRemaining = () => {
+                    const diff = orderCutoff - new Date();
+                    if (diff <= 0) return 'Order now for fastest delivery';
+                    const hours = Math.floor(diff / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    return `Place order within ${hours}hrs ${minutes}mins`;
+                };
+
+                return {
+                    doorStart: formatDate(startDoor),
+                    doorEnd: formatDate(endDoor),
+                    pickupStart: formatDate(startPickup),
+                    pickupEnd: formatDate(endPickup),
+                    timer: formatTimeRemaining()
+                };
             }
 
             // ========== SUPABASE FETCH & SEED ==========
@@ -1261,15 +1554,18 @@
                 }
 
                 // Load settings
-                let { data: settingsData, error: settingsErr } = await supabase.from('settings').select('*').eq('key', 'wa_number');
+                let { data: settingsData, error: settingsErr } = await supabase.from('settings').select('*');
                 if (settingsErr) console.error('settings error', settingsErr);
-                if (!settingsData || settingsData.length === 0) {
-                    await supabase.from('settings').insert([{ key: 'wa_number', value: DEFAULT_SETTINGS.wa_number }]);
-                    settings.wa_number = DEFAULT_SETTINGS.wa_number;
-                } else {
-                    settings.wa_number = settingsData[0].value;
+                if (settingsData) {
+                    settingsData.forEach(s => settings[s.key] = s.value);
                 }
+                // Ensure defaults
+                if (!settings.wa_number) settings.wa_number = DEFAULT_SETTINGS.wa_number;
+                if (!settings.delivery_fee) settings.delivery_fee = DEFAULT_SETTINGS.delivery_fee;
+                if (!settings.pickup_stations) settings.pickup_stations = DEFAULT_SETTINGS.pickup_stations;
                 waNumberInput.value = settings.wa_number;
+                deliveryFeeInput.value = settings.delivery_fee;
+                pickupStationsInput.value = settings.pickup_stations;
 
                 // Load orders
                 let { data: ordersData, error: ordersErr } = await supabase.from('orders').select('*');
@@ -1372,10 +1668,17 @@
                 filtered.forEach(prod => {
                     const discount = prod.originalPrice && prod.originalPrice > prod.price ? Math.round((1 - prod.price/prod.originalPrice)*100) : 0;
                     const hasBadge = prod.badgeImage || prod.badgeText;
+                    const inStock = prod.stock > 0;
                     html += `<div class="product-card" data-product-id="${prod.id}">`;
-                    html += `<div class="image-section"><img src="${prod.image}" class="product-image" onerror="this.src='https://placehold.co/400x400/eeeeee/aaaaaa?text=Product'">`;
+                    html += `<div class="image-section">`;
+                    html += `<img src="${prod.image}" class="product-image" onerror="this.src='https://placehold.co/400x400/eeeeee/aaaaaa?text=Product'">`;
+                    html += `<div class="product-badges">`;
+                    if (prod.is_official_store) html += `<span class="badge official">Official Store</span>`;
+                    if (prod.is_non_returnable) html += `<span class="badge nonreturn">Non-returnable</span>`;
+                    if (inStock) html += `<span class="badge stock">In stock</span>`; else html += `<span class="badge outstock">Out of stock</span>`;
+                    html += `</div>`;
                     if (hasBadge) {
-                        html += `<div class="product-badge">`;
+                        html += `<div class="product-badge-bottom">`;
                         if (prod.badgeImage) html += `<img src="${prod.badgeImage}" alt="badge">`;
                         if (prod.badgeText) html += `<span>${prod.badgeText}</span>`;
                         html += `</div>`;
@@ -1391,8 +1694,9 @@
                     } else {
                         html += `<span class="product-price">KSh ${prod.price.toLocaleString()}</span>`;
                     }
-                    html += `</div><div class="product-rating"><i class="fas fa-star"></i> ${prod.rating} (${prod.sold}+ sold)</div>
-                        <button class="add-to-cart-btn" data-id="${prod.id}"><i class="fas fa-cart-plus"></i> Add to cart</button>`;
+                    html += `</div><div class="product-rating"><i class="fas fa-star"></i> ${prod.rating} (${prod.sold}+ sold)</div>`;
+                    html += `<div class="stock-status ${inStock ? '' : 'out'}">${inStock ? 'In stock' : 'Out of stock'}</div>`;
+                    html += `<button class="add-to-cart-btn" data-id="${prod.id}" ${!inStock ? 'disabled style="background:#ccc;"' : ''}><i class="fas fa-cart-plus"></i> Add to cart</button>`;
                     
                     // Admin can edit/delete any product; sellers can edit/delete their own
                     if ((currentUserProfile?.role === 'admin') || (currentUserProfile?.role === 'seller' && prod.seller_id === currentUser?.id)) {
@@ -1402,6 +1706,23 @@
                 });
                 if (filtered.length === 0) html = '<div style="grid-column:span 2; text-align:center; padding:40px;">No products</div>';
                 productGrid.innerHTML = html;
+
+                // Also viewed: random 5 products not in filtered
+                const otherProducts = products.filter(p => !filtered.includes(p)).sort(() => 0.5 - Math.random()).slice(0, 5);
+                if (otherProducts.length > 0) {
+                    let alsoHtml = '';
+                    otherProducts.forEach(p => {
+                        alsoHtml += `<div class="also-item" data-product-id="${p.id}">
+                            <img src="${p.image}" onerror="this.src='https://placehold.co/120x120'">
+                            <div class="name">${p.name}</div>
+                            <div class="price">KSh ${p.price}</div>
+                        </div>`;
+                    });
+                    alsoViewedList.innerHTML = alsoHtml;
+                    alsoViewedSection.style.display = 'block';
+                } else {
+                    alsoViewedSection.style.display = 'none';
+                }
             }
 
             function renderCartModal() {
@@ -1431,11 +1752,11 @@
                 if (currentUserProfile?.role === 'admin') {
                     adminBadge.style.display = 'inline-flex';
                     sellerBadge.style.display = 'none';
-                    addProductBtn.style.display = 'flex'; // admin can add products
+                    addProductBtn.style.display = 'flex';
                 } else if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
                     adminBadge.style.display = 'none';
                     sellerBadge.style.display = 'inline-flex';
-                    addProductBtn.style.display = 'flex'; // seller can add products
+                    addProductBtn.style.display = 'flex';
                 } else {
                     adminBadge.style.display = 'none';
                     sellerBadge.style.display = 'none';
@@ -1448,6 +1769,18 @@
                 } else {
                     document.querySelector('[data-nav="home"]').classList.add('active');
                 }
+
+                // Update delivery dates in checkout modal (if open)
+                updateDeliveryDates();
+            }
+
+            function updateDeliveryDates() {
+                const dates = getDeliveryDates();
+                doorStart.innerText = dates.doorStart;
+                doorEnd.innerText = dates.doorEnd;
+                doorTimer.innerText = dates.timer;
+                pickupStart.innerText = dates.pickupStart;
+                pickupEnd.innerText = dates.pickupEnd;
             }
 
             // ========== AUTH FUNCTIONS ==========
@@ -1458,7 +1791,6 @@
                 } else {
                     alert('Sign up successful! You can now log in.');
                     authModal.style.display = 'none';
-                    // Profile will be created automatically on first login
                 }
             }
 
@@ -1493,15 +1825,42 @@
                     alert('Cart is empty');
                     return;
                 }
+                // Reset delivery selection
+                document.querySelectorAll('.delivery-option').forEach(opt => opt.classList.remove('selected'));
+                deliveryDoor.classList.add('selected');
+                addressField.style.display = 'block';
+                updateDeliveryDates();
                 checkoutDetailsModal.style.display = 'flex';
             }
+
+            // Delivery option click
+            deliveryDoor.addEventListener('click', () => {
+                deliveryDoor.classList.add('selected');
+                deliveryPickup.classList.remove('selected');
+                addressField.style.display = 'block';
+            });
+            deliveryPickup.addEventListener('click', () => {
+                deliveryPickup.classList.add('selected');
+                deliveryDoor.classList.remove('selected');
+                addressField.style.display = 'none';
+            });
 
             checkoutConfirm.addEventListener('click', async () => {
                 const name = checkoutName.value.trim();
                 const phone = checkoutPhone.value.trim();
-                const address = checkoutAddress.value.trim();
-                if (!name || !phone || !address) {
-                    alert('Please fill in all required fields');
+                let address = checkoutAddress.value.trim();
+                const deliveryMethod = deliveryDoor.classList.contains('selected') ? 'door' : 'pickup';
+                if (deliveryMethod === 'door' && !address) {
+                    alert('Please enter your shipping address');
+                    return;
+                }
+                if (!name || !phone) {
+                    alert('Please fill in name and phone');
+                    return;
+                }
+                const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value;
+                if (!paymentMethod) {
+                    alert('Please select payment method');
                     return;
                 }
 
@@ -1516,15 +1875,27 @@
                     };
                 });
 
+                const deliveryFee = deliveryMethod === 'door' ? parseInt(settings.delivery_fee) : 0;
+                total += deliveryFee;
+
+                const dates = getDeliveryDates();
+                const estimatedStart = deliveryMethod === 'door' ? dates.doorStart : dates.pickupStart;
+                const estimatedEnd = deliveryMethod === 'door' ? dates.doorEnd : dates.pickupEnd;
+
                 const newOrder = {
                     user_id: currentUser.id,
                     user_email: currentUser.email,
                     shipping_name: name,
                     shipping_phone: phone,
-                    shipping_address: address,
+                    shipping_address: deliveryMethod === 'door' ? address : 'Pickup at station',
                     notes: checkoutNotes.value.trim(),
                     status: 'ordered',
                     total_amount: total,
+                    payment_method: paymentMethod,
+                    delivery_method: deliveryMethod,
+                    delivery_fee: deliveryFee,
+                    estimated_delivery_start: estimatedStart,
+                    estimated_delivery_end: estimatedEnd,
                     created_at: new Date().toISOString(),
                     items: JSON.stringify(orderItems)
                 };
@@ -1640,7 +2011,10 @@
                         const canReview = order.status === 'delivered' && !reviewedOrderIds.has(order.id);
                         html += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
                             <div><strong>Order #${order.id.slice(-6)}</strong> <span class="status-badge ${statusClass}">${order.status}</span></div>
-                            <div>Total: KSh ${order.total_amount}</div>
+                            <div>Total: KSh ${order.total_amount} (incl. delivery)</div>
+                            <div>Delivery: ${order.delivery_method === 'door' ? 'Door' : 'Pickup'}</div>
+                            <div>Payment: ${order.payment_method}</div>
+                            <div>Est. delivery: ${order.estimated_delivery_start} - ${order.estimated_delivery_end}</div>
                             <div>${new Date(order.created_at).toLocaleDateString()}</div>`;
                         if (canReview) {
                             html += `<button class="btn-save review-order-btn" data-order-id="${order.id}" style="margin-top:8px; padding:4px 12px; font-size:0.8rem;">Write a Review</button>`;
@@ -1666,10 +2040,8 @@
             async function renderSellerDashboard() {
                 if (!currentUser || currentUserProfile?.role !== 'seller' || currentUserProfile.seller_status !== 'approved') return;
                 
-                // Show seller dashboard
                 sellerDashboard.style.display = 'block';
                 
-                // Render seller's products
                 const sellerProds = products.filter(p => p.seller_id === currentUser.id);
                 let prodHtml = '';
                 sellerProds.forEach(prod => {
@@ -1683,7 +2055,6 @@
                 if (sellerProds.length === 0) prodHtml = '<p>You have no products yet.</p>';
                 sellerProductsList.innerHTML = prodHtml;
 
-                // Render orders containing seller's products
                 let ordersHtml = '';
                 for (let order of orders) {
                     const items = JSON.parse(order.items || '[]');
@@ -1704,13 +2075,16 @@
             }
 
             sellerAddProductBtn.addEventListener('click', () => {
-                // Open product edit modal for new product, with seller_id preset
                 currentProductId = null;
                 prodName.value = ''; 
                 prodPrice.value = ''; 
                 prodCost.value = ''; 
                 prodOriginalPrice.value = ''; 
                 prodCommission.value = '10'; 
+                prodStock.value = '10';
+                prodReturnPolicy.value = 'Free return within 7 days';
+                prodOfficial.checked = false;
+                prodNonReturn.checked = false;
                 prodImage.value = ''; 
                 prodImages.value = ''; 
                 prodDescription.value = ''; 
@@ -1726,7 +2100,7 @@
                 if (prodCategory.options.length > 0) prodCategory.selectedIndex = 0;
                 
                 productEditModal.style.display = 'flex';
-                profileModal.style.display = 'none'; // hide profile modal
+                profileModal.style.display = 'none';
             });
 
             // ========== SELLER APPLICATION ==========
@@ -1740,7 +2114,6 @@
 
             sellerApplyConfirm.addEventListener('click', async () => {
                 if (!currentUser) return;
-                // Update profile seller_status to 'pending'
                 const { error } = await supabase
                     .from('profiles')
                     .update({ seller_status: 'pending' })
@@ -1771,6 +2144,7 @@
                             <div class="order-detail-item">Customer: ${order.user_email || 'N/A'} (${order.shipping_name})</div>
                             <div class="order-detail-item">Phone: ${order.shipping_phone}</div>
                             <div class="order-detail-item">Address: ${order.shipping_address}</div>
+                            <div class="order-detail-item">Delivery: ${order.delivery_method}, Payment: ${order.payment_method}</div>
                             ${order.notes ? `<div class="order-detail-item">Notes: ${order.notes}</div>` : ''}
                             <div class="order-detail-item">Total: KSh ${order.total_amount}</div>
                             <div>
@@ -1997,6 +2371,15 @@
                         detailOriginalPrice.innerText = '';
                         detailDiscount.style.display = 'none';
                     }
+                    // Badges
+                    detailOfficial.style.display = prod.is_official_store ? 'inline-block' : 'none';
+                    detailNonReturn.style.display = prod.is_non_returnable ? 'inline-block' : 'none';
+                    const inStock = prod.stock > 0;
+                    detailInStock.style.display = inStock ? 'inline-block' : 'none';
+                    detailOutStock.style.display = !inStock ? 'inline-block' : 'none';
+                    detailStock.innerText = inStock ? `In stock (${prod.stock} available)` : 'Out of stock';
+                    detailReturnPolicy.innerText = prod.return_policy || 'Free return within 7 days';
+
                     let galleryHtml = '';
                     if (prod.images && Array.isArray(prod.images)) {
                         prod.images.forEach(img => {
@@ -2024,12 +2407,19 @@
                     }
 
                     detailAddToCart.dataset.id = prodId;
+                    detailAddToCart.disabled = !inStock;
+                    detailAddToCart.style.background = !inStock ? '#ccc' : '';
                     detailModal.style.display = 'flex';
                 }
             });
 
             detailAddToCart.addEventListener('click', () => {
                 const prodId = detailAddToCart.dataset.id;
+                const prod = products.find(p => p.id === prodId);
+                if (prod.stock <= 0) {
+                    alert('Out of stock');
+                    return;
+                }
                 const existing = cart.find(item => item.id === prodId);
                 if (existing) existing.quantity++; else cart.push({ id: prodId, quantity: 1 });
                 localStorage.setItem('cart', JSON.stringify(cart));
@@ -2040,11 +2430,29 @@
 
             closeDetailBtn.addEventListener('click', () => detailModal.style.display = 'none');
 
+            // Also viewed click
+            alsoViewedList.addEventListener('click', (e) => {
+                const item = e.target.closest('.also-item');
+                if (!item) return;
+                const prodId = item.dataset.productId;
+                const prod = products.find(p => p.id === prodId);
+                if (prod) {
+                    // Trigger product detail (simulate click on product card)
+                    const fakeEvent = { target: { closest: () => ({ dataset: { productId: prodId } }) } };
+                    productGrid.dispatchEvent(new CustomEvent('click', { detail: fakeEvent }));
+                }
+            });
+
             // Add to cart buttons
             productGrid.addEventListener('click', (e) => {
                 const btn = e.target.closest('.add-to-cart-btn');
                 if (!btn) return;
                 const prodId = btn.dataset.id;
+                const prod = products.find(p => p.id === prodId);
+                if (prod.stock <= 0) {
+                    alert('Out of stock');
+                    return;
+                }
                 const existing = cart.find(item => item.id === prodId);
                 if (existing) existing.quantity++; else cart.push({ id: prodId, quantity: 1 });
                 localStorage.setItem('cart', JSON.stringify(cart));
@@ -2059,7 +2467,6 @@
                     const prodId = e.target.closest('.edit-btn').dataset.id;
                     const prod = products.find(p => p.id === prodId);
                     if (!prod) return;
-                    // Check permissions
                     if (currentUserProfile?.role !== 'admin' && prod.seller_id !== currentUser.id) {
                         alert('You can only edit your own products.');
                         return;
@@ -2071,6 +2478,10 @@
                         prodCost.value = prod.costPrice || '';
                         prodOriginalPrice.value = prod.originalPrice || '';
                         prodCommission.value = prod.commission_percent || 10;
+                        prodStock.value = prod.stock || 10;
+                        prodReturnPolicy.value = prod.return_policy || 'Free return within 7 days';
+                        prodOfficial.checked = prod.is_official_store || false;
+                        prodNonReturn.checked = prod.is_non_returnable || false;
                         prodImage.value = prod.image || '';
                         prodImages.value = (prod.images || []).join(', ');
                         prodDescription.value = prod.description || '';
@@ -2149,6 +2560,8 @@
                 await renderReviewsList();
                 await renderAnalytics();
                 waNumberInput.value = settings.wa_number;
+                deliveryFeeInput.value = settings.delivery_fee;
+                pickupStationsInput.value = settings.pickup_stations;
                 adminModal.style.display = 'flex';
             });
             closeAdminModal.addEventListener('click', () => adminModal.style.display = 'none');
@@ -2295,6 +2708,10 @@
                         prodCost.value = prod.costPrice || '';
                         prodOriginalPrice.value = prod.originalPrice || '';
                         prodCommission.value = prod.commission_percent || 10;
+                        prodStock.value = prod.stock || 10;
+                        prodReturnPolicy.value = prod.return_policy || 'Free return within 7 days';
+                        prodOfficial.checked = prod.is_official_store || false;
+                        prodNonReturn.checked = prod.is_non_returnable || false;
                         prodImage.value = prod.image || '';
                         prodImages.value = (prod.images || []).join(', ');
                         prodDescription.value = prod.description || '';
@@ -2318,7 +2735,7 @@
                 }
             });
 
-            // Add product button (main) – for admin or seller
+            // Add product button (main)
             addProductBtn.addEventListener('click', () => {
                 if (!currentUser || (currentUserProfile?.role !== 'admin' && currentUserProfile?.role !== 'seller')) {
                     alert('You do not have permission to add products.');
@@ -2330,6 +2747,10 @@
                 prodCost.value = ''; 
                 prodOriginalPrice.value = ''; 
                 prodCommission.value = '10'; 
+                prodStock.value = '10';
+                prodReturnPolicy.value = 'Free return within 7 days';
+                prodOfficial.checked = false;
+                prodNonReturn.checked = false;
                 prodImage.value = ''; 
                 prodImages.value = ''; 
                 prodDescription.value = ''; 
@@ -2346,7 +2767,7 @@
                 productEditModal.style.display = 'flex';
             });
 
-            // Save product – includes seller_id
+            // Save product
             productModalSave.addEventListener('click', async () => {
                 const name = prodName.value.trim(), price = parseFloat(prodPrice.value);
                 if (!name || isNaN(price)) return alert('Name and price required');
@@ -2357,6 +2778,10 @@
                     costPrice: parseFloat(prodCost.value) || undefined,
                     originalPrice: parseFloat(prodOriginalPrice.value) || undefined,
                     commission_percent: parseInt(prodCommission.value) || 10,
+                    stock: parseInt(prodStock.value) || 10,
+                    return_policy: prodReturnPolicy.value.trim() || 'Free return within 7 days',
+                    is_official_store: prodOfficial.checked,
+                    is_non_returnable: prodNonReturn.checked,
                     image: prodImage.value.trim() || 'https://placehold.co/400x400/03ac0e/white?text=Product',
                     images: imagesArray,
                     description: prodDescription.value.trim(),
@@ -2366,7 +2791,7 @@
                     sold: parseInt(prodSold.value) || 0,
                     badgeImage: prodBadgeImage.value.trim() || '',
                     badgeText: prodBadgeText.value.trim() || '',
-                    seller_id: currentUser?.id // assign to current user
+                    seller_id: currentUser?.id
                 };
                 if (currentProductId) {
                     const { error } = await supabase.from('products').update(productData).eq('id', currentProductId);
@@ -2389,13 +2814,21 @@
                 }, 300);
             });
 
-            // Save WhatsApp number
-            saveWABtn.addEventListener('click', async () => {
-                const newNumber = waNumberInput.value.trim();
-                if (!newNumber) return alert('Please enter a number');
-                await supabase.from('settings').upsert({ key: 'wa_number', value: newNumber }, { onConflict: 'key' });
-                settings.wa_number = newNumber;
-                alert('WhatsApp number updated');
+            // Save settings
+            saveSettingsBtn.addEventListener('click', async () => {
+                const newWa = waNumberInput.value.trim();
+                const newFee = deliveryFeeInput.value.trim();
+                const newStations = pickupStationsInput.value.trim();
+                if (!newWa || !newFee || !newStations) return alert('All fields required');
+                await supabase.from('settings').upsert([
+                    { key: 'wa_number', value: newWa },
+                    { key: 'delivery_fee', value: newFee },
+                    { key: 'pickup_stations', value: newStations }
+                ], { onConflict: 'key' });
+                settings.wa_number = newWa;
+                settings.delivery_fee = newFee;
+                settings.pickup_stations = newStations;
+                alert('Settings updated');
             });
 
             // Notifications modal
@@ -2444,7 +2877,6 @@
                 profileEmail.innerText = currentUser.email;
                 profileRole.innerText = currentUserProfile?.role || 'customer';
                 
-                // Show seller application section if applicable
                 sellerRequestSection.innerHTML = '';
                 if (currentUserProfile?.role === 'customer' && !currentUserProfile.seller_status) {
                     sellerRequestSection.innerHTML = '<button class="btn-save" id="applySellerBtn" style="width:100%; margin:10px 0;">Become a Seller</button>';
@@ -2455,11 +2887,9 @@
                     sellerRequestSection.innerHTML = '<p style="color:red;">Seller application rejected. Contact admin.</p>';
                 }
 
-                // Render user orders
                 await renderUserOrders();
                 await loadReferralStats();
 
-                // If seller, render seller dashboard
                 if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
                     await renderSellerDashboard();
                 } else {
@@ -2515,4 +2945,4 @@
         })();
     </script>
 </body>
-                    </html>
+</html>
