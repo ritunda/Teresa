@@ -27,7 +27,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cstyle%3E.accent-icon%7Bstroke:%23C72A4C;stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;%7D%3C/style%3E%3Cpath class='accent-icon' d='M70 50 L100 30 L130 70 L115 130 L85 130 L70 70 L70 50'/%3E%3Ccircle cx='100' cy='55' r='12' fill='%23C72A4C' opacity='0.9'/%3E%3C/svg%3E">
     <style>
-        /* ========== GLOBAL STYLES ========== */
+        /* (Keep all existing styles – same as before) */
         * {
             margin: 0;
             padding: 0;
@@ -118,7 +118,6 @@
             outline: none;
             font-size: 0.95rem;
         }
-        /* ========== EXPRESS BANNER ========== */
         .express-banner {
             background: linear-gradient(135deg, #f9a825, #f57c00);
             color: white;
@@ -140,7 +139,6 @@
             font-size: 0.8rem;
             opacity: 0.9;
         }
-        /* ========== BANNER CAROUSEL ========== */
         .banner-carousel {
             margin: 12px 16px;
             overflow-x: auto;
@@ -187,7 +185,6 @@
             background: #ccc;
         }
         .dot.active { background: var(--tokped-green); }
-        /* ========== CATEGORIES ========== */
         .categories {
             display: flex;
             gap: 8px;
@@ -225,7 +222,6 @@
             color: white;
         }
         .chip.active i { color: white; }
-        /* ========== ADMIN/SELLER BAR ========== */
         .admin-bar {
             display: flex;
             align-items: center;
@@ -255,7 +251,6 @@
             gap: 5px;
             cursor: pointer;
         }
-        /* ========== PRODUCT GRID ========== */
         .product-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -404,6 +399,11 @@
             width: 100%;
             border: 1px solid #02940c;
         }
+        .add-to-cart-btn:disabled {
+            background: #ccc;
+            border-color: #aaa;
+            cursor: not-allowed;
+        }
         .affiliate-btn {
             background: #f39c12;
             border: none;
@@ -471,7 +471,6 @@
             justify-content: center;
             gap: 8px;
         }
-        /* ========== BOTTOM NAVIGATION ========== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -496,7 +495,6 @@
         }
         .nav-item i { font-size: 1.3rem; }
         .nav-item.active { color: var(--tokped-green); }
-        /* ========== MODALS ========== */
         .modal {
             display: none;
             position: fixed;
@@ -544,7 +542,6 @@
         }
         .btn-save { background: var(--tokped-green); color: white; }
         .btn-cancel { background: #f1f3f4; color: #3c3c3c; }
-        /* ========== DELIVERY OPTIONS ========== */
         .delivery-option {
             border: 1px solid var(--tokped-border);
             border-radius: 12px;
@@ -580,7 +577,6 @@
             border-radius: 8px;
             margin-bottom: 8px;
         }
-        /* ========== CART ITEMS ========== */
         .cart-item {
             display: flex;
             gap: 12px;
@@ -617,7 +613,6 @@
             gap: 8px;
             cursor: pointer;
         }
-        /* ========== ADMIN TABS ========== */
         .admin-tabs {
             display: flex;
             gap: 8px;
@@ -634,7 +629,6 @@
         .admin-tab.active { background: var(--tokped-green); color: white; }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
-        /* ========== LIST ITEMS ========== */
         .banner-list-item, .cat-list-item, .prod-list-item, .user-list-item, .review-list-item {
             display: flex;
             gap: 10px;
@@ -653,8 +647,6 @@
         .cat-list-item i { font-size: 1.2rem; width: 30px; text-align: center; }
         .prod-list-item span { flex: 1; }
         .user-list-item, .review-list-item { flex-direction: column; align-items: flex-start; }
-
-        /* ========== NOTIFICATIONS ========== */
         .notif-item {
             display: flex;
             align-items: center;
@@ -677,8 +669,6 @@
             font-size: 0.7rem;
             color: #999;
         }
-
-        /* ========== IMAGE GALLERY ========== */
         .image-gallery {
             display: flex;
             gap: 8px;
@@ -701,8 +691,6 @@
             border-radius: 16px;
             margin-bottom: 10px;
         }
-
-        /* ========== ORDER STATUS BADGES ========== */
         .status-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -714,8 +702,6 @@
         .status-waiting_shipment { background: #ffe0b2; color: #bf360c; }
         .status-shipped { background: #b3e5fc; color: #01579b; }
         .status-delivered { background: #c8e6c9; color: #1b5e20; }
-
-        /* ========== ANALYTICS CARDS ========== */
         .analytics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -737,14 +723,10 @@
             font-size: 0.8rem;
             color: #666;
         }
-
-        /* ========== ORDER DETAILS ========== */
         .order-detail-item {
             font-size: 0.8rem;
             color: #555;
         }
-
-        /* ========== STAR RATING ========== */
         .star-rating {
             display: flex;
             gap: 4px;
@@ -757,8 +739,6 @@
         .star-rating .fa-star.selected {
             color: #f9a825;
         }
-
-        /* ========== CUSTOMERS ALSO VIEWED ========== */
         .also-viewed {
             padding: 16px;
             border-top: 8px solid #f1f3f4;
@@ -778,6 +758,7 @@
             border: 1px solid var(--tokped-border);
             border-radius: 12px;
             padding: 8px;
+            cursor: pointer;
         }
         .also-item img {
             width: 100%;
@@ -908,7 +889,7 @@
                     <div class="delivery-option" data-method="door" id="deliveryDoor">
                         <div class="delivery-option-header">
                             <span><i class="fas fa-truck"></i> Door Delivery</span>
-                            <span>KSh 250</span>
+                            <span>KSh <span id="deliveryFeeDisplay">250</span></span>
                         </div>
                         <div class="delivery-option-details">Ready for delivery between <span id="doorStart"></span> and <span id="doorEnd"></span></div>
                         <div class="delivery-option-time" id="doorTimer"></div>
@@ -1146,7 +1127,7 @@
     <div id="productDetailModal" class="modal">
         <div class="modal-card">
             <h3 id="detailProductName"></h3>
-            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+            <div style="display: flex; gap: 5px; margin-bottom: 5px; flex-wrap: wrap;">
                 <span class="badge official" id="detailOfficial" style="display: none;">Official Store</span>
                 <span class="badge nonreturn" id="detailNonReturn" style="display: none;">Non-returnable</span>
                 <span class="badge stock" id="detailInStock" style="display: none;">In stock</span>
@@ -1278,7 +1259,7 @@
                 { id: 'p4', name: 'Gold Plated Hoop Earrings', price: 3499, costPrice: 2000, originalPrice: 4499, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earrings', images: [], description: 'Elegant gold plated hoop earrings.', category: 'cat4', rating: 4.8, sold: 56, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 3, return_policy: 'Non-returnable', is_official_store: false, is_non_returnable: true },
                 { id: 'p5', name: 'Silver Nose Ring', price: 899, costPrice: 400, originalPrice: 1199, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Nose+Ring', images: [], description: 'Adjustable silver nose ring.', category: 'cat5', rating: 4.4, sold: 103, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 0, return_policy: 'Free return within 7 days', is_official_store: false, is_non_returnable: false }
             ];
-            const DEFAULT_SETTINGS = { wa_number: '254700000000', delivery_fee: 250, pickup_stations: 'Teresa Hub Nairobi, Teresa Hub Mombasa' };
+            const DEFAULT_SETTINGS = { wa_number: '254700000000', delivery_fee: '250', pickup_stations: 'Teresa Hub Nairobi, Teresa Hub Mombasa' };
 
             // ========== STATE ==========
             let categories = [];
@@ -1332,6 +1313,7 @@
             const doorTimer = document.getElementById('doorTimer');
             const pickupStart = document.getElementById('pickupStart');
             const pickupEnd = document.getElementById('pickupEnd');
+            const deliveryFeeDisplay = document.getElementById('deliveryFeeDisplay');
             const paymentOptions = document.querySelectorAll('input[name="payment"]');
             const adminModal = document.getElementById('adminModal');
             const closeAdminModal = document.getElementById('closeAdminModal');
@@ -1469,11 +1451,18 @@
                     .single();
                 
                 if (error && error.code === 'PGRST116') {
+                    // Create new profile
+                    let role = 'customer';
+                    let seller_status = null;
+                    // If email is admin, set role to admin
+                    if (user.email === 'admin@teresa.com') {
+                        role = 'admin';
+                    }
                     const newProfile = {
                         user_id: user.id,
                         email: user.email,
-                        role: 'customer',
-                        seller_status: null,
+                        role: role,
+                        seller_status: seller_status,
                         created_at: new Date().toISOString()
                     };
                     const { data: inserted, error: insertError } = await supabase
@@ -1485,6 +1474,12 @@
                     profile = inserted;
                 } else if (error) {
                     console.error('Profile fetch error', error);
+                } else {
+                    // If existing profile but email is admin and role is not admin, upgrade
+                    if (user.email === 'admin@teresa.com' && profile.role !== 'admin') {
+                        await supabase.from('profiles').update({ role: 'admin' }).eq('user_id', user.id);
+                        profile.role = 'admin';
+                    }
                 }
                 return profile;
             }
@@ -1492,10 +1487,10 @@
             // ========== DELIVERY DATE HELPER ==========
             function getDeliveryDates() {
                 const now = new Date();
-                const orderCutoff = new Date(now.setHours(now.getHours() + 3, now.getMinutes() + 43, 0, 0)); // 3hrs 43mins from now
+                const orderCutoff = new Date(now.getTime() + (3 * 60 * 60 * 1000) + (43 * 60 * 1000)); // 3hrs 43mins from now
                 const today = new Date();
                 const startDoor = new Date(today);
-                startDoor.setDate(today.getDate() + 2); // 2 days later
+                startDoor.setDate(today.getDate() + 2);
                 const endDoor = new Date(today);
                 endDoor.setDate(today.getDate() + 4);
                 const startPickup = new Date(today);
@@ -1513,10 +1508,14 @@
                 };
 
                 return {
-                    doorStart: formatDate(startDoor),
-                    doorEnd: formatDate(endDoor),
-                    pickupStart: formatDate(startPickup),
-                    pickupEnd: formatDate(endPickup),
+                    doorStart: startDoor,
+                    doorEnd: endDoor,
+                    pickupStart: startPickup,
+                    pickupEnd: endPickup,
+                    doorStartStr: formatDate(startDoor),
+                    doorEndStr: formatDate(endDoor),
+                    pickupStartStr: formatDate(startPickup),
+                    pickupEndStr: formatDate(endPickup),
                     timer: formatTimeRemaining()
                 };
             }
@@ -1565,6 +1564,7 @@
                 if (!settings.pickup_stations) settings.pickup_stations = DEFAULT_SETTINGS.pickup_stations;
                 waNumberInput.value = settings.wa_number;
                 deliveryFeeInput.value = settings.delivery_fee;
+                deliveryFeeDisplay.innerText = settings.delivery_fee;
                 pickupStationsInput.value = settings.pickup_stations;
 
                 // Load orders
@@ -1696,7 +1696,7 @@
                     }
                     html += `</div><div class="product-rating"><i class="fas fa-star"></i> ${prod.rating} (${prod.sold}+ sold)</div>`;
                     html += `<div class="stock-status ${inStock ? '' : 'out'}">${inStock ? 'In stock' : 'Out of stock'}</div>`;
-                    html += `<button class="add-to-cart-btn" data-id="${prod.id}" ${!inStock ? 'disabled style="background:#ccc;"' : ''}><i class="fas fa-cart-plus"></i> Add to cart</button>`;
+                    html += `<button class="add-to-cart-btn" data-id="${prod.id}" ${!inStock ? 'disabled' : ''}><i class="fas fa-cart-plus"></i> Add to cart</button>`;
                     
                     // Admin can edit/delete any product; sellers can edit/delete their own
                     if ((currentUserProfile?.role === 'admin') || (currentUserProfile?.role === 'seller' && prod.seller_id === currentUser?.id)) {
@@ -1776,11 +1776,11 @@
 
             function updateDeliveryDates() {
                 const dates = getDeliveryDates();
-                doorStart.innerText = dates.doorStart;
-                doorEnd.innerText = dates.doorEnd;
+                doorStart.innerText = dates.doorStartStr;
+                doorEnd.innerText = dates.doorEndStr;
                 doorTimer.innerText = dates.timer;
-                pickupStart.innerText = dates.pickupStart;
-                pickupEnd.innerText = dates.pickupEnd;
+                pickupStart.innerText = dates.pickupStartStr;
+                pickupEnd.innerText = dates.pickupEndStr;
             }
 
             // ========== AUTH FUNCTIONS ==========
@@ -1894,8 +1894,8 @@
                     payment_method: paymentMethod,
                     delivery_method: deliveryMethod,
                     delivery_fee: deliveryFee,
-                    estimated_delivery_start: estimatedStart,
-                    estimated_delivery_end: estimatedEnd,
+                    estimated_delivery_start: estimatedStart.toISOString().split('T')[0], // store as YYYY-MM-DD
+                    estimated_delivery_end: estimatedEnd.toISOString().split('T')[0],
                     created_at: new Date().toISOString(),
                     items: JSON.stringify(orderItems)
                 };
@@ -2009,12 +2009,14 @@
                     userOrders.forEach(order => {
                         const statusClass = `status-${order.status.replace('_', '-')}`;
                         const canReview = order.status === 'delivered' && !reviewedOrderIds.has(order.id);
+                        const startDate = order.estimated_delivery_start ? new Date(order.estimated_delivery_start).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
+                        const endDate = order.estimated_delivery_end ? new Date(order.estimated_delivery_end).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
                         html += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
                             <div><strong>Order #${order.id.slice(-6)}</strong> <span class="status-badge ${statusClass}">${order.status}</span></div>
                             <div>Total: KSh ${order.total_amount} (incl. delivery)</div>
                             <div>Delivery: ${order.delivery_method === 'door' ? 'Door' : 'Pickup'}</div>
                             <div>Payment: ${order.payment_method}</div>
-                            <div>Est. delivery: ${order.estimated_delivery_start} - ${order.estimated_delivery_end}</div>
+                            <div>Est. delivery: ${startDate} - ${endDate}</div>
                             <div>${new Date(order.created_at).toLocaleDateString()}</div>`;
                         if (canReview) {
                             html += `<button class="btn-save review-order-btn" data-order-id="${order.id}" style="margin-top:8px; padding:4px 12px; font-size:0.8rem;">Write a Review</button>`;
@@ -2139,12 +2141,15 @@
                 if (allOrders && allOrders.length > 0) {
                     allOrders.forEach(order => {
                         const statusClass = `status-${order.status.replace('_', '-')}`;
+                        const startDate = order.estimated_delivery_start ? new Date(order.estimated_delivery_start).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
+                        const endDate = order.estimated_delivery_end ? new Date(order.estimated_delivery_end).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
                         html += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
                             <div><strong>Order #${order.id.slice(-6)}</strong></div>
                             <div class="order-detail-item">Customer: ${order.user_email || 'N/A'} (${order.shipping_name})</div>
                             <div class="order-detail-item">Phone: ${order.shipping_phone}</div>
                             <div class="order-detail-item">Address: ${order.shipping_address}</div>
                             <div class="order-detail-item">Delivery: ${order.delivery_method}, Payment: ${order.payment_method}</div>
+                            <div class="order-detail-item">Est. delivery: ${startDate} - ${endDate}</div>
                             ${order.notes ? `<div class="order-detail-item">Notes: ${order.notes}</div>` : ''}
                             <div class="order-detail-item">Total: KSh ${order.total_amount}</div>
                             <div>
@@ -2408,7 +2413,6 @@
 
                     detailAddToCart.dataset.id = prodId;
                     detailAddToCart.disabled = !inStock;
-                    detailAddToCart.style.background = !inStock ? '#ccc' : '';
                     detailModal.style.display = 'flex';
                 }
             });
@@ -2437,7 +2441,7 @@
                 const prodId = item.dataset.productId;
                 const prod = products.find(p => p.id === prodId);
                 if (prod) {
-                    // Trigger product detail (simulate click on product card)
+                    // Trigger product detail
                     const fakeEvent = { target: { closest: () => ({ dataset: { productId: prodId } }) } };
                     productGrid.dispatchEvent(new CustomEvent('click', { detail: fakeEvent }));
                 }
@@ -2828,6 +2832,7 @@
                 settings.wa_number = newWa;
                 settings.delivery_fee = newFee;
                 settings.pickup_stations = newStations;
+                deliveryFeeDisplay.innerText = newFee;
                 alert('Settings updated');
             });
 
@@ -2945,4 +2950,4 @@
         })();
     </script>
 </body>
-</html>
+                            </html>
