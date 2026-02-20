@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Teresa · complete marketplace</title>
+    <title>Teresa · marketplace with sellers</title>
     <!-- SEO meta tags -->
     <meta name="description" content="Teresa – your everyday style and gadgets. Shop the latest trends in beauty, electronics, and accessories.">
     <meta name="keywords" content="Teresa, online shop, gadgets, beauty, earrings, nose ring, Kenya">
@@ -27,7 +27,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cstyle%3E.accent-icon%7Bstroke:%23C72A4C;stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;%7D%3C/style%3E%3Cpath class='accent-icon' d='M70 50 L100 30 L130 70 L115 130 L85 130 L70 70 L70 50'/%3E%3Ccircle cx='100' cy='55' r='12' fill='%23C72A4C' opacity='0.9'/%3E%3C/svg%3E">
     <style>
-        /* ========== GLOBAL STYLES ========== */
+        /* (Keep all existing styles) */
         * {
             margin: 0;
             padding: 0;
@@ -54,7 +54,6 @@
             position: relative;
             padding-bottom: 70px;
         }
-        /* ========== HEADER ========== */
         .header {
             background-color: white;
             padding: 12px 16px 8px;
@@ -119,7 +118,6 @@
             outline: none;
             font-size: 0.95rem;
         }
-        /* ========== BANNER CAROUSEL ========== */
         .banner-carousel {
             margin: 12px 16px;
             overflow-x: auto;
@@ -166,7 +164,6 @@
             background: #ccc;
         }
         .dot.active { background: var(--tokped-green); }
-        /* ========== CATEGORIES ========== */
         .categories {
             display: flex;
             gap: 8px;
@@ -204,7 +201,6 @@
             color: white;
         }
         .chip.active i { color: white; }
-        /* ========== ADMIN BAR ========== */
         .admin-bar {
             display: flex;
             align-items: center;
@@ -222,7 +218,6 @@
             gap: 5px;
             cursor: pointer;
         }
-        /* ========== PRODUCT GRID ========== */
         .product-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -402,7 +397,6 @@
             justify-content: center;
             gap: 8px;
         }
-        /* ========== BOTTOM NAVIGATION ========== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -427,7 +421,6 @@
         }
         .nav-item i { font-size: 1.3rem; }
         .nav-item.active { color: var(--tokped-green); }
-        /* ========== MODALS ========== */
         .modal {
             display: none;
             position: fixed;
@@ -475,7 +468,6 @@
         }
         .btn-save { background: var(--tokped-green); color: white; }
         .btn-cancel { background: #f1f3f4; color: #3c3c3c; }
-        /* ========== CART ITEMS ========== */
         .cart-item {
             display: flex;
             gap: 12px;
@@ -512,7 +504,6 @@
             gap: 8px;
             cursor: pointer;
         }
-        /* ========== ADMIN TABS ========== */
         .admin-tabs {
             display: flex;
             gap: 8px;
@@ -529,7 +520,6 @@
         .admin-tab.active { background: var(--tokped-green); color: white; }
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
-        /* ========== LIST ITEMS (categories, banners, products, users, reviews) ========== */
         .banner-list-item, .cat-list-item, .prod-list-item, .user-list-item, .review-list-item {
             display: flex;
             gap: 10px;
@@ -548,8 +538,6 @@
         .cat-list-item i { font-size: 1.2rem; width: 30px; text-align: center; }
         .prod-list-item span { flex: 1; }
         .user-list-item, .review-list-item { flex-direction: column; align-items: flex-start; }
-
-        /* ========== NOTIFICATIONS ========== */
         .notif-item {
             display: flex;
             align-items: center;
@@ -572,8 +560,6 @@
             font-size: 0.7rem;
             color: #999;
         }
-
-        /* ========== IMAGE GALLERY ========== */
         .image-gallery {
             display: flex;
             gap: 8px;
@@ -596,8 +582,6 @@
             border-radius: 16px;
             margin-bottom: 10px;
         }
-
-        /* ========== ORDER STATUS BADGES ========== */
         .status-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -609,8 +593,6 @@
         .status-waiting_shipment { background: #ffe0b2; color: #bf360c; }
         .status-shipped { background: #b3e5fc; color: #01579b; }
         .status-delivered { background: #c8e6c9; color: #1b5e20; }
-
-        /* ========== ANALYTICS CARDS ========== */
         .analytics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -632,14 +614,10 @@
             font-size: 0.8rem;
             color: #666;
         }
-
-        /* ========== ORDER DETAILS ========== */
         .order-detail-item {
             font-size: 0.8rem;
             color: #555;
         }
-
-        /* ========== STAR RATING ========== */
         .star-rating {
             display: flex;
             gap: 4px;
@@ -651,6 +629,15 @@
         }
         .star-rating .fa-star.selected {
             color: #f9a825;
+        }
+        /* Seller specific */
+        .seller-badge {
+            background: #f39c12;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 30px;
+            margin-left: 8px;
         }
     </style>
 </head>
@@ -691,15 +678,16 @@
         <!-- CATEGORIES -->
         <div id="categoryContainer" class="categories"></div>
 
-        <!-- ADMIN BAR -->
+        <!-- ADMIN/SELLER BAR -->
         <div class="admin-bar">
-            <span id="adminModeBadge" class="admin-badge" style="display: none;"><i class="fas fa-unlock-alt"></i> edit mode (dashboard)</span>
+            <span id="adminModeBadge" class="admin-badge" style="display: none;"><i class="fas fa-unlock-alt"></i> admin</span>
+            <span id="sellerModeBadge" class="admin-badge" style="display: none; background: #f39c12;"><i class="fas fa-store"></i> seller</span>
         </div>
 
         <!-- PRODUCT GRID -->
         <div id="productGrid" class="product-grid"></div>
 
-        <!-- ADD PRODUCT BUTTON (admin only) -->
+        <!-- ADD PRODUCT BUTTON (admin or seller) -->
         <button id="addProductBtn" class="btn-add-product" style="display: none;"><i class="fas fa-plus-circle"></i> Add new product</button>
 
         <!-- BOTTOM NAVIGATION -->
@@ -753,7 +741,7 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL (login / signup) -->
+    <!-- AUTH MODAL -->
     <div id="authModal" class="modal">
         <div class="modal-card">
             <h3 id="authModalTitle">Login</h3>
@@ -775,22 +763,42 @@
         </div>
     </div>
 
-    <!-- PROFILE MODAL (orders & referral dashboard) -->
+    <!-- PROFILE MODAL (with seller features) -->
     <div id="profileModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-user"></i> My Account</h3>
-            <p><strong id="profileEmail"></strong></p>
+            <p><strong id="profileEmail"></strong> <span id="profileRole" class="seller-badge"></span></p>
+            <div id="sellerRequestSection" style="margin: 16px 0;">
+                <!-- Show different options based on role -->
+            </div>
             <button class="btn-cancel" id="logoutBtn" style="width:100%; margin-bottom:20px;">Logout</button>
+
             <h4>My Orders</h4>
             <div id="userOrdersList"></div>
 
-            <h4 style="margin-top:20px;">Referral Dashboard</h4>
-            <div>Total Clicks: <span id="totalClicks">0</span></div>
-            <div>Total Conversions: <span id="totalConversions">0</span></div>
-            <div>Pending Earnings: KSh <span id="pendingEarnings">0</span></div>
-            <div>Paid Earnings: KSh <span id="paidEarnings">0</span></div>
+            <!-- Seller Dashboard (visible to sellers) -->
+            <div id="sellerDashboard" style="display: none; margin-top:20px;">
+                <h4>My Products</h4>
+                <div id="sellerProductsList"></div>
+                <button class="btn-save" id="sellerAddProductBtn" style="margin-top:10px; width:100%;"><i class="fas fa-plus"></i> Add Product</button>
+                
+                <h4 style="margin-top:20px;">Orders for My Products</h4>
+                <div id="sellerOrdersList"></div>
+            </div>
 
             <div class="modal-actions"><button class="btn-cancel" id="closeProfileBtn">Close</button></div>
+        </div>
+    </div>
+
+    <!-- SELLER APPLICATION MODAL -->
+    <div id="sellerApplyModal" class="modal">
+        <div class="modal-card">
+            <h3>Become a Seller</h3>
+            <p>Apply to start selling your products on Teresa.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="sellerApplyCancel">Cancel</button>
+                <button class="btn-save" id="sellerApplyConfirm">Submit Application</button>
+            </div>
         </div>
     </div>
 
@@ -820,7 +828,7 @@
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD MODAL -->
+    <!-- ADMIN DASHBOARD MODAL (updated with Seller Applications tab) -->
     <div id="adminModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-cog"></i> Admin dashboard</h3>
@@ -830,6 +838,7 @@
                 <div class="admin-tab" data-tab="products">Products</div>
                 <div class="admin-tab" data-tab="orders">Orders</div>
                 <div class="admin-tab" data-tab="users">Users</div>
+                <div class="admin-tab" data-tab="sellers">Seller Apps</div>
                 <div class="admin-tab" data-tab="reviews">Reviews</div>
                 <div class="admin-tab" data-tab="analytics">Analytics</div>
                 <div class="admin-tab" data-tab="settings">Settings</div>
@@ -850,7 +859,6 @@
             <!-- Products tab -->
             <div id="tab-products" class="tab-pane">
                 <div id="productsList"></div>
-                <p style="text-align:center; margin-top:10px;">Use "Add new product" on main page</p>
             </div>
 
             <!-- Orders tab -->
@@ -861,6 +869,11 @@
             <!-- Users tab -->
             <div id="tab-users" class="tab-pane">
                 <div id="usersList"></div>
+            </div>
+
+            <!-- Seller Applications tab -->
+            <div id="tab-sellers" class="tab-pane">
+                <div id="sellerApplicationsList"></div>
             </div>
 
             <!-- Reviews tab -->
@@ -907,7 +920,7 @@
         </div>
     </div>
 
-    <!-- PRODUCT DETAIL MODAL (with gallery, affiliate link, referral link) -->
+    <!-- PRODUCT DETAIL MODAL -->
     <div id="productDetailModal" class="modal">
         <div class="modal-card">
             <h3 id="detailProductName"></h3>
@@ -926,7 +939,7 @@
         </div>
     </div>
 
-    <!-- EDIT PRODUCT MODAL (with commission) -->
+    <!-- EDIT PRODUCT MODAL (with seller_id hidden) -->
     <div id="productEditModal" class="modal">
         <div class="modal-card">
             <h3 id="productModalTitle">Edit product</h3>
@@ -991,8 +1004,8 @@
     <script>
         (async function() {
             // ========== SUPABASE SETUP ==========
-            const SUPABASE_URL = 'https://ykqhoacpopuiaupwoied.supabase.co';
-            const SUPABASE_ANON_KEY = 'sb_publishable_O_d-72K0nB0pyLF4y5YZWw_KSWWFB_f';
+            const SUPABASE_URL = 'https://ykqhoacpopuiaupwoied.supabase.co'; // Replace with your project URL
+            const SUPABASE_ANON_KEY = 'sb_publishable_O_d-72K0nB0pyLF4y5YZWw_KSWWFB_f'; // Replace with your anon key
             const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
             // ========== REFERRAL TRACKING ==========
@@ -1021,11 +1034,11 @@
                 { id: 'ban2', image: 'https://placehold.co/600x200/f9a825/white?text=Beauty+Special', link: '', title: 'Beauty Special' }
             ];
             const DEFAULT_PRODUCTS = [
-                { id: 'p1', name: 'Smartphone Android 13', price: 25999, costPrice: 22000, originalPrice: 29999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Smartphone', images: [], description: 'Latest Android 13 smartphone with 128GB storage.', category: 'cat1', rating: 4.5, sold: 78, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '' },
-                { id: 'p2', name: 'TWS Wireless Earbuds Pro', price: 3999, costPrice: 2500, originalPrice: 5999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earbuds', images: [], description: 'Noise cancelling earbuds with charging case.', category: 'cat1', rating: 4.3, sold: 124, badgeImage: '', badgeText: '', affiliate_link: '' },
-                { id: 'p3', name: 'Matte Lipstick Set (6 pcs)', price: 1299, costPrice: 800, originalPrice: 1899, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Lipstick', images: [], description: 'Set of 6 long-lasting matte lipsticks.', category: 'cat2', rating: 4.7, sold: 312, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '' },
-                { id: 'p4', name: 'Gold Plated Hoop Earrings', price: 3499, costPrice: 2000, originalPrice: 4499, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earrings', images: [], description: 'Elegant gold plated hoop earrings.', category: 'cat4', rating: 4.8, sold: 56, badgeImage: '', badgeText: '', affiliate_link: '' },
-                { id: 'p5', name: 'Silver Nose Ring', price: 899, costPrice: 400, originalPrice: 1199, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Nose+Ring', images: [], description: 'Adjustable silver nose ring.', category: 'cat5', rating: 4.4, sold: 103, badgeImage: '', badgeText: '', affiliate_link: '' }
+                { id: 'p1', name: 'Smartphone Android 13', price: 25999, costPrice: 22000, originalPrice: 29999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Smartphone', images: [], description: 'Latest Android 13 smartphone with 128GB storage.', category: 'cat1', rating: 4.5, sold: 78, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null },
+                { id: 'p2', name: 'TWS Wireless Earbuds Pro', price: 3999, costPrice: 2500, originalPrice: 5999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earbuds', images: [], description: 'Noise cancelling earbuds with charging case.', category: 'cat1', rating: 4.3, sold: 124, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null },
+                { id: 'p3', name: 'Matte Lipstick Set (6 pcs)', price: 1299, costPrice: 800, originalPrice: 1899, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Lipstick', images: [], description: 'Set of 6 long-lasting matte lipsticks.', category: 'cat2', rating: 4.7, sold: 312, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null },
+                { id: 'p4', name: 'Gold Plated Hoop Earrings', price: 3499, costPrice: 2000, originalPrice: 4499, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earrings', images: [], description: 'Elegant gold plated hoop earrings.', category: 'cat4', rating: 4.8, sold: 56, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null },
+                { id: 'p5', name: 'Silver Nose Ring', price: 899, costPrice: 400, originalPrice: 1199, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Nose+Ring', images: [], description: 'Adjustable silver nose ring.', category: 'cat5', rating: 4.4, sold: 103, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null }
             ];
             const DEFAULT_SETTINGS = { wa_number: '254700000000' };
 
@@ -1036,8 +1049,9 @@
             let settings = { ...DEFAULT_SETTINGS };
             let orders = [];
             let reviews = [];
+            let profiles = []; // store user profiles
             let currentUser = null;
-            let isAdmin = false;
+            let currentUserProfile = null; // role, seller_status
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             let activeCategory = null;
@@ -1054,6 +1068,7 @@
             const bannerDots = document.getElementById('bannerDots');
             const productGrid = document.getElementById('productGrid');
             const adminBadge = document.getElementById('adminModeBadge');
+            const sellerBadge = document.getElementById('sellerModeBadge');
             const addProductBtn = document.getElementById('addProductBtn');
             const cartIcon = document.getElementById('cartIcon');
             const cartCountSpan = document.getElementById('cartCount');
@@ -1078,6 +1093,7 @@
             const adminOrdersListDiv = document.getElementById('adminOrdersList');
             const usersListDiv = document.getElementById('usersList');
             const reviewsListDiv = document.getElementById('reviewsList');
+            const sellerApplicationsListDiv = document.getElementById('sellerApplicationsList');
             const addCategoryBtn = document.getElementById('addCategoryBtn');
             const addBannerBtn = document.getElementById('addBannerBtn');
             const productEditModal = document.getElementById('productEditModal');
@@ -1126,9 +1142,19 @@
 
             const profileModal = document.getElementById('profileModal');
             const profileEmail = document.getElementById('profileEmail');
+            const profileRole = document.getElementById('profileRole');
+            const sellerRequestSection = document.getElementById('sellerRequestSection');
+            const sellerDashboard = document.getElementById('sellerDashboard');
+            const sellerProductsList = document.getElementById('sellerProductsList');
+            const sellerOrdersList = document.getElementById('sellerOrdersList');
+            const sellerAddProductBtn = document.getElementById('sellerAddProductBtn');
             const logoutBtn = document.getElementById('logoutBtn');
             const userOrdersList = document.getElementById('userOrdersList');
             const closeProfileBtn = document.getElementById('closeProfileBtn');
+
+            const sellerApplyModal = document.getElementById('sellerApplyModal');
+            const sellerApplyCancel = document.getElementById('sellerApplyCancel');
+            const sellerApplyConfirm = document.getElementById('sellerApplyConfirm');
 
             const totalClicksSpan = document.getElementById('totalClicks');
             const totalConversionsSpan = document.getElementById('totalConversions');
@@ -1170,38 +1196,71 @@
                 });
             });
 
+            // ========== PROFILE FUNCTIONS ==========
+            async function getOrCreateProfile(user) {
+                if (!user) return null;
+                // Check if profile exists
+                let { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .single();
+                
+                if (error && error.code === 'PGRST116') { // not found
+                    // Create new profile
+                    const newProfile = {
+                        user_id: user.id,
+                        email: user.email,
+                        role: 'customer',
+                        seller_status: null,
+                        created_at: new Date().toISOString()
+                    };
+                    const { data: inserted, error: insertError } = await supabase
+                        .from('profiles')
+                        .insert([newProfile])
+                        .select()
+                        .single();
+                    if (insertError) console.error('Profile creation error', insertError);
+                    profile = inserted;
+                } else if (error) {
+                    console.error('Profile fetch error', error);
+                }
+                return profile;
+            }
+
             // ========== SUPABASE FETCH & SEED ==========
             async function loadAllData() {
+                // Load categories
                 let { data: catData, error: catErr } = await supabase.from('categories').select('*');
                 if (catErr) console.error('categories error', catErr);
                 if (!catData || catData.length === 0) {
-                    const { data: inserted, error: insertErr } = await supabase.from('categories').insert(DEFAULT_CATEGORIES).select();
-                    if (insertErr) console.error('insert categories error', insertErr);
+                    const { data: inserted } = await supabase.from('categories').insert(DEFAULT_CATEGORIES).select();
                     categories = inserted || DEFAULT_CATEGORIES;
                 } else {
                     categories = catData;
                 }
 
+                // Load banners
                 let { data: banData, error: banErr } = await supabase.from('banners').select('*');
                 if (banErr) console.error('banners error', banErr);
                 if (!banData || banData.length === 0) {
-                    const { data: inserted, error: insertErr } = await supabase.from('banners').insert(DEFAULT_BANNERS).select();
-                    if (insertErr) console.error('insert banners error', insertErr);
+                    const { data: inserted } = await supabase.from('banners').insert(DEFAULT_BANNERS).select();
                     banners = inserted || DEFAULT_BANNERS;
                 } else {
                     banners = banData;
                 }
 
+                // Load products
                 let { data: prodData, error: prodErr } = await supabase.from('products').select('*');
                 if (prodErr) console.error('products error', prodErr);
                 if (!prodData || prodData.length === 0) {
-                    const { data: inserted, error: insertErr } = await supabase.from('products').insert(DEFAULT_PRODUCTS).select();
-                    if (insertErr) console.error('insert products error', insertErr);
+                    const { data: inserted } = await supabase.from('products').insert(DEFAULT_PRODUCTS).select();
                     products = inserted || DEFAULT_PRODUCTS;
                 } else {
                     products = prodData;
                 }
 
+                // Load settings
                 let { data: settingsData, error: settingsErr } = await supabase.from('settings').select('*').eq('key', 'wa_number');
                 if (settingsErr) console.error('settings error', settingsErr);
                 if (!settingsData || settingsData.length === 0) {
@@ -1212,28 +1271,32 @@
                 }
                 waNumberInput.value = settings.wa_number;
 
+                // Load orders
                 let { data: ordersData, error: ordersErr } = await supabase.from('orders').select('*');
                 if (ordersErr) console.error('orders error', ordersErr);
-                if (ordersData) {
-                    orders = ordersData;
-                }
+                if (ordersData) orders = ordersData;
 
+                // Load reviews
                 let { data: reviewsData, error: reviewsErr } = await supabase.from('reviews').select('*');
                 if (reviewsErr) console.error('reviews error', reviewsErr);
-                if (reviewsData) {
-                    reviews = reviewsData;
-                }
+                if (reviewsData) reviews = reviewsData;
 
+                // Load profiles
+                let { data: profilesData, error: profilesErr } = await supabase.from('profiles').select('*');
+                if (profilesErr) console.error('profiles error', profilesErr);
+                if (profilesData) profiles = profilesData;
+
+                // Clean cart
                 cart = cart.filter(item => products.some(p => p.id === item.id));
                 localStorage.setItem('cart', JSON.stringify(cart));
 
+                // Get current user and profile
                 const { data: { user } } = await supabase.auth.getUser();
                 currentUser = user;
-                // Admin check: you can change this email to your admin email
-                if (user && user.email === 'admin@teresa.com') {
-                    isAdmin = true;
+                if (user) {
+                    currentUserProfile = await getOrCreateProfile(user);
                 } else {
-                    isAdmin = false;
+                    currentUserProfile = null;
                 }
 
                 refreshUI();
@@ -1241,24 +1304,13 @@
 
             // ========== REAL‑TIME SUBSCRIPTIONS ==========
             function setupSubscriptions() {
-                supabase.channel('categories')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'categories' }, () => loadAllData())
-                    .subscribe();
-                supabase.channel('banners')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'banners' }, () => loadAllData())
-                    .subscribe();
-                supabase.channel('products')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => loadAllData())
-                    .subscribe();
-                supabase.channel('settings')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, () => loadAllData())
-                    .subscribe();
-                supabase.channel('orders')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => loadAllData())
-                    .subscribe();
-                supabase.channel('reviews')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => loadAllData())
-                    .subscribe();
+                supabase.channel('categories').on('postgres_changes', { event: '*', schema: 'public', table: 'categories' }, () => loadAllData()).subscribe();
+                supabase.channel('banners').on('postgres_changes', { event: '*', schema: 'public', table: 'banners' }, () => loadAllData()).subscribe();
+                supabase.channel('products').on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => loadAllData()).subscribe();
+                supabase.channel('settings').on('postgres_changes', { event: '*', schema: 'public', table: 'settings' }, () => loadAllData()).subscribe();
+                supabase.channel('orders').on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => loadAllData()).subscribe();
+                supabase.channel('reviews').on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => loadAllData()).subscribe();
+                supabase.channel('profiles').on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => loadAllData()).subscribe();
             }
 
             // ========== HELPER FUNCTIONS ==========
@@ -1341,7 +1393,9 @@
                     }
                     html += `</div><div class="product-rating"><i class="fas fa-star"></i> ${prod.rating} (${prod.sold}+ sold)</div>
                         <button class="add-to-cart-btn" data-id="${prod.id}"><i class="fas fa-cart-plus"></i> Add to cart</button>`;
-                    if (isAdmin) {
+                    
+                    // Admin can edit/delete any product; sellers can edit/delete their own
+                    if ((currentUserProfile?.role === 'admin') || (currentUserProfile?.role === 'seller' && prod.seller_id === currentUser?.id)) {
                         html += `<div class="admin-controls"><i class="fas fa-edit edit-btn" data-id="${prod.id}"></i><i class="fas fa-trash delete-btn" data-id="${prod.id}"></i></div>`;
                     }
                     html += `</div></div>`;
@@ -1363,7 +1417,6 @@
                 cartTotalSpan.innerText = `Total: KSh ${total}`;
             }
 
-            // ========== NOTIFICATIONS – REMOVED DUMMY DATA ==========
             function renderNotifications() {
                 notificationsList.innerHTML = '<p style="text-align:center; color:#aaa;">No notifications</p>';
             }
@@ -1373,13 +1426,22 @@
                 renderBanners();
                 renderProducts();
                 updateCartCount();
-                if (isAdmin) {
+                
+                // Update badges
+                if (currentUserProfile?.role === 'admin') {
                     adminBadge.style.display = 'inline-flex';
-                    addProductBtn.style.display = 'flex';
+                    sellerBadge.style.display = 'none';
+                    addProductBtn.style.display = 'flex'; // admin can add products
+                } else if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
+                    adminBadge.style.display = 'none';
+                    sellerBadge.style.display = 'inline-flex';
+                    addProductBtn.style.display = 'flex'; // seller can add products
                 } else {
                     adminBadge.style.display = 'none';
+                    sellerBadge.style.display = 'none';
                     addProductBtn.style.display = 'none';
                 }
+
                 navItems.forEach(item => item.classList.remove('active'));
                 if (activePromo) {
                     document.querySelector('[data-nav="promo"]').classList.add('active');
@@ -1396,6 +1458,7 @@
                 } else {
                     alert('Sign up successful! You can now log in.');
                     authModal.style.display = 'none';
+                    // Profile will be created automatically on first login
                 }
             }
 
@@ -1405,11 +1468,7 @@
                     alert('Login error: ' + error.message);
                 } else {
                     currentUser = data.user;
-                    if (currentUser.email === 'admin@teresa.com') {
-                        isAdmin = true;
-                    } else {
-                        isAdmin = false;
-                    }
+                    currentUserProfile = await getOrCreateProfile(currentUser);
                     authModal.style.display = 'none';
                     refreshUI();
                 }
@@ -1418,7 +1477,7 @@
             async function signOut() {
                 await supabase.auth.signOut();
                 currentUser = null;
-                isAdmin = false;
+                currentUserProfile = null;
                 refreshUI();
                 profileModal.style.display = 'none';
             }
@@ -1603,6 +1662,99 @@
                 });
             }
 
+            // ========== SELLER FUNCTIONS ==========
+            async function renderSellerDashboard() {
+                if (!currentUser || currentUserProfile?.role !== 'seller' || currentUserProfile.seller_status !== 'approved') return;
+                
+                // Show seller dashboard
+                sellerDashboard.style.display = 'block';
+                
+                // Render seller's products
+                const sellerProds = products.filter(p => p.seller_id === currentUser.id);
+                let prodHtml = '';
+                sellerProds.forEach(prod => {
+                    prodHtml += `<div class="prod-list-item">
+                        <img src="${prod.image}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
+                        <span>${prod.name} (KSh ${prod.price})</span>
+                        <button class="edit-prod-btn" data-id="${prod.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
+                        <button class="delete-prod-btn" data-id="${prod.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
+                    </div>`;
+                });
+                if (sellerProds.length === 0) prodHtml = '<p>You have no products yet.</p>';
+                sellerProductsList.innerHTML = prodHtml;
+
+                // Render orders containing seller's products
+                let ordersHtml = '';
+                for (let order of orders) {
+                    const items = JSON.parse(order.items || '[]');
+                    const sellerItems = items.filter(item => {
+                        const prod = products.find(p => p.id === item.product_id);
+                        return prod && prod.seller_id === currentUser.id;
+                    });
+                    if (sellerItems.length > 0) {
+                        ordersHtml += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
+                            <div><strong>Order #${order.id.slice(-6)}</strong> <span class="status-badge status-${order.status.replace('_', '-')}">${order.status}</span></div>
+                            <div>Customer: ${order.shipping_name}</div>
+                            <div>Items: ${sellerItems.map(i => `${i.quantity}x ${products.find(p => p.id === i.product_id)?.name}`).join(', ')}</div>
+                        </div>`;
+                    }
+                }
+                if (ordersHtml === '') ordersHtml = '<p>No orders for your products yet.</p>';
+                sellerOrdersList.innerHTML = ordersHtml;
+            }
+
+            sellerAddProductBtn.addEventListener('click', () => {
+                // Open product edit modal for new product, with seller_id preset
+                currentProductId = null;
+                prodName.value = ''; 
+                prodPrice.value = ''; 
+                prodCost.value = ''; 
+                prodOriginalPrice.value = ''; 
+                prodCommission.value = '10'; 
+                prodImage.value = ''; 
+                prodImages.value = ''; 
+                prodDescription.value = ''; 
+                prodAffiliateLink.value = ''; 
+                prodRating.value = '4.5'; 
+                prodSold.value = '0'; 
+                prodBadgeImage.value = ''; 
+                prodBadgeText.value = '';
+
+                let catOptions = '';
+                categories.forEach(c => catOptions += `<option value="${c.id}">${c.name}</option>`);
+                prodCategory.innerHTML = catOptions;
+                if (prodCategory.options.length > 0) prodCategory.selectedIndex = 0;
+                
+                productEditModal.style.display = 'flex';
+                profileModal.style.display = 'none'; // hide profile modal
+            });
+
+            // ========== SELLER APPLICATION ==========
+            function openSellerApplyModal() {
+                sellerApplyModal.style.display = 'flex';
+            }
+
+            sellerApplyCancel.addEventListener('click', () => {
+                sellerApplyModal.style.display = 'none';
+            });
+
+            sellerApplyConfirm.addEventListener('click', async () => {
+                if (!currentUser) return;
+                // Update profile seller_status to 'pending'
+                const { error } = await supabase
+                    .from('profiles')
+                    .update({ seller_status: 'pending' })
+                    .eq('user_id', currentUser.id);
+                if (error) {
+                    alert('Error: ' + error.message);
+                } else {
+                    alert('Application submitted! Admin will review.');
+                    sellerApplyModal.style.display = 'none';
+                    currentUserProfile.seller_status = 'pending';
+                    refreshUI();
+                }
+            });
+
             // ========== ADMIN RENDERING ==========
             async function renderAdminOrders() {
                 const { data: allOrders, error } = await supabase
@@ -1645,7 +1797,6 @@
                         if (error) {
                             alert('Error updating status: ' + error.message);
                         } else {
-                            // Refresh data to show updated status
                             await loadAllData();
                         }
                     });
@@ -1683,6 +1834,38 @@
                 }
                 if (html === '') html = '<p>No users yet.</p>';
                 usersListDiv.innerHTML = html;
+            }
+
+            async function renderSellerApplications() {
+                const pendingSellers = profiles.filter(p => p.seller_status === 'pending');
+                let html = '';
+                pendingSellers.forEach(prof => {
+                    html += `<div class="user-list-item">
+                        <div><strong>${prof.email}</strong></div>
+                        <div>Applied: ${new Date(prof.created_at).toLocaleDateString()}</div>
+                        <div>
+                            <button class="btn-save approve-seller" data-user-id="${prof.user_id}" style="padding:4px 12px;">Approve</button>
+                            <button class="btn-cancel reject-seller" data-user-id="${prof.user_id}" style="padding:4px 12px;">Reject</button>
+                        </div>
+                    </div>`;
+                });
+                if (html === '') html = '<p>No pending applications.</p>';
+                sellerApplicationsListDiv.innerHTML = html;
+
+                document.querySelectorAll('.approve-seller').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const userId = e.target.dataset.userId;
+                        await supabase.from('profiles').update({ role: 'seller', seller_status: 'approved' }).eq('user_id', userId);
+                        loadAllData();
+                    });
+                });
+                document.querySelectorAll('.reject-seller').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const userId = e.target.dataset.userId;
+                        await supabase.from('profiles').update({ seller_status: 'rejected' }).eq('user_id', userId);
+                        loadAllData();
+                    });
+                });
             }
 
             async function renderReviewsList() {
@@ -1869,12 +2052,18 @@
                 updateCartCount();
             });
 
-            // Admin edit/delete
+            // Edit/delete product (admin or seller)
             productGrid.addEventListener('click', async (e) => {
-                if (!isAdmin) return;
+                if (!currentUser) return;
                 if (e.target.closest('.edit-btn')) {
                     const prodId = e.target.closest('.edit-btn').dataset.id;
                     const prod = products.find(p => p.id === prodId);
+                    if (!prod) return;
+                    // Check permissions
+                    if (currentUserProfile?.role !== 'admin' && prod.seller_id !== currentUser.id) {
+                        alert('You can only edit your own products.');
+                        return;
+                    }
                     if (prod) {
                         currentProductId = prodId;
                         prodName.value = prod.name || '';
@@ -1899,6 +2088,12 @@
                 }
                 if (e.target.closest('.delete-btn')) {
                     const prodId = e.target.closest('.delete-btn').dataset.id;
+                    const prod = products.find(p => p.id === prodId);
+                    if (!prod) return;
+                    if (currentUserProfile?.role !== 'admin' && prod.seller_id !== currentUser.id) {
+                        alert('You can only delete your own products.');
+                        return;
+                    }
                     if (confirm('Delete product?')) {
                         await supabase.from('products').delete().eq('id', prodId);
                     }
@@ -1944,12 +2139,13 @@
             checkoutBtn.addEventListener('click', placeOrderWithDetails);
 
             adminBadge.addEventListener('click', async () => {
-                if (!isAdmin) return;
+                if (currentUserProfile?.role !== 'admin') return;
                 await renderCategoriesList();
                 await renderBannersList();
                 await renderProductsList();
                 await renderAdminOrders();
                 await renderUsersList();
+                await renderSellerApplications();
                 await renderReviewsList();
                 await renderAnalytics();
                 waNumberInput.value = settings.wa_number;
@@ -1967,6 +2163,7 @@
                     if (tab.dataset.tab === 'orders') renderAdminOrders();
                     if (tab.dataset.tab === 'users') renderUsersList();
                     if (tab.dataset.tab === 'reviews') renderReviewsList();
+                    if (tab.dataset.tab === 'sellers') renderSellerApplications();
                 });
             });
 
@@ -2011,7 +2208,7 @@
                 productsListDiv.innerHTML = html;
             }
 
-            // Category CRUD – FIXED: icon default and validation
+            // Category CRUD
             addCategoryBtn.addEventListener('click', () => {
                 currentCategoryId = null;
                 catNameInput.value = ''; 
@@ -2086,7 +2283,7 @@
             });
             bannerModalCancel.addEventListener('click', () => bannerEditModal.style.display = 'none');
 
-            // Product list actions
+            // Product list actions (from admin panel)
             productsListDiv.addEventListener('click', async (e) => {
                 if (e.target.closest('.edit-prod-btn')) {
                     const prodId = e.target.closest('.edit-prod-btn').dataset.id;
@@ -2121,8 +2318,12 @@
                 }
             });
 
-            // Add product button (main) – FIXED: category dropdown populated
+            // Add product button (main) – for admin or seller
             addProductBtn.addEventListener('click', () => {
+                if (!currentUser || (currentUserProfile?.role !== 'admin' && currentUserProfile?.role !== 'seller')) {
+                    alert('You do not have permission to add products.');
+                    return;
+                }
                 currentProductId = null;
                 prodName.value = ''; 
                 prodPrice.value = ''; 
@@ -2141,12 +2342,11 @@
                 let catOptions = '';
                 categories.forEach(c => catOptions += `<option value="${c.id}">${c.name}</option>`);
                 prodCategory.innerHTML = catOptions;
-                // Set first option as selected
                 if (prodCategory.options.length > 0) prodCategory.selectedIndex = 0;
                 productEditModal.style.display = 'flex';
             });
 
-            // Save product – FIXED: ensure images array
+            // Save product – includes seller_id
             productModalSave.addEventListener('click', async () => {
                 const name = prodName.value.trim(), price = parseFloat(prodPrice.value);
                 if (!name || isNaN(price)) return alert('Name and price required');
@@ -2165,7 +2365,8 @@
                     rating: parseFloat(prodRating.value) || 4.5,
                     sold: parseInt(prodSold.value) || 0,
                     badgeImage: prodBadgeImage.value.trim() || '',
-                    badgeText: prodBadgeText.value.trim() || ''
+                    badgeText: prodBadgeText.value.trim() || '',
+                    seller_id: currentUser?.id // assign to current user
                 };
                 if (currentProductId) {
                     const { error } = await supabase.from('products').update(productData).eq('id', currentProductId);
@@ -2197,7 +2398,7 @@
                 alert('WhatsApp number updated');
             });
 
-            // Notifications modal – FIXED: no dummy data
+            // Notifications modal
             function openNotifModal() {
                 renderNotifications();
                 notifModal.style.display = 'flex';
@@ -2241,8 +2442,30 @@
                     return;
                 }
                 profileEmail.innerText = currentUser.email;
+                profileRole.innerText = currentUserProfile?.role || 'customer';
+                
+                // Show seller application section if applicable
+                sellerRequestSection.innerHTML = '';
+                if (currentUserProfile?.role === 'customer' && !currentUserProfile.seller_status) {
+                    sellerRequestSection.innerHTML = '<button class="btn-save" id="applySellerBtn" style="width:100%; margin:10px 0;">Become a Seller</button>';
+                    document.getElementById('applySellerBtn')?.addEventListener('click', openSellerApplyModal);
+                } else if (currentUserProfile?.seller_status === 'pending') {
+                    sellerRequestSection.innerHTML = '<p style="color:orange;">Seller application pending approval.</p>';
+                } else if (currentUserProfile?.seller_status === 'rejected') {
+                    sellerRequestSection.innerHTML = '<p style="color:red;">Seller application rejected. Contact admin.</p>';
+                }
+
+                // Render user orders
                 await renderUserOrders();
                 await loadReferralStats();
+
+                // If seller, render seller dashboard
+                if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
+                    await renderSellerDashboard();
+                } else {
+                    sellerDashboard.style.display = 'none';
+                }
+
                 profileModal.style.display = 'flex';
             }
 
@@ -2292,4 +2515,4 @@
         })();
     </script>
 </body>
-</html>
+                    </html>
