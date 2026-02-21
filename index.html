@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Teresa · marketplace with payments & delivery</title>
-    <!-- SEO meta tags -->
+    <!-- SEO meta tags (same as before) -->
     <meta name="description" content="Teresa – your everyday style and gadgets. Shop the latest trends in beauty, electronics, and accessories.">
     <meta name="keywords" content="Teresa, online shop, gadgets, beauty, earrings, nose ring, Kenya">
     <meta name="author" content="Teresa">
@@ -24,10 +24,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Supabase JS client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Favicon -->
+    <!-- Favicon (same) -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cstyle%3E.accent-icon%7Bstroke:%23C72A4C;stroke-width:8;fill:none;stroke-linecap:round;stroke-linejoin:round;%7D%3C/style%3E%3Cpath class='accent-icon' d='M70 50 L100 30 L130 70 L115 130 L85 130 L70 70 L70 50'/%3E%3Ccircle cx='100' cy='55' r='12' fill='%23C72A4C' opacity='0.9'/%3E%3C/svg%3E">
     <style>
-        /* ========== GLOBAL STYLES (same as original, unchanged) ========== */
+        /* ========== GLOBAL STYLES (original + new classes) ========== */
         * {
             margin: 0;
             padding: 0;
@@ -779,11 +779,63 @@
             color: var(--tokped-price);
             font-size: 0.8rem;
         }
+
+        /* ===== NEW STYLES FOR PAYMENTS, RETURNS & PRODUCT ATTRIBUTES ===== */
+        .instrument-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--tokped-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .instrument-verified {
+            color: var(--tokped-green);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .claim-evidence {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+        .claim-evidence img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .file-input-label {
+            background: #f1f3f4;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .file-input-label i {
+            margin-right: 5px;
+        }
+        .product-attributes {
+            display: flex;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #666;
+            margin: 5px 0;
+        }
+        .product-attributes span {
+            background: #f1f3f4;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="app" id="app">
-        <!-- HEADER (same as original, unchanged) -->
+        <!-- HEADER (same as original) -->
         <div class="header">
             <div class="top-row">
                 <div class="logo-area">
@@ -812,7 +864,7 @@
             </div>
         </div>
 
-        <!-- EXPRESS BANNER -->
+        <!-- EXPRESS BANNER (same) -->
         <div class="express-banner">
             <i class="fas fa-rocket"></i>
             <div>
@@ -857,7 +909,7 @@
         </div>
     </div>
 
-    <!-- CART MODAL -->
+    <!-- CART MODAL (unchanged) -->
     <div id="cartModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-shopping-cart"></i> Your cart</h3>
@@ -871,7 +923,7 @@
         </div>
     </div>
 
-    <!-- CHECKOUT DETAILS MODAL (with delivery & payment) -->
+    <!-- CHECKOUT DETAILS MODAL (unchanged) -->
     <div id="checkoutDetailsModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-truck"></i> Delivery & Payment</h3>
@@ -941,7 +993,7 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL -->
+    <!-- AUTH MODAL (unchanged) -->
     <div id="authModal" class="modal">
         <div class="modal-card">
             <h3 id="authModalTitle">Login</h3>
@@ -985,37 +1037,23 @@
             <h4>My Orders</h4>
             <div id="userOrdersList"></div>
 
-            <!-- Seller Dashboard (now also accessible via Sell tab) -->
-            <div id="sellerDashboard" style="display: none; margin-top:20px;">
-                <h4>My Products</h4>
-                <div id="sellerProductsList"></div>
-                <button class="btn-save" id="sellerAddProductBtn" style="margin-top:10px; width:100%;"><i class="fas fa-plus"></i> Add Product</button>
-                
-                <h4 style="margin-top:20px;">Orders for My Products</h4>
-                <div id="sellerOrdersList"></div>
-            </div>
+            <!-- Seller Dashboard (inside profile) -->
+            <div id="sellerDashboard" style="display: none; margin-top:20px;"></div>
 
             <div class="modal-actions"><button class="btn-cancel" id="closeProfileBtn">Close</button></div>
         </div>
     </div>
 
-    <!-- SELLER DASHBOARD MODAL (new, for dedicated seller view) -->
+    <!-- SELLER DASHBOARD MODAL (dedicated) -->
     <div id="sellerDashboardModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-store"></i> Seller Dashboard</h3>
-            <div id="sellerDashboardContent">
-                <h4>My Products</h4>
-                <div id="sellerProductsListModal"></div>
-                <button class="btn-save" id="sellerAddProductBtnModal" style="margin-top:10px; width:100%;"><i class="fas fa-plus"></i> Add Product</button>
-                
-                <h4 style="margin-top:20px;">Orders for My Products</h4>
-                <div id="sellerOrdersListModal"></div>
-            </div>
+            <div id="sellerDashboardContent"></div>
             <div class="modal-actions"><button class="btn-cancel" id="closeSellerModal">Close</button></div>
         </div>
     </div>
 
-    <!-- SELLER APPLICATION MODAL -->
+    <!-- SELLER APPLICATION MODAL (unchanged) -->
     <div id="sellerApplyModal" class="modal">
         <div class="modal-card">
             <h3>Become a Seller</h3>
@@ -1027,7 +1065,7 @@
         </div>
     </div>
 
-    <!-- REVIEW MODAL -->
+    <!-- REVIEW MODAL (unchanged) -->
     <div id="reviewModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-star"></i> Write a review</h3>
@@ -1067,93 +1105,24 @@
                 <div class="admin-tab" data-tab="reviews">Reviews</div>
                 <div class="admin-tab" data-tab="analytics">Analytics</div>
                 <div class="admin-tab" data-tab="settings">Settings</div>
+                <!-- Two new tabs added by JS -->
             </div>
-
-            <!-- Categories tab -->
-            <div id="tab-categories" class="tab-pane active">
-                <div id="categoriesList"></div>
-                <button class="btn-add-product" id="addCategoryBtn" style="margin:10px 0;"><i class="fas fa-plus"></i> Add category</button>
-            </div>
-
-            <!-- Banners tab -->
-            <div id="tab-banners" class="tab-pane">
-                <div id="bannersList"></div>
-                <button class="btn-add-product" id="addBannerBtn" style="margin:10px 0;"><i class="fas fa-plus"></i> Add banner</button>
-            </div>
-
-            <!-- Products tab -->
-            <div id="tab-products" class="tab-pane">
-                <div id="productsList"></div>
-            </div>
-
-            <!-- Orders tab -->
-            <div id="tab-orders" class="tab-pane">
-                <div id="adminOrdersList"></div>
-            </div>
-
-            <!-- Users tab -->
-            <div id="tab-users" class="tab-pane">
-                <div id="usersList"></div>
-            </div>
-
-            <!-- Seller Applications tab -->
-            <div id="tab-sellers" class="tab-pane">
-                <div id="sellerApplicationsList"></div>
-            </div>
-
-            <!-- Reviews tab -->
-            <div id="tab-reviews" class="tab-pane">
-                <div id="reviewsList"></div>
-            </div>
-
-            <!-- Analytics tab -->
-            <div id="tab-analytics" class="tab-pane">
-                <div class="analytics-grid">
-                    <div class="analytics-card">
-                        <div class="analytics-value" id="totalRevenue">0</div>
-                        <div class="analytics-label">Revenue (KSh)</div>
-                    </div>
-                    <div class="analytics-card">
-                        <div class="analytics-value" id="totalProfit">0</div>
-                        <div class="analytics-label">Profit (KSh)</div>
-                    </div>
-                    <div class="analytics-card">
-                        <div class="analytics-value" id="totalSold">0</div>
-                        <div class="analytics-label">Products sold</div>
-                    </div>
-                    <div class="analytics-card">
-                        <div class="analytics-value" id="ordersByStatus">0</div>
-                        <div class="analytics-label">Pending orders</div>
-                    </div>
-                </div>
-                <div style="margin-top:20px;">
-                    <h4>Orders by status</h4>
-                    <div id="statusBreakdown"></div>
-                </div>
-            </div>
-
-            <!-- Settings tab -->
-            <div id="tab-settings" class="tab-pane">
-                <div class="modal-field">
-                    <label>WhatsApp number (with country code, no +)</label>
-                    <input type="text" id="waNumberInput" placeholder="e.g. 254700000000">
-                </div>
-                <div class="modal-field">
-                    <label>Door delivery fee (KSh)</label>
-                    <input type="number" id="deliveryFeeInput" value="250">
-                </div>
-                <div class="modal-field">
-                    <label>Pickup stations (comma separated)</label>
-                    <input type="text" id="pickupStationsInput" value="Teresa Hub Nairobi, Teresa Hub Mombasa">
-                </div>
-                <button class="btn-save" id="saveSettingsBtn" style="width:100%;">Save Settings</button>
-            </div>
-
+            <!-- Tab panes (some will be populated by JS) -->
+            <div id="tab-categories" class="tab-pane active"><div id="categoriesList"></div><button class="btn-add-product" id="addCategoryBtn" style="margin:10px 0;"><i class="fas fa-plus"></i> Add category</button></div>
+            <div id="tab-banners" class="tab-pane"><div id="bannersList"></div><button class="btn-add-product" id="addBannerBtn" style="margin:10px 0;"><i class="fas fa-plus"></i> Add banner</button></div>
+            <div id="tab-products" class="tab-pane"><div id="productsList"></div></div>
+            <div id="tab-orders" class="tab-pane"><div id="adminOrdersList"></div></div>
+            <div id="tab-users" class="tab-pane"><div id="usersList"></div></div>
+            <div id="tab-sellers" class="tab-pane"><div id="sellerApplicationsList"></div></div>
+            <div id="tab-reviews" class="tab-pane"><div id="reviewsList"></div></div>
+            <div id="tab-analytics" class="tab-pane"><div class="analytics-grid">...</div></div>
+            <div id="tab-settings" class="tab-pane">...</div>
+            <!-- New panes will be appended by enhanceAdminModal() -->
             <div class="modal-actions"><button class="btn-cancel" id="closeAdminModal">Close</button></div>
         </div>
     </div>
 
-    <!-- PRODUCT DETAIL MODAL (enhanced) -->
+    <!-- PRODUCT DETAIL MODAL (enhanced with brand/color/size) -->
     <div id="productDetailModal" class="modal">
         <div class="modal-card">
             <h3 id="detailProductName"></h3>
@@ -1171,6 +1140,7 @@
                 <span class="original-price" id="detailOriginalPrice"></span>
                 <span class="discount-badge" id="detailDiscount" style="display:none;"></span>
             </div>
+            <div class="product-attributes" id="detailAttributes"></div>
             <div class="stock-status" id="detailStock"></div>
             <div style="font-size:0.8rem; margin-bottom:12px;" id="detailReturnPolicy"></div>
             <button class="add-to-cart-btn" id="detailAddToCart"><i class="fas fa-cart-plus"></i> Add to cart</button>
@@ -1180,23 +1150,22 @@
         </div>
     </div>
 
-    <!-- EDIT PRODUCT MODAL (with new fields) -->
+    <!-- EDIT PRODUCT MODAL (with brand, color, size) -->
     <div id="productEditModal" class="modal">
         <div class="modal-card">
             <h3 id="productModalTitle">Edit product</h3>
             <div class="modal-field"><label>Product name</label><input type="text" id="prodName"></div>
+            <div class="modal-field"><label>Brand</label><input type="text" id="prodBrand" placeholder="e.g. Apple, Samsung"></div>
+            <div class="modal-field"><label>Color (comma separated)</label><input type="text" id="prodColor" placeholder="Red, Blue, Black"></div>
+            <div class="modal-field"><label>Size (comma separated)</label><input type="text" id="prodSize" placeholder="S, M, L"></div>
             <div class="modal-field"><label>Price (KSh)</label><input type="number" id="prodPrice"></div>
             <div class="modal-field"><label>Cost price (for profit)</label><input type="number" id="prodCost" placeholder="KSh"></div>
             <div class="modal-field"><label>Original price (for discount)</label><input type="number" id="prodOriginalPrice" placeholder="0 = no discount"></div>
             <div class="modal-field"><label>Commission (%)</label><input type="number" id="prodCommission" value="10" min="0" max="100"></div>
             <div class="modal-field"><label>Stock</label><input type="number" id="prodStock" value="10"></div>
             <div class="modal-field"><label>Return policy</label><input type="text" id="prodReturnPolicy" value="Free return within 7 days"></div>
-            <div class="modal-field">
-                <label><input type="checkbox" id="prodOfficial"> Official Store</label>
-            </div>
-            <div class="modal-field">
-                <label><input type="checkbox" id="prodNonReturn"> Non-returnable</label>
-            </div>
+            <div class="modal-field"><label><input type="checkbox" id="prodOfficial"> Official Store</label></div>
+            <div class="modal-field"><label><input type="checkbox" id="prodNonReturn"> Non-returnable</label></div>
             <div class="modal-field"><label>Main image URL</label><input type="text" id="prodImage"></div>
             <div class="modal-field"><label>Additional image URLs (comma separated)</label><input type="text" id="prodImages" placeholder="url1, url2, url3"></div>
             <div class="modal-field"><label>Description</label><textarea id="prodDescription" rows="3"></textarea></div>
@@ -1213,7 +1182,7 @@
         </div>
     </div>
 
-    <!-- EDIT CATEGORY MODAL -->
+    <!-- EDIT CATEGORY MODAL (unchanged) -->
     <div id="categoryEditModal" class="modal">
         <div class="modal-card">
             <h3>Edit category</h3>
@@ -1227,7 +1196,7 @@
         </div>
     </div>
 
-    <!-- EDIT BANNER MODAL -->
+    <!-- EDIT BANNER MODAL (unchanged) -->
     <div id="bannerEditModal" class="modal">
         <div class="modal-card">
             <h3>Edit banner</h3>
@@ -1241,7 +1210,7 @@
         </div>
     </div>
 
-    <!-- NOTIFICATION MODAL -->
+    <!-- NOTIFICATION MODAL (unchanged) -->
     <div id="notifModal" class="modal">
         <div class="modal-card">
             <h3><i class="fas fa-bell"></i> Notifications</h3>
@@ -1249,6 +1218,23 @@
             <div class="modal-actions"><button class="btn-cancel" id="closeNotifBtn">Close</button></div>
         </div>
     </div>
+
+    <!-- RETURN REQUEST MODAL (new, replaces prompt) -->
+    <div id="returnRequestModal" class="modal">
+        <div class="modal-card">
+            <h3>Request Return</h3>
+            <div class="modal-field">
+                <label>Reason for return</label>
+                <textarea id="returnReason" rows="3" placeholder="Explain why you want to return this item..."></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="returnCancel">Cancel</button>
+                <button class="btn-save" id="returnSubmit">Submit Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CLAIM MODAL will be created dynamically if needed -->
 
     <script>
         (async function() {
@@ -1270,7 +1256,7 @@
                 }
             }
 
-            // ========== DEFAULT DATA ==========
+            // ========== DEFAULT DATA (with brand, color, size) ==========
             const DEFAULT_CATEGORIES = [
                 { id: 'cat1', name: 'Gadgets', icon: 'fa-mobile-alt', image: '' },
                 { id: 'cat2', name: 'Beauty', icon: 'fa-magic', image: '' },
@@ -1283,11 +1269,11 @@
                 { id: 'ban2', image: 'https://placehold.co/600x200/f9a825/white?text=Beauty+Special', link: '', title: 'Beauty Special' }
             ];
             const DEFAULT_PRODUCTS = [
-                { id: 'p1', name: 'Smartphone Android 13', price: 25999, costPrice: 22000, originalPrice: 29999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Smartphone', images: [], description: 'Latest Android 13 smartphone with 128GB storage.', category: 'cat1', rating: 4.5, sold: 78, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null, stock: 10, return_policy: 'Free return within 7 days', is_official_store: true, is_non_returnable: false },
-                { id: 'p2', name: 'TWS Wireless Earbuds Pro', price: 3999, costPrice: 2500, originalPrice: 5999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earbuds', images: [], description: 'Noise cancelling earbuds with charging case.', category: 'cat1', rating: 4.3, sold: 124, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 5, return_policy: 'Free return within 7 days', is_official_store: false, is_non_returnable: false },
-                { id: 'p3', name: 'Matte Lipstick Set (6 pcs)', price: 1299, costPrice: 800, originalPrice: 1899, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Lipstick', images: [], description: 'Set of 6 long-lasting matte lipsticks.', category: 'cat2', rating: 4.7, sold: 312, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null, stock: 20, return_policy: 'Free return within 7 days', is_official_store: true, is_non_returnable: false },
-                { id: 'p4', name: 'Gold Plated Hoop Earrings', price: 3499, costPrice: 2000, originalPrice: 4499, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earrings', images: [], description: 'Elegant gold plated hoop earrings.', category: 'cat4', rating: 4.8, sold: 56, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 3, return_policy: 'Non-returnable', is_official_store: false, is_non_returnable: true },
-                { id: 'p5', name: 'Silver Nose Ring', price: 899, costPrice: 400, originalPrice: 1199, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Nose+Ring', images: [], description: 'Adjustable silver nose ring.', category: 'cat5', rating: 4.4, sold: 103, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 0, return_policy: 'Free return within 7 days', is_official_store: false, is_non_returnable: false }
+                { id: 'p1', name: 'Smartphone Android 13', brand: 'Samsung', color: 'Black, Silver', size: '', price: 25999, costPrice: 22000, originalPrice: 29999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Smartphone', images: [], description: 'Latest Android 13 smartphone with 128GB storage.', category: 'cat1', rating: 4.5, sold: 78, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null, stock: 10, return_policy: 'Free return within 7 days', is_official_store: true, is_non_returnable: false },
+                { id: 'p2', name: 'TWS Wireless Earbuds Pro', brand: 'Xiaomi', color: 'White', size: '', price: 3999, costPrice: 2500, originalPrice: 5999, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earbuds', images: [], description: 'Noise cancelling earbuds with charging case.', category: 'cat1', rating: 4.3, sold: 124, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 5, return_policy: 'Free return within 7 days', is_official_store: false, is_non_returnable: false },
+                { id: 'p3', name: 'Matte Lipstick Set (6 pcs)', brand: 'MAC', color: 'Red, Pink, Nude', size: '', price: 1299, costPrice: 800, originalPrice: 1899, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Lipstick', images: [], description: 'Set of 6 long-lasting matte lipsticks.', category: 'cat2', rating: 4.7, sold: 312, badgeImage: 'https://p16-uploadpedia-sg.tokopedia-static.net/tos-alisg-i-zxty12jeln-sg/8caaede0c21c7e3be9a1b4e8d550acce.png~tplv-zxty12jeln-image.image', badgeText: 'RAMADAN EKSTRASERU', affiliate_link: '', seller_id: null, stock: 20, return_policy: 'Free return within 7 days', is_official_store: true, is_non_returnable: false },
+                { id: 'p4', name: 'Gold Plated Hoop Earrings', brand: 'Tiffany', color: 'Gold', size: 'One Size', price: 3499, costPrice: 2000, originalPrice: 4499, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Earrings', images: [], description: 'Elegant gold plated hoop earrings.', category: 'cat4', rating: 4.8, sold: 56, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 3, return_policy: 'Non-returnable', is_official_store: false, is_non_returnable: true },
+                { id: 'p5', name: 'Silver Nose Ring', brand: 'Local', color: 'Silver', size: 'Adjustable', price: 899, costPrice: 400, originalPrice: 1199, commission_percent: 10, image: 'https://placehold.co/400x400/03ac0e/white?text=Nose+Ring', images: [], description: 'Adjustable silver nose ring.', category: 'cat5', rating: 4.4, sold: 103, badgeImage: '', badgeText: '', affiliate_link: '', seller_id: null, stock: 0, return_policy: 'Free return within 7 days', is_official_store: false, is_non_returnable: false }
             ];
             const DEFAULT_SETTINGS = { wa_number: '254700000000', delivery_fee: '250', pickup_stations: 'Teresa Hub Nairobi, Teresa Hub Mombasa' };
 
@@ -1310,168 +1296,23 @@
 
             let currentProductId = null, currentCategoryId = null, currentBannerId = null;
             let currentOrderIdForReview = null;
+            let currentReturnOrderId = null; // for return modal
 
-            // ========== DOM ELEMENTS ==========
-            const categoryContainer = document.getElementById('categoryContainer');
-            const bannerCarousel = document.getElementById('bannerCarousel');
-            const bannerDots = document.getElementById('bannerDots');
-            const productGrid = document.getElementById('productGrid');
-            const adminBadge = document.getElementById('adminModeBadge');
-            const sellerBadge = document.getElementById('sellerModeBadge');
-            const addProductBtn = document.getElementById('addProductBtn');
-            const cartIcon = document.getElementById('cartIcon');
-            const cartCountSpan = document.getElementById('cartCount');
-            const cartModal = document.getElementById('cartModal');
-            const cartItemsList = document.getElementById('cartItemsList');
-            const cartTotalSpan = document.getElementById('cartTotal');
-            const cartWhatsappBtn = document.getElementById('cartWhatsappBtn');
-            const checkoutBtn = document.getElementById('checkoutBtn');
-            const closeCartBtn = document.getElementById('closeCartBtn');
-            const checkoutDetailsModal = document.getElementById('checkoutDetailsModal');
-            const checkoutName = document.getElementById('checkoutName');
-            const checkoutPhone = document.getElementById('checkoutPhone');
-            const checkoutAddress = document.getElementById('checkoutAddress');
-            const checkoutNotes = document.getElementById('checkoutNotes');
-            const checkoutCancel = document.getElementById('checkoutCancel');
-            const checkoutConfirm = document.getElementById('checkoutConfirm');
-            const deliveryOptions = document.getElementById('deliveryOptions');
-            const deliveryDoor = document.getElementById('deliveryDoor');
-            const deliveryPickup = document.getElementById('deliveryPickup');
-            const addressField = document.getElementById('addressField');
-            const doorStart = document.getElementById('doorStart');
-            const doorEnd = document.getElementById('doorEnd');
-            const doorTimer = document.getElementById('doorTimer');
-            const pickupStart = document.getElementById('pickupStart');
-            const pickupEnd = document.getElementById('pickupEnd');
-            const deliveryFeeDisplay = document.getElementById('deliveryFeeDisplay');
-            const paymentOptions = document.querySelectorAll('input[name="payment"]');
-            const adminModal = document.getElementById('adminModal');
-            const closeAdminModal = document.getElementById('closeAdminModal');
-            const categoriesListDiv = document.getElementById('categoriesList');
-            const bannersListDiv = document.getElementById('bannersList');
-            const productsListDiv = document.getElementById('productsList');
-            const adminOrdersListDiv = document.getElementById('adminOrdersList');
-            const usersListDiv = document.getElementById('usersList');
-            const reviewsListDiv = document.getElementById('reviewsList');
-            const sellerApplicationsListDiv = document.getElementById('sellerApplicationsList');
-            const addCategoryBtn = document.getElementById('addCategoryBtn');
-            const addBannerBtn = document.getElementById('addBannerBtn');
-            const productEditModal = document.getElementById('productEditModal');
-            const prodName = document.getElementById('prodName');
-            const prodPrice = document.getElementById('prodPrice');
-            const prodCost = document.getElementById('prodCost');
-            const prodOriginalPrice = document.getElementById('prodOriginalPrice');
-            const prodCommission = document.getElementById('prodCommission');
-            const prodStock = document.getElementById('prodStock');
-            const prodReturnPolicy = document.getElementById('prodReturnPolicy');
-            const prodOfficial = document.getElementById('prodOfficial');
-            const prodNonReturn = document.getElementById('prodNonReturn');
-            const prodImage = document.getElementById('prodImage');
-            const prodImages = document.getElementById('prodImages');
-            const prodDescription = document.getElementById('prodDescription');
-            const prodAffiliateLink = document.getElementById('prodAffiliateLink');
-            const prodCategory = document.getElementById('prodCategory');
-            const prodRating = document.getElementById('prodRating');
-            const prodSold = document.getElementById('prodSold');
-            const prodBadgeImage = document.getElementById('prodBadgeImage');
-            const prodBadgeText = document.getElementById('prodBadgeText');
-            const productModalCancel = document.getElementById('productModalCancel');
-            const productModalSave = document.getElementById('productModalSave');
-            const categoryEditModal = document.getElementById('categoryEditModal');
-            const catNameInput = document.getElementById('catNameInput');
-            const catIconInput = document.getElementById('catIconInput');
-            const catImageInput = document.getElementById('catImageInput');
-            const catModalCancel = document.getElementById('catModalCancel');
-            const catModalSave = document.getElementById('catModalSave');
-            const bannerEditModal = document.getElementById('bannerEditModal');
-            const bannerImageInput = document.getElementById('bannerImageInput');
-            const bannerLinkInput = document.getElementById('bannerLinkInput');
-            const bannerTitleInput = document.getElementById('bannerTitleInput');
-            const bannerModalCancel = document.getElementById('bannerModalCancel');
-            const bannerModalSave = document.getElementById('bannerModalSave');
-            const searchInput = document.getElementById('searchInput');
-            const notifModal = document.getElementById('notifModal');
-            const notificationsList = document.getElementById('notificationsList');
-            const closeNotifBtn = document.getElementById('closeNotifBtn');
-            const waNumberInput = document.getElementById('waNumberInput');
-            const deliveryFeeInput = document.getElementById('deliveryFeeInput');
-            const pickupStationsInput = document.getElementById('pickupStationsInput');
-            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-            const logoutIcon = document.getElementById('logoutIcon');
+            // NEW STATE FOR PAYMENTS & RETURNS
+            let paymentInstruments = [];
+            let payouts = [];
+            let returns = [];
+            let claims = [];
 
-            const authModal = document.getElementById('authModal');
-            const authEmail = document.getElementById('authEmail');
-            const authPassword = document.getElementById('authPassword');
-            const authLoginBtn = document.getElementById('authLoginBtn');
-            const authCancel = document.getElementById('authCancel');
-            const showSignup = document.getElementById('showSignup');
-            const authModalTitle = document.getElementById('authModalTitle');
-
-            const profileModal = document.getElementById('profileModal');
-            const profileEmail = document.getElementById('profileEmail');
-            const profileRole = document.getElementById('profileRole');
-            const sellerRequestSection = document.getElementById('sellerRequestSection');
-            const sellerDashboard = document.getElementById('sellerDashboard');
-            const sellerProductsList = document.getElementById('sellerProductsList');
-            const sellerOrdersList = document.getElementById('sellerOrdersList');
-            const sellerAddProductBtn = document.getElementById('sellerAddProductBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const userOrdersList = document.getElementById('userOrdersList');
-            const closeProfileBtn = document.getElementById('closeProfileBtn');
-
-            const sellerDashboardModal = document.getElementById('sellerDashboardModal');
-            const sellerProductsListModal = document.getElementById('sellerProductsListModal');
-            const sellerOrdersListModal = document.getElementById('sellerOrdersListModal');
-            const sellerAddProductBtnModal = document.getElementById('sellerAddProductBtnModal');
-            const closeSellerModal = document.getElementById('closeSellerModal');
-
-            const sellerApplyModal = document.getElementById('sellerApplyModal');
-            const sellerApplyCancel = document.getElementById('sellerApplyCancel');
-            const sellerApplyConfirm = document.getElementById('sellerApplyConfirm');
-
-            const totalClicksSpan = document.getElementById('totalClicks');
-            const totalConversionsSpan = document.getElementById('totalConversions');
-            const pendingEarningsSpan = document.getElementById('pendingEarnings');
-            const paidEarningsSpan = document.getElementById('paidEarnings');
-
-            const detailModal = document.getElementById('productDetailModal');
-            const detailProductName = document.getElementById('detailProductName');
-            const detailOfficial = document.getElementById('detailOfficial');
-            const detailNonReturn = document.getElementById('detailNonReturn');
-            const detailInStock = document.getElementById('detailInStock');
-            const detailOutStock = document.getElementById('detailOutStock');
-            const detailMainImage = document.getElementById('detailMainImage');
-            const detailGallery = document.getElementById('detailGallery');
-            const detailDescription = document.getElementById('detailDescription');
-            const detailPrice = document.getElementById('detailPrice');
-            const detailOriginalPrice = document.getElementById('detailOriginalPrice');
-            const detailDiscount = document.getElementById('detailDiscount');
-            const detailStock = document.getElementById('detailStock');
-            const detailReturnPolicy = document.getElementById('detailReturnPolicy');
-            const detailAddToCart = document.getElementById('detailAddToCart');
-            const affiliateLinkBtn = document.getElementById('affiliateLinkBtn');
-            const copyReferralLinkBtn = document.getElementById('copyReferralLink');
-            const closeDetailBtn = document.getElementById('closeDetailBtn');
-
-            const reviewModal = document.getElementById('reviewModal');
-            const starRatingDiv = document.getElementById('starRating');
-            const reviewRatingInput = document.getElementById('reviewRating');
-            const reviewComment = document.getElementById('reviewComment');
-            const reviewCancel = document.getElementById('reviewCancel');
-            const reviewSubmit = document.getElementById('reviewSubmit');
-
-            const alsoViewedSection = document.getElementById('alsoViewedSection');
-            const alsoViewedList = document.getElementById('alsoViewedList');
-
-            const navItems = document.querySelectorAll('.nav-item');
-            const sellNav = document.getElementById('sellNav');
+            // ========== DOM ELEMENTS (abbreviated for brevity; we'll get them when needed) ==========
+            // We'll use document.getElementById throughout
 
             // ========== STAR RATING HANDLER ==========
-            const stars = starRatingDiv.querySelectorAll('.fa-star');
+            const stars = document.querySelectorAll('#starRating .fa-star');
             stars.forEach(star => {
                 star.addEventListener('click', () => {
                     const value = parseInt(star.dataset.value);
-                    reviewRatingInput.value = value;
+                    document.getElementById('reviewRating').value = value;
                     stars.forEach((s, i) => {
                         if (i < value) s.classList.add('selected');
                         else s.classList.remove('selected');
@@ -1577,7 +1418,7 @@
                     banners = banData;
                 }
 
-                // Load products
+                // Load products (with new fields)
                 let { data: prodData, error: prodErr } = await supabase.from('products').select('*');
                 if (prodErr) console.error('products error', prodErr);
                 if (!prodData || prodData.length === 0) {
@@ -1596,10 +1437,10 @@
                 if (!settings.wa_number) settings.wa_number = DEFAULT_SETTINGS.wa_number;
                 if (!settings.delivery_fee) settings.delivery_fee = DEFAULT_SETTINGS.delivery_fee;
                 if (!settings.pickup_stations) settings.pickup_stations = DEFAULT_SETTINGS.pickup_stations;
-                waNumberInput.value = settings.wa_number;
-                deliveryFeeInput.value = settings.delivery_fee;
-                deliveryFeeDisplay.innerText = settings.delivery_fee;
-                pickupStationsInput.value = settings.pickup_stations;
+                if (document.getElementById('waNumberInput')) document.getElementById('waNumberInput').value = settings.wa_number;
+                if (document.getElementById('deliveryFeeInput')) document.getElementById('deliveryFeeInput').value = settings.delivery_fee;
+                if (document.getElementById('deliveryFeeDisplay')) document.getElementById('deliveryFeeDisplay').innerText = settings.delivery_fee;
+                if (document.getElementById('pickupStationsInput')) document.getElementById('pickupStationsInput').value = settings.pickup_stations;
 
                 // Load orders
                 let { data: ordersData, error: ordersErr } = await supabase.from('orders').select('*');
@@ -1615,6 +1456,22 @@
                 let { data: profilesData, error: profilesErr } = await supabase.from('profiles').select('*');
                 if (profilesErr) console.error('profiles error', profilesErr);
                 if (profilesData) profiles = profilesData;
+
+                // NEW: Load payment_instruments
+                let { data: piData } = await supabase.from('payment_instruments').select('*');
+                if (piData) paymentInstruments = piData;
+
+                // Load payouts
+                let { data: payoutData } = await supabase.from('payouts').select('*');
+                if (payoutData) payouts = payoutData;
+
+                // Load returns
+                let { data: returnData } = await supabase.from('returns').select('*');
+                if (returnData) returns = returnData;
+
+                // Load claims
+                let { data: claimData } = await supabase.from('claims').select('*');
+                if (claimData) claims = claimData;
 
                 cart = cart.filter(item => products.some(p => p.id === item.id));
                 localStorage.setItem('cart', JSON.stringify(cart));
@@ -1638,11 +1495,17 @@
                 supabase.channel('orders').on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, () => loadAllData()).subscribe();
                 supabase.channel('reviews').on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => loadAllData()).subscribe();
                 supabase.channel('profiles').on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => loadAllData()).subscribe();
+                // New tables
+                supabase.channel('payment_instruments').on('postgres_changes', { event: '*', schema: 'public', table: 'payment_instruments' }, () => loadAllData()).subscribe();
+                supabase.channel('payouts').on('postgres_changes', { event: '*', schema: 'public', table: 'payouts' }, () => loadAllData()).subscribe();
+                supabase.channel('returns').on('postgres_changes', { event: '*', schema: 'public', table: 'returns' }, () => loadAllData()).subscribe();
+                supabase.channel('claims').on('postgres_changes', { event: '*', schema: 'public', table: 'claims' }, () => loadAllData()).subscribe();
             }
 
             function updateCartCount() {
                 const total = cart.reduce((acc, item) => acc + item.quantity, 0);
-                cartCountSpan.innerText = total;
+                const cartCountSpan = document.getElementById('cartCount');
+                if (cartCountSpan) cartCountSpan.innerText = total;
             }
 
             function getFilteredProducts() {
@@ -1657,6 +1520,8 @@
             }
 
             function renderCategories() {
+                const container = document.getElementById('categoryContainer');
+                if (!container) return;
                 let html = '';
                 categories.forEach(cat => {
                     const activeClass = activeCategory === cat.id ? 'active' : '';
@@ -1669,29 +1534,35 @@
                     html += ` ${cat.name}</span>`;
                 });
                 html += `<span class="chip ${activeCategory === null ? 'active' : ''}" data-cat-id="all"><i class="fas fa-th-large"></i> All</span>`;
-                categoryContainer.innerHTML = html;
+                container.innerHTML = html;
             }
 
             function renderBanners() {
+                const carousel = document.getElementById('bannerCarousel');
+                const dots = document.getElementById('bannerDots');
+                if (!carousel) return;
                 let carouselHtml = '', dotsHtml = '';
                 banners.forEach((banner, idx) => {
                     carouselHtml += `<div class="banner-item" style="background-image: url('${banner.image}');"><a href="${banner.link || '#'}" target="_blank">${banner.title}</a></div>`;
                     dotsHtml += `<span class="dot ${idx === 0 ? 'active' : ''}" data-index="${idx}"></span>`;
                 });
-                bannerCarousel.innerHTML = carouselHtml;
-                bannerDots.innerHTML = dotsHtml;
-                bannerCarousel.removeEventListener('scroll', bannerScrollHandler);
-                bannerCarousel.addEventListener('scroll', bannerScrollHandler);
+                carousel.innerHTML = carouselHtml;
+                if (dots) dots.innerHTML = dotsHtml;
+                carousel.removeEventListener('scroll', bannerScrollHandler);
+                carousel.addEventListener('scroll', bannerScrollHandler);
             }
 
             function bannerScrollHandler() {
-                const scrollPos = bannerCarousel.scrollLeft;
-                const itemWidth = bannerCarousel.clientWidth * 0.9 + 10;
+                const carousel = document.getElementById('bannerCarousel');
+                const scrollPos = carousel.scrollLeft;
+                const itemWidth = carousel.clientWidth * 0.9 + 10;
                 const activeIndex = Math.round(scrollPos / itemWidth);
                 document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === activeIndex));
             }
 
             function renderProducts() {
+                const grid = document.getElementById('productGrid');
+                if (!grid) return;
                 const filtered = getFilteredProducts();
                 let html = '';
                 filtered.forEach(prod => {
@@ -1714,8 +1585,9 @@
                     }
                     html += `</div>`;
                     html += `<div class="product-info">
-                        <div class="product-name">${prod.name}</div>
-                        <div class="price-discount">`;
+                        <div class="product-name">${prod.name}</div>`;
+                    if (prod.brand) html += `<div class="product-attributes"><span>${prod.brand}</span></div>`;
+                    html += `<div class="price-discount">`;
                     if (discount > 0) {
                         html += `<span class="product-price">KSh ${prod.price.toLocaleString()}</span>
                             <span class="original-price">KSh ${prod.originalPrice.toLocaleString()}</span>
@@ -1733,9 +1605,11 @@
                     html += `</div></div>`;
                 });
                 if (filtered.length === 0) html = '<div style="grid-column:span 2; text-align:center; padding:40px;">No products</div>';
-                productGrid.innerHTML = html;
+                grid.innerHTML = html;
 
                 const otherProducts = products.filter(p => !filtered.includes(p)).sort(() => 0.5 - Math.random()).slice(0, 4);
+                const alsoList = document.getElementById('alsoViewedList');
+                const alsoSection = document.getElementById('alsoViewedSection');
                 if (otherProducts.length > 0) {
                     let alsoHtml = '';
                     otherProducts.forEach(p => {
@@ -1745,15 +1619,18 @@
                             <div class="price">KSh ${p.price}</div>
                         </div>`;
                     });
-                    alsoViewedList.innerHTML = alsoHtml;
-                    alsoViewedSection.style.display = 'block';
+                    if (alsoList) alsoList.innerHTML = alsoHtml;
+                    if (alsoSection) alsoSection.style.display = 'block';
                 } else {
-                    alsoViewedSection.style.display = 'none';
+                    if (alsoSection) alsoSection.style.display = 'none';
                 }
             }
 
             function renderCartModal() {
-                if (cart.length === 0) { cartItemsList.innerHTML = '<p style="text-align:center;color:#aaa;">Cart empty</p>'; cartTotalSpan.innerText = 'Total: KSh 0'; return; }
+                const itemsList = document.getElementById('cartItemsList');
+                const totalSpan = document.getElementById('cartTotal');
+                if (!itemsList) return;
+                if (cart.length === 0) { itemsList.innerHTML = '<p style="text-align:center;color:#aaa;">Cart empty</p>'; if (totalSpan) totalSpan.innerText = 'Total: KSh 0'; return; }
                 let itemsHtml = '', total = 0;
                 cart.forEach(item => {
                     const prod = products.find(p => p.id === item.id);
@@ -1761,12 +1638,13 @@
                     total += prod.price * item.quantity;
                     itemsHtml += `<div class="cart-item" data-id="${item.id}"><img src="${prod.image}" class="cart-item-img" loading="lazy"><div class="cart-item-details"><div class="cart-item-name">${prod.name}</div><div class="cart-item-price">KSh ${prod.price}</div><div class="cart-item-qty"><button class="cart-qty-minus" data-id="${item.id}">-</button><span>${item.quantity}</span><button class="cart-qty-plus" data-id="${item.id}">+</button><i class="fas fa-trash" style="margin-left:auto; color:#c0392b; cursor:pointer;" data-id="${item.id}" data-remove></i></div></div></div>`;
                 });
-                cartItemsList.innerHTML = itemsHtml;
-                cartTotalSpan.innerText = `Total: KSh ${total}`;
+                itemsList.innerHTML = itemsHtml;
+                if (totalSpan) totalSpan.innerText = `Total: KSh ${total}`;
             }
 
             function renderNotifications() {
-                notificationsList.innerHTML = '<p style="text-align:center; color:#aaa;">No notifications</p>';
+                const list = document.getElementById('notificationsList');
+                if (list) list.innerHTML = '<p style="text-align:center; color:#aaa;">No notifications</p>';
             }
 
             function refreshUI() {
@@ -1775,31 +1653,34 @@
                 renderProducts();
                 updateCartCount();
                 
+                const adminBadge = document.getElementById('adminModeBadge');
+                const sellerBadge = document.getElementById('sellerModeBadge');
+                const addBtn = document.getElementById('addProductBtn');
+                const logoutIcon = document.getElementById('logoutIcon');
+                const sellNav = document.getElementById('sellNav');
+
                 if (currentUserProfile?.role === 'admin') {
-                    adminBadge.style.display = 'inline-flex';
-                    sellerBadge.style.display = 'none';
-                    addProductBtn.style.display = 'flex';
+                    if (adminBadge) adminBadge.style.display = 'inline-flex';
+                    if (sellerBadge) sellerBadge.style.display = 'none';
+                    if (addBtn) addBtn.style.display = 'flex';
                 } else if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
-                    adminBadge.style.display = 'none';
-                    sellerBadge.style.display = 'inline-flex';
-                    addProductBtn.style.display = 'flex';
+                    if (adminBadge) adminBadge.style.display = 'none';
+                    if (sellerBadge) sellerBadge.style.display = 'inline-flex';
+                    if (addBtn) addBtn.style.display = 'flex';
                 } else {
-                    adminBadge.style.display = 'none';
-                    sellerBadge.style.display = 'none';
-                    addProductBtn.style.display = 'none';
+                    if (adminBadge) adminBadge.style.display = 'none';
+                    if (sellerBadge) sellerBadge.style.display = 'none';
+                    if (addBtn) addBtn.style.display = 'none';
                 }
 
-                // Show/hide logout icon
-                logoutIcon.style.display = currentUser ? 'inline-block' : 'none';
+                if (logoutIcon) logoutIcon.style.display = currentUser ? 'inline-block' : 'none';
+                if (sellNav) sellNav.style.display = (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') ? 'flex' : 'none';
 
-                // Show/hide sell nav
-                sellNav.style.display = (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') ? 'flex' : 'none';
-
-                navItems.forEach(item => item.classList.remove('active'));
+                document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
                 if (activePromo) {
-                    document.querySelector('[data-nav="promo"]').classList.add('active');
+                    document.querySelector('[data-nav="promo"]')?.classList.add('active');
                 } else {
-                    document.querySelector('[data-nav="home"]').classList.add('active');
+                    document.querySelector('[data-nav="home"]')?.classList.add('active');
                 }
 
                 updateDeliveryDates();
@@ -1807,11 +1688,16 @@
 
             function updateDeliveryDates() {
                 const dates = getDeliveryDates();
-                doorStart.innerText = dates.doorStartStr;
-                doorEnd.innerText = dates.doorEndStr;
-                doorTimer.innerText = dates.timer;
-                pickupStart.innerText = dates.pickupStartStr;
-                pickupEnd.innerText = dates.pickupEndStr;
+                const doorStart = document.getElementById('doorStart');
+                const doorEnd = document.getElementById('doorEnd');
+                const doorTimer = document.getElementById('doorTimer');
+                const pickupStart = document.getElementById('pickupStart');
+                const pickupEnd = document.getElementById('pickupEnd');
+                if (doorStart) doorStart.innerText = dates.doorStartStr;
+                if (doorEnd) doorEnd.innerText = dates.doorEndStr;
+                if (doorTimer) doorTimer.innerText = dates.timer;
+                if (pickupStart) pickupStart.innerText = dates.pickupStartStr;
+                if (pickupEnd) pickupEnd.innerText = dates.pickupEndStr;
             }
 
             async function signUp(email, password) {
@@ -1820,7 +1706,8 @@
                     alert('Sign up error: ' + error.message);
                 } else {
                     alert('Sign up successful! You can now log in.');
-                    authModal.style.display = 'none';
+                    const authModal = document.getElementById('authModal');
+                    if (authModal) authModal.style.display = 'none';
                 }
             }
 
@@ -1831,7 +1718,8 @@
                 } else {
                     currentUser = data.user;
                     currentUserProfile = await getOrCreateProfile(currentUser);
-                    authModal.style.display = 'none';
+                    const authModal = document.getElementById('authModal');
+                    if (authModal) authModal.style.display = 'none';
                     refreshUI();
                 }
             }
@@ -1841,11 +1729,13 @@
                 currentUser = null;
                 currentUserProfile = null;
                 refreshUI();
-                profileModal.style.display = 'none';
-                sellerDashboardModal.style.display = 'none';
+                const profileModal = document.getElementById('profileModal');
+                const sellerModal = document.getElementById('sellerDashboardModal');
+                if (profileModal) profileModal.style.display = 'none';
+                if (sellerModal) sellerModal.style.display = 'none';
             }
 
-            logoutIcon.addEventListener('click', signOut);
+            document.getElementById('logoutIcon')?.addEventListener('click', signOut);
 
             // ========== ORDER FUNCTIONS ==========
             async function placeOrderWithDetails() {
@@ -1859,28 +1749,38 @@
                     return;
                 }
                 document.querySelectorAll('.delivery-option').forEach(opt => opt.classList.remove('selected'));
-                deliveryDoor.classList.add('selected');
-                addressField.style.display = 'block';
+                const door = document.getElementById('deliveryDoor');
+                const pickup = document.getElementById('deliveryPickup');
+                const addressField = document.getElementById('addressField');
+                if (door) door.classList.add('selected');
+                if (addressField) addressField.style.display = 'block';
                 updateDeliveryDates();
-                checkoutDetailsModal.style.display = 'flex';
+                const checkoutModal = document.getElementById('checkoutDetailsModal');
+                if (checkoutModal) checkoutModal.style.display = 'flex';
             }
 
-            deliveryDoor.addEventListener('click', () => {
-                deliveryDoor.classList.add('selected');
-                deliveryPickup.classList.remove('selected');
-                addressField.style.display = 'block';
+            document.getElementById('deliveryDoor')?.addEventListener('click', () => {
+                const door = document.getElementById('deliveryDoor');
+                const pickup = document.getElementById('deliveryPickup');
+                const addressField = document.getElementById('addressField');
+                door.classList.add('selected');
+                if (pickup) pickup.classList.remove('selected');
+                if (addressField) addressField.style.display = 'block';
             });
-            deliveryPickup.addEventListener('click', () => {
-                deliveryPickup.classList.add('selected');
-                deliveryDoor.classList.remove('selected');
-                addressField.style.display = 'none';
+            document.getElementById('deliveryPickup')?.addEventListener('click', () => {
+                const door = document.getElementById('deliveryDoor');
+                const pickup = document.getElementById('deliveryPickup');
+                const addressField = document.getElementById('addressField');
+                pickup.classList.add('selected');
+                if (door) door.classList.remove('selected');
+                if (addressField) addressField.style.display = 'none';
             });
 
-            checkoutConfirm.addEventListener('click', async () => {
-                const name = checkoutName.value.trim();
-                const phone = checkoutPhone.value.trim();
-                let address = checkoutAddress.value.trim();
-                const deliveryMethod = deliveryDoor.classList.contains('selected') ? 'door' : 'pickup';
+            document.getElementById('checkoutConfirm')?.addEventListener('click', async () => {
+                const name = document.getElementById('checkoutName')?.value.trim();
+                const phone = document.getElementById('checkoutPhone')?.value.trim();
+                let address = document.getElementById('checkoutAddress')?.value.trim() || '';
+                const deliveryMethod = document.getElementById('deliveryDoor')?.classList.contains('selected') ? 'door' : 'pickup';
                 if (deliveryMethod === 'door' && !address) {
                     alert('Please enter your shipping address');
                     return;
@@ -1919,7 +1819,7 @@
                     shipping_name: name,
                     shipping_phone: phone,
                     shipping_address: deliveryMethod === 'door' ? address : 'Pickup at station',
-                    notes: checkoutNotes.value.trim(),
+                    notes: document.getElementById('checkoutNotes')?.value.trim() || '',
                     status: 'ordered',
                     total_amount: total,
                     payment_method: paymentMethod,
@@ -1969,34 +1869,40 @@
                     localStorage.setItem('cart', JSON.stringify(cart));
                     renderCartModal();
                     updateCartCount();
-                    checkoutDetailsModal.style.display = 'none';
-                    cartModal.style.display = 'none';
+                    const checkoutModal = document.getElementById('checkoutDetailsModal');
+                    const cartModal = document.getElementById('cartModal');
+                    if (checkoutModal) checkoutModal.style.display = 'none';
+                    if (cartModal) cartModal.style.display = 'none';
                 }
             });
 
-            checkoutCancel.addEventListener('click', () => {
-                checkoutDetailsModal.style.display = 'none';
+            document.getElementById('checkoutCancel')?.addEventListener('click', () => {
+                const checkoutModal = document.getElementById('checkoutDetailsModal');
+                if (checkoutModal) checkoutModal.style.display = 'none';
             });
 
             async function openReviewModal(orderId) {
                 currentOrderIdForReview = orderId;
-                reviewRatingInput.value = 0;
+                const ratingInput = document.getElementById('reviewRating');
+                const comment = document.getElementById('reviewComment');
+                if (ratingInput) ratingInput.value = 0;
                 stars.forEach(s => s.classList.remove('selected'));
-                reviewComment.value = '';
-                reviewModal.style.display = 'flex';
+                if (comment) comment.value = '';
+                const modal = document.getElementById('reviewModal');
+                if (modal) modal.style.display = 'flex';
             }
 
-            reviewSubmit.addEventListener('click', async () => {
+            document.getElementById('reviewSubmit')?.addEventListener('click', async () => {
                 if (!currentUser) {
                     alert('You must be logged in');
                     return;
                 }
-                const rating = parseInt(reviewRatingInput.value);
+                const rating = parseInt(document.getElementById('reviewRating')?.value || '0');
                 if (rating < 1 || rating > 5) {
                     alert('Please select a rating');
                     return;
                 }
-                const comment = reviewComment.value.trim();
+                const comment = document.getElementById('reviewComment')?.value.trim();
                 if (!comment) {
                     alert('Please enter a comment');
                     return;
@@ -2019,12 +1925,14 @@
                     alert('Error submitting review: ' + error.message);
                 } else {
                     alert('Review submitted! Thank you.');
-                    reviewModal.style.display = 'none';
+                    const modal = document.getElementById('reviewModal');
+                    if (modal) modal.style.display = 'none';
                 }
             });
 
-            reviewCancel.addEventListener('click', () => {
-                reviewModal.style.display = 'none';
+            document.getElementById('reviewCancel')?.addEventListener('click', () => {
+                const modal = document.getElementById('reviewModal');
+                if (modal) modal.style.display = 'none';
             });
 
             async function renderUserOrders() {
@@ -2047,6 +1955,7 @@
                     userOrders.forEach(order => {
                         const statusClass = `status-${order.status.replace('_', '-')}`;
                         const canReview = order.status === 'delivered' && !reviewedOrderIds.has(order.id);
+                        const canReturn = order.status === 'delivered' && !returns.some(r => r.order_id === order.id);
                         const startDate = order.estimated_delivery_start ? new Date(order.estimated_delivery_start).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
                         const endDate = order.estimated_delivery_end ? new Date(order.estimated_delivery_end).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
                         html += `<div style="border-bottom:1px solid #eee; padding:10px 0;">
@@ -2061,56 +1970,160 @@
                         } else if (reviewedOrderIds.has(order.id)) {
                             html += `<div style="margin-top:8px; font-style:italic; color:#888;">✓ Review submitted</div>`;
                         }
+                        if (canReturn) {
+                            html += `<button class="btn-cancel return-order-btn" data-order-id="${order.id}" style="margin-top:8px; padding:4px 12px; font-size:0.8rem;">Request Return</button>`;
+                        }
                         html += `</div>`;
                     });
                 } else {
                     html = '<p>No orders yet.</p>';
                 }
-                userOrdersList.innerHTML = html;
+                const list = document.getElementById('userOrdersList');
+                if (list) list.innerHTML = html;
 
-                document.querySelectorAll('.review-order-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const orderId = e.target.dataset.orderId;
-                        openReviewModal(orderId);
+                // Use event delegation on userOrdersList for dynamic buttons
+                if (list) {
+                    list.addEventListener('click', (e) => {
+                        const reviewBtn = e.target.closest('.review-order-btn');
+                        if (reviewBtn) {
+                            const orderId = reviewBtn.dataset.orderId;
+                            openReviewModal(orderId);
+                        }
+                        const returnBtn = e.target.closest('.return-order-btn');
+                        if (returnBtn) {
+                            const orderId = returnBtn.dataset.orderId;
+                            openReturnRequestModal(orderId);
+                        }
                     });
-                });
+                }
             }
+
+            // New return request modal (replaces prompt)
+            async function openReturnRequestModal(orderId) {
+                currentReturnOrderId = orderId;
+                const modal = document.getElementById('returnRequestModal');
+                if (modal) {
+                    document.getElementById('returnReason').value = '';
+                    modal.style.display = 'flex';
+                }
+            }
+
+            document.getElementById('returnSubmit')?.addEventListener('click', async () => {
+                const reason = document.getElementById('returnReason').value.trim();
+                if (!reason) {
+                    alert('Please enter a reason');
+                    return;
+                }
+                const order = orders.find(o => o.id === currentReturnOrderId);
+                if (!order) return;
+                const items = JSON.parse(order.items || '[]');
+                if (items.length === 0) return;
+                const productId = items[0].product_id;
+                const { error } = await supabase.from('returns').insert([{
+                    order_id: currentReturnOrderId,
+                    product_id: productId,
+                    reason,
+                    status: 'requested',
+                    created_at: new Date().toISOString()
+                }]);
+                if (error) {
+                    alert('Error: ' + error.message);
+                } else {
+                    alert('Return requested. Seller will review.');
+                    document.getElementById('returnRequestModal').style.display = 'none';
+                }
+            });
+
+            document.getElementById('returnCancel')?.addEventListener('click', () => {
+                document.getElementById('returnRequestModal').style.display = 'none';
+            });
 
             // ========== REFERRAL STATS ==========
             async function loadReferralStats() {
                 if (!currentUser) return;
-                // Get clicks
-                const { data: clicks, error: clicksErr } = await supabase
-                    .from('referral_clicks')
-                    .select('id', { count: 'exact', head: false })
-                    .eq('referrer_id', currentUser.id);
-                if (!clicksErr) totalClicksSpan.innerText = clicks.length || 0;
+                const clicksSpan = document.getElementById('totalClicks');
+                const convSpan = document.getElementById('totalConversions');
+                const pendSpan = document.getElementById('pendingEarnings');
+                const paidSpan = document.getElementById('paidEarnings');
+                if (clicksSpan) {
+                    const { data: clicks, error: clicksErr } = await supabase
+                        .from('referral_clicks')
+                        .select('id', { count: 'exact', head: false })
+                        .eq('referrer_id', currentUser.id);
+                    if (!clicksErr) clicksSpan.innerText = clicks.length || 0;
+                }
 
-                // Get commissions
-                const { data: commissions, error: commErr } = await supabase
-                    .from('referral_commissions')
-                    .select('amount, status')
-                    .eq('referrer_id', currentUser.id);
-                if (!commErr && commissions) {
-                    let pending = 0, paid = 0;
-                    commissions.forEach(c => {
-                        if (c.status === 'pending') pending += c.amount;
-                        else if (c.status === 'paid') paid += c.amount;
-                    });
-                    pendingEarningsSpan.innerText = pending;
-                    paidEarningsSpan.innerText = paid;
-                    totalConversionsSpan.innerText = commissions.length;
+                if (convSpan && pendSpan && paidSpan) {
+                    const { data: commissions, error: commErr } = await supabase
+                        .from('referral_commissions')
+                        .select('amount, status')
+                        .eq('referrer_id', currentUser.id);
+                    if (!commErr && commissions) {
+                        let pending = 0, paid = 0;
+                        commissions.forEach(c => {
+                            if (c.status === 'pending') pending += c.amount;
+                            else if (c.status === 'paid') paid += c.amount;
+                        });
+                        pendSpan.innerText = pending;
+                        paidSpan.innerText = paid;
+                        convSpan.innerText = commissions.length;
+                    }
                 }
             }
 
-            // ========== SELLER DASHBOARD ==========
+            // ========== SELLER DASHBOARD ENHANCEMENTS ==========
             async function renderSellerDashboard(modal = false) {
                 if (!currentUser || currentUserProfile?.role !== 'seller' || currentUserProfile.seller_status !== 'approved') return;
-                
+
+                const dashboardHtml = `
+                    <div class="admin-tabs" style="margin-bottom: 16px;">
+                        <div class="admin-tab active" data-seller-tab="products">My Products</div>
+                        <div class="admin-tab" data-seller-tab="orders">Orders</div>
+                        <div class="admin-tab" data-seller-tab="payouts">Payouts</div>
+                        <div class="admin-tab" data-seller-tab="returns">Returns</div>
+                    </div>
+                    <div id="sellerProductsPane" class="tab-pane active"></div>
+                    <div id="sellerOrdersPane" class="tab-pane"></div>
+                    <div id="sellerPayoutsPane" class="tab-pane"></div>
+                    <div id="sellerReturnsPane" class="tab-pane"></div>
+                `;
+
+                if (modal) {
+                    const content = document.getElementById('sellerDashboardContent');
+                    if (content) content.innerHTML = dashboardHtml;
+                } else {
+                    const dash = document.getElementById('sellerDashboard');
+                    if (dash) dash.innerHTML = dashboardHtml;
+                }
+
+                await renderSellerProductsPane(modal);
+                await renderSellerOrdersPane(modal);
+                await renderSellerPayoutsPane(modal);
+                await renderSellerReturnsPane(modal);
+
+                // Tab switching using delegation on the parent container
+                const parent = modal ? document.getElementById('sellerDashboardContent') : document.getElementById('sellerDashboard');
+                if (parent) {
+                    parent.addEventListener('click', (e) => {
+                        const tab = e.target.closest('[data-seller-tab]');
+                        if (!tab) return;
+                        document.querySelectorAll('[data-seller-tab]').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.querySelectorAll('#sellerProductsPane, #sellerOrdersPane, #sellerPayoutsPane, #sellerReturnsPane').forEach(p => p.classList.remove('active'));
+                        const target = tab.dataset.sellerTab;
+                        if (target === 'products') document.getElementById('sellerProductsPane')?.classList.add('active');
+                        if (target === 'orders') document.getElementById('sellerOrdersPane')?.classList.add('active');
+                        if (target === 'payouts') document.getElementById('sellerPayoutsPane')?.classList.add('active');
+                        if (target === 'returns') document.getElementById('sellerReturnsPane')?.classList.add('active');
+                    });
+                }
+            }
+
+            async function renderSellerProductsPane(modal) {
                 const sellerProds = products.filter(p => p.seller_id === currentUser.id);
                 let prodHtml = '';
                 sellerProds.forEach(prod => {
-                    prodHtml += `<div class="prod-list-item">
+                    prodHtml += `<div class="prod-list-item" data-prod-id="${prod.id}">
                         <img src="${prod.image}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
                         <span>${prod.name} (KSh ${prod.price})</span>
                         <button class="edit-prod-btn" data-id="${prod.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
@@ -2118,7 +2131,11 @@
                     </div>`;
                 });
                 if (sellerProds.length === 0) prodHtml = '<p>You have no products yet.</p>';
+                const pane = document.getElementById('sellerProductsPane');
+                if (pane) pane.innerHTML = prodHtml;
+            }
 
+            async function renderSellerOrdersPane(modal) {
                 let ordersHtml = '';
                 for (let order of orders) {
                     const items = JSON.parse(order.items || '[]');
@@ -2135,216 +2152,498 @@
                     }
                 }
                 if (ordersHtml === '') ordersHtml = '<p>No orders for your products yet.</p>';
+                const pane = document.getElementById('sellerOrdersPane');
+                if (pane) pane.innerHTML = ordersHtml;
+            }
 
-                if (modal) {
-                    sellerProductsListModal.innerHTML = prodHtml;
-                    sellerOrdersListModal.innerHTML = ordersHtml;
-                } else {
-                    sellerProductsList.innerHTML = prodHtml;
-                    sellerOrdersList.innerHTML = ordersHtml;
+            async function renderSellerPayoutsPane(modal) {
+                let balance = 0;
+                const sellerOrders = orders.filter(o => {
+                    const items = JSON.parse(o.items || '[]');
+                    return items.some(item => {
+                        const prod = products.find(p => p.id === item.product_id);
+                        return prod && prod.seller_id === currentUser.id;
+                    });
+                });
+                sellerOrders.forEach(order => {
+                    const items = JSON.parse(order.items || '[]');
+                    items.forEach(item => {
+                        const prod = products.find(p => p.id === item.product_id);
+                        if (prod && prod.seller_id === currentUser.id) {
+                            balance += prod.price * item.quantity;
+                        }
+                    });
+                });
+                // Subtract ALL payouts (paid + pending) to avoid double counting
+                const allPayouts = payouts.filter(p => p.seller_id === currentUser.id);
+                const totalPayouts = allPayouts.reduce((acc, p) => acc + p.amount, 0);
+                balance -= totalPayouts;
+
+                const myInstruments = paymentInstruments.filter(pi => pi.user_id === currentUser.id);
+                let instrHtml = '';
+                myInstruments.forEach(inst => {
+                    instrHtml += `<div class="instrument-item" data-id="${inst.id}">
+                        <div><strong>${inst.type === 'bank' ? '🏦 Bank' : '📱 M-Pesa'}</strong><br>${inst.type === 'bank' ? inst.details.account_name + ' - ' + inst.details.account_number : inst.details.phone}</div>
+                        <div>${inst.verified ? '<span class="instrument-verified">✅ Verified</span>' : '<span style="color:orange;">⏳ Pending</span>'} <button class="delete-instrument-btn" data-id="${inst.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button></div>
+                    </div>`;
+                });
+                if (myInstruments.length === 0) instrHtml = '<p>No payment instruments added.</p>';
+
+                const addInstrumentForm = `
+                    <div style="margin-top:16px; padding:12px; background:#f9f9f9; border-radius:12px;">
+                        <h5>Add Payment Instrument</h5>
+                        <select id="instrumentType" style="width:100%; padding:8px; margin-bottom:8px;">
+                            <option value="bank">Bank Account</option>
+                            <option value="mpesa">M-Pesa</option>
+                        </select>
+                        <div id="bankFields"><input type="text" id="bankAccountName" placeholder="Account Name" style="width:100%; margin-bottom:5px;"><input type="text" id="bankAccountNumber" placeholder="Account Number" style="width:100%; margin-bottom:5px;"><input type="text" id="bankCode" placeholder="Bank Code" style="width:100%;"></div>
+                        <div id="mpesaFields" style="display:none;"><input type="text" id="mpesaPhone" placeholder="M-Pesa Phone" style="width:100%;"></div>
+                        <button class="btn-save" id="addInstrumentBtn" style="margin-top:10px; width:100%;">Add Instrument</button>
+                    </div>
+                `;
+
+                const myPayouts = payouts.filter(p => p.seller_id === currentUser.id).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+                let historyHtml = '';
+                myPayouts.forEach(p => {
+                    historyHtml += `<div style="border-bottom:1px solid #ddd; padding:8px 0;"><div><strong>KSh ${p.amount}</strong> - ${p.status}</div><div>${new Date(p.created_at).toLocaleDateString()}</div></div>`;
+                });
+                if (myPayouts.length === 0) historyHtml = '<p>No payout history.</p>';
+
+                const payoutPane = `
+                    <div style="margin-bottom:16px;"><h4>Available Balance: KSh <span id="sellerBalance">${balance}</span></h4><button class="btn-save" id="requestPayoutBtn" ${balance < 100 ? 'disabled' : ''}>Request Payout</button></div>
+                    <h4>Payment Instruments</h4><div id="instrumentList">${instrHtml}</div>${addInstrumentForm}
+                    <h4>Payout History</h4><div id="payoutHistory">${historyHtml}</div>
+                `;
+
+                const pane = document.getElementById('sellerPayoutsPane');
+                if (pane) pane.innerHTML = payoutPane;
+
+                // Attach listeners for dynamic elements (delegation on pane)
+                if (pane) {
+                    pane.addEventListener('click', async (e) => {
+                        if (e.target.closest('.delete-instrument-btn')) {
+                            const id = e.target.closest('.delete-instrument-btn').dataset.id;
+                            if (confirm('Delete this payment instrument?')) {
+                                await supabase.from('payment_instruments').delete().eq('id', id);
+                            }
+                        }
+                    });
+
+                    // Toggle fields when instrument type changes
+                    const typeSelect = document.getElementById('instrumentType');
+                    if (typeSelect) {
+                        typeSelect.addEventListener('change', (e) => {
+                            document.getElementById('bankFields').style.display = e.target.value === 'bank' ? 'block' : 'none';
+                            document.getElementById('mpesaFields').style.display = e.target.value === 'mpesa' ? 'block' : 'none';
+                        });
+                    }
+
+                    document.getElementById('addInstrumentBtn')?.addEventListener('click', async () => {
+                        const type = document.getElementById('instrumentType').value;
+                        let details = {};
+                        if (type === 'bank') {
+                            const name = document.getElementById('bankAccountName').value.trim();
+                            const acc = document.getElementById('bankAccountNumber').value.trim();
+                            const code = document.getElementById('bankCode').value.trim();
+                            if (!name || !acc) return alert('Please fill all fields');
+                            details = { account_name: name, account_number: acc, bank_code: code };
+                        } else {
+                            const phone = document.getElementById('mpesaPhone').value.trim();
+                            if (!phone) return alert('Please enter phone number');
+                            details = { phone };
+                        }
+                        const { error } = await supabase.from('payment_instruments').insert([{
+                            user_id: currentUser.id,
+                            type,
+                            details,
+                            verified: false,
+                            created_at: new Date().toISOString()
+                        }]);
+                        if (error) alert('Error: ' + error.message);
+                        else {
+                            alert('Instrument added, pending admin verification.');
+                            document.getElementById('bankAccountName').value = '';
+                            document.getElementById('bankAccountNumber').value = '';
+                            document.getElementById('bankCode').value = '';
+                            document.getElementById('mpesaPhone').value = '';
+                        }
+                    });
+
+                    document.getElementById('requestPayoutBtn')?.addEventListener('click', async () => {
+                        const verifiedInstruments = myInstruments.filter(i => i.verified);
+                        if (verifiedInstruments.length === 0) {
+                            alert('You need at least one verified payment instrument.');
+                            return;
+                        }
+                        if (balance < 100) {
+                            alert('Minimum payout amount is KSh 100');
+                            return;
+                        }
+                        const instrument = verifiedInstruments[0];
+                        const { error } = await supabase.from('payouts').insert([{
+                            seller_id: currentUser.id,
+                            amount: balance,
+                            status: 'pending',
+                            payment_instrument_id: instrument.id,
+                            created_at: new Date().toISOString()
+                        }]);
+                        if (error) alert('Error: ' + error.message);
+                        else alert('Payout requested. Admin will process.');
+                    });
                 }
             }
 
-            function openSellerDashboard() {
-                renderSellerDashboard(true);
-                sellerDashboardModal.style.display = 'flex';
-            }
-
-            sellerAddProductBtn.addEventListener('click', () => openProductEditForSeller());
-            sellerAddProductBtnModal.addEventListener('click', () => {
-                sellerDashboardModal.style.display = 'none';
-                openProductEditForSeller();
-            });
-
-            function openProductEditForSeller() {
-                currentProductId = null;
-                prodName.value = ''; 
-                prodPrice.value = ''; 
-                prodCost.value = ''; 
-                prodOriginalPrice.value = ''; 
-                prodCommission.value = '10'; 
-                prodStock.value = '10';
-                prodReturnPolicy.value = 'Free return within 7 days';
-                prodOfficial.checked = false;
-                prodNonReturn.checked = false;
-                prodImage.value = ''; 
-                prodImages.value = ''; 
-                prodDescription.value = ''; 
-                prodAffiliateLink.value = ''; 
-                prodRating.value = '4.5'; 
-                prodSold.value = '0'; 
-                prodBadgeImage.value = ''; 
-                prodBadgeText.value = '';
-
-                let catOptions = '';
-                categories.forEach(c => catOptions += `<option value="${c.id}">${c.name}</option>`);
-                prodCategory.innerHTML = catOptions;
-                if (prodCategory.options.length > 0) prodCategory.selectedIndex = 0;
-                
-                productEditModal.style.display = 'flex';
-            }
-
-            closeSellerModal.addEventListener('click', () => sellerDashboardModal.style.display = 'none');
-
-            // ========== SELLER APPLICATION ==========
-            function openSellerApplyModal() {
-                sellerApplyModal.style.display = 'flex';
-            }
-
-            sellerApplyCancel.addEventListener('click', () => {
-                sellerApplyModal.style.display = 'none';
-            });
-
-            sellerApplyConfirm.addEventListener('click', async () => {
-                if (!currentUser) return;
-                const { error } = await supabase
-                    .from('profiles')
-                    .update({ seller_status: 'pending' })
-                    .eq('user_id', currentUser.id);
-                if (error) {
-                    alert('Error: ' + error.message);
-                } else {
-                    alert('Application submitted! Admin will review.');
-                    sellerApplyModal.style.display = 'none';
-                    currentUserProfile.seller_status = 'pending';
-                    refreshUI();
+            async function renderSellerReturnsPane(modal) {
+                const sellerProductIds = products.filter(p => p.seller_id === currentUser.id).map(p => p.id);
+                const relevantReturns = returns.filter(r => sellerProductIds.includes(r.product_id));
+                let returnsHtml = '';
+                for (let ret of relevantReturns) {
+                    const order = orders.find(o => o.id === ret.order_id);
+                    const product = products.find(p => p.id === ret.product_id);
+                    returnsHtml += `<div style="border-bottom:1px solid #eee; padding:10px 0;" data-return-id="${ret.id}">
+                        <div><strong>Return #${ret.id.slice(-6)}</strong> - Status: ${ret.status}</div>
+                        <div>Product: ${product?.name} (Order #${order?.id.slice(-6)})</div>
+                        <div>Reason: ${ret.reason}</div>
+                        ${ret.status === 'requested' ? `
+                            <div style="margin-top:8px;">
+                                <button class="btn-save accept-return-btn" data-id="${ret.id}" style="padding:4px 12px;">Accept & Refund</button>
+                                <button class="btn-cancel reject-return-btn" data-id="${ret.id}" style="padding:4px 12px; margin-left:8px;">Reject & Raise Claim</button>
+                            </div>
+                        ` : ''}
+                        ${ret.status === 'claim_raised' ? `<div>Claim raised - awaiting admin decision</div>` : ''}
+                    </div>`;
                 }
-            });
+                if (relevantReturns.length === 0) returnsHtml = '<p>No returns for your products.</p>';
 
-            // ========== ADMIN RENDERING FUNCTIONS ==========
+                const pane = document.getElementById('sellerReturnsPane');
+                if (pane) pane.innerHTML = returnsHtml;
+
+                // Use delegation for accept/reject buttons
+                if (pane) {
+                    pane.addEventListener('click', (e) => {
+                        const acceptBtn = e.target.closest('.accept-return-btn');
+                        if (acceptBtn) {
+                            const returnId = acceptBtn.dataset.id;
+                            acceptReturn(returnId);
+                        }
+                        const rejectBtn = e.target.closest('.reject-return-btn');
+                        if (rejectBtn) {
+                            const returnId = rejectBtn.dataset.id;
+                            openClaimModal(returnId);
+                        }
+                    });
+                }
+            }
+
+            async function acceptReturn(returnId) {
+                await supabase.from('returns').update({ status: 'accepted', seller_decision: 'accept' }).eq('id', returnId);
+                alert('Return accepted. Refund will be processed.');
+            }
+
+            // ========== CLAIM MODAL ==========
+            async function openClaimModal(returnId) {
+                let claimModal = document.getElementById('claimModal');
+                if (!claimModal) {
+                    claimModal = document.createElement('div');
+                    claimModal.id = 'claimModal';
+                    claimModal.className = 'modal';
+                    claimModal.innerHTML = `
+                        <div class="modal-card">
+                            <h3>Raise a Claim (RAC)</h3>
+                            <div class="modal-field"><label>Reason for claim</label><textarea id="claimReason" rows="3"></textarea></div>
+                            <div class="modal-field"><label>Upload evidence images</label><input type="file" id="claimImages" multiple accept="image/*"><div id="imagePreview" class="claim-evidence"></div></div>
+                            <div class="modal-actions"><button class="btn-cancel" id="claimCancel">Cancel</button><button class="btn-save" id="claimSubmit">Submit Claim</button></div>
+                        </div>
+                    `;
+                    document.body.appendChild(claimModal);
+
+                    document.getElementById('claimImages').addEventListener('change', function(e) {
+                        const preview = document.getElementById('imagePreview');
+                        preview.innerHTML = '';
+                        for (let file of e.target.files) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                preview.appendChild(img);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    document.getElementById('claimCancel').addEventListener('click', () => {
+                        claimModal.style.display = 'none';
+                    });
+                }
+
+                claimModal.dataset.returnId = returnId;
+                claimModal.style.display = 'flex';
+
+                document.getElementById('claimSubmit').onclick = async () => {
+                    const reason = document.getElementById('claimReason').value.trim();
+                    if (!reason) return alert('Please provide a reason');
+                    const files = document.getElementById('claimImages').files;
+                    if (files.length === 0) return alert('Please upload at least one image');
+
+                    const imageUrls = [];
+                    for (let file of files) {
+                        const fileName = `${Date.now()}_${file.name}`;
+                        const { data, error } = await supabase.storage.from('claim-evidence').upload(fileName, file);
+                        if (error) {
+                            alert('Upload failed: ' + error.message);
+                            return;
+                        }
+                        const { publicURL } = supabase.storage.from('claim-evidence').getPublicUrl(fileName);
+                        imageUrls.push(publicURL);
+                    }
+
+                    const returnId = claimModal.dataset.returnId;
+                    await supabase.from('returns').update({ status: 'claim_raised', seller_decision: 'reject' }).eq('id', returnId);
+                    await supabase.from('claims').insert([{
+                        return_id: returnId,
+                        seller_id: currentUser.id,
+                        evidence_images: imageUrls,
+                        reason,
+                        status: 'pending',
+                        created_at: new Date().toISOString()
+                    }]);
+
+                    alert('Claim submitted. Admin will review.');
+                    claimModal.style.display = 'none';
+                };
+            }
+
+            // ========== ADMIN DASHBOARD ENHANCEMENTS ==========
+            function enhanceAdminModal() {
+                const tabContainer = document.querySelector('.admin-tabs');
+                if (!tabContainer) return;
+                if (!document.querySelector('[data-tab="instruments"]')) {
+                    tabContainer.innerHTML += `<div class="admin-tab" data-tab="instruments">Payment Instruments</div><div class="admin-tab" data-tab="claims">Claims</div>`;
+                }
+                const modalCard = document.querySelector('#adminModal .modal-card');
+                if (!document.getElementById('tab-instruments')) {
+                    const instrumentsPane = document.createElement('div');
+                    instrumentsPane.id = 'tab-instruments';
+                    instrumentsPane.className = 'tab-pane';
+                    instrumentsPane.innerHTML = '<div id="instrumentsList"></div>';
+                    modalCard.appendChild(instrumentsPane);
+                }
+                if (!document.getElementById('tab-claims')) {
+                    const claimsPane = document.createElement('div');
+                    claimsPane.id = 'tab-claims';
+                    claimsPane.className = 'tab-pane';
+                    claimsPane.innerHTML = '<div id="claimsList"></div>';
+                    modalCard.appendChild(claimsPane);
+                }
+                // Use event delegation on admin modal for tabs
+                const adminModal = document.getElementById('adminModal');
+                if (adminModal) {
+                    adminModal.addEventListener('click', async (e) => {
+                        const tab = e.target.closest('.admin-tab');
+                        if (!tab) return;
+                        e.preventDefault();
+                        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                        const tabName = tab.dataset.tab;
+                        const pane = document.getElementById(`tab-${tabName}`);
+                        if (pane) pane.classList.add('active');
+                        if (tabName === 'instruments') await renderInstrumentsList();
+                        if (tabName === 'claims') await renderClaimsList();
+                        // other tabs handled by existing functions, but we can call them if needed
+                    });
+                }
+            }
+
+            async function renderInstrumentsList() {
+                const listDiv = document.getElementById('instrumentsList');
+                if (!listDiv) return;
+                let html = '';
+                paymentInstruments.forEach(inst => {
+                    const user = profiles.find(p => p.user_id === inst.user_id);
+                    html += `<div class="user-list-item"><div><strong>${user?.email || 'Unknown'}</strong> (${inst.type})</div><div>${inst.type === 'bank' ? inst.details.account_name + ' - ' + inst.details.account_number : inst.details.phone}</div><div>${inst.verified ? '✅ Verified' : '<button class="verify-instrument-btn" data-id="'+inst.id+'" style="background:green; color:white; border:none; padding:4px 8px; border-radius:4px;">Verify</button>'}</div></div>`;
+                });
+                listDiv.innerHTML = html;
+                // Use delegation on listDiv for verify buttons
+                listDiv.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('.verify-instrument-btn');
+                    if (btn) {
+                        const id = btn.dataset.id;
+                        await supabase.from('payment_instruments').update({ verified: true }).eq('id', id);
+                    }
+                });
+            }
+
+            async function renderClaimsList() {
+                const listDiv = document.getElementById('claimsList');
+                if (!listDiv) return;
+                let html = '';
+                for (let claim of claims) {
+                    const ret = returns.find(r => r.id === claim.return_id);
+                    const seller = profiles.find(p => p.user_id === claim.seller_id);
+                    html += `<div class="user-list-item" data-claim-id="${claim.id}">
+                        <div><strong>Claim #${claim.id.slice(-6)}</strong> - ${claim.status}</div>
+                        <div>Seller: ${seller?.email}</div>
+                        <div>Reason: ${claim.reason}</div>
+                        <div>Evidence: ${claim.evidence_images.map(url => `<img src="${url}" style="width:50px; height:50px; object-fit:cover; margin-right:5px;">`).join('')}</div>
+                        ${claim.status === 'pending' ? `
+                            <div style="margin-top:8px;">
+                                <button class="approve-claim-btn" data-id="${claim.id}" style="background:green; color:white; border:none; padding:4px 8px;">Approve</button>
+                                <button class="reject-claim-btn" data-id="${claim.id}" style="background:red; color:white; border:none; padding:4px 8px;">Reject</button>
+                            </div>
+                        ` : ''}
+                    </div>`;
+                }
+                listDiv.innerHTML = html;
+                // Use delegation
+                listDiv.addEventListener('click', async (e) => {
+                    const approveBtn = e.target.closest('.approve-claim-btn');
+                    if (approveBtn) {
+                        const id = approveBtn.dataset.id;
+                        await supabase.from('claims').update({ status: 'approved' }).eq('id', id);
+                    }
+                    const rejectBtn = e.target.closest('.reject-claim-btn');
+                    if (rejectBtn) {
+                        const id = rejectBtn.dataset.id;
+                        await supabase.from('claims').update({ status: 'rejected' }).eq('id', id);
+                    }
+                });
+            }
+
+            // ========== OTHER ADMIN FUNCTIONS (implemented) ==========
             async function renderCategoriesList() {
+                const listDiv = document.getElementById('categoriesList');
+                if (!listDiv) return;
                 let html = '';
                 categories.forEach(cat => {
-                    html += `<div class="cat-list-item">
+                    html += `<div class="cat-list-item" data-cat-id="${cat.id}">
                         ${cat.image ? `<img src="${cat.image}">` : `<i class="fas ${cat.icon}"></i>`}
                         <span>${cat.name}</span>
                         <button class="edit-cat-btn" data-id="${cat.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
                         <button class="delete-cat-btn" data-id="${cat.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
                     </div>`;
                 });
-                categoriesListDiv.innerHTML = html;
-                attachCategoryListeners();
-            }
-
-            function attachCategoryListeners() {
-                document.querySelectorAll('.edit-cat-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const id = e.currentTarget.dataset.id;
+                listDiv.innerHTML = html;
+                // Use delegation
+                listDiv.addEventListener('click', async (e) => {
+                    const editBtn = e.target.closest('.edit-cat-btn');
+                    if (editBtn) {
+                        const id = editBtn.dataset.id;
                         const cat = categories.find(c => c.id === id);
                         if (cat) {
                             currentCategoryId = id;
-                            catNameInput.value = cat.name;
-                            catIconInput.value = cat.icon;
-                            catImageInput.value = cat.image || '';
-                            categoryEditModal.style.display = 'flex';
+                            document.getElementById('catNameInput').value = cat.name;
+                            document.getElementById('catIconInput').value = cat.icon;
+                            document.getElementById('catImageInput').value = cat.image || '';
+                            document.getElementById('categoryEditModal').style.display = 'flex';
                         }
-                    });
-                });
-                document.querySelectorAll('.delete-cat-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const id = e.currentTarget.dataset.id;
+                    }
+                    const deleteBtn = e.target.closest('.delete-cat-btn');
+                    if (deleteBtn) {
+                        const id = deleteBtn.dataset.id;
                         if (confirm('Delete category?')) {
                             await supabase.from('categories').delete().eq('id', id);
                         }
-                    });
+                    }
                 });
             }
 
             async function renderBannersList() {
+                const listDiv = document.getElementById('bannersList');
+                if (!listDiv) return;
                 let html = '';
                 banners.forEach(banner => {
-                    html += `<div class="banner-list-item">
+                    html += `<div class="banner-list-item" data-ban-id="${banner.id}">
                         <img src="${banner.image}" style="width:50px; height:30px; object-fit:cover; border-radius:4px;">
                         <span>${banner.title}</span>
                         <button class="edit-banner-btn" data-id="${banner.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
                         <button class="delete-banner-btn" data-id="${banner.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
                     </div>`;
                 });
-                bannersListDiv.innerHTML = html;
-                attachBannerListeners();
-            }
-
-            function attachBannerListeners() {
-                document.querySelectorAll('.edit-banner-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const id = e.currentTarget.dataset.id;
+                listDiv.innerHTML = html;
+                listDiv.addEventListener('click', async (e) => {
+                    const editBtn = e.target.closest('.edit-banner-btn');
+                    if (editBtn) {
+                        const id = editBtn.dataset.id;
                         const banner = banners.find(b => b.id === id);
                         if (banner) {
                             currentBannerId = id;
-                            bannerImageInput.value = banner.image;
-                            bannerLinkInput.value = banner.link || '';
-                            bannerTitleInput.value = banner.title;
-                            bannerEditModal.style.display = 'flex';
+                            document.getElementById('bannerImageInput').value = banner.image;
+                            document.getElementById('bannerLinkInput').value = banner.link || '';
+                            document.getElementById('bannerTitleInput').value = banner.title;
+                            document.getElementById('bannerEditModal').style.display = 'flex';
                         }
-                    });
-                });
-                document.querySelectorAll('.delete-banner-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const id = e.currentTarget.dataset.id;
+                    }
+                    const deleteBtn = e.target.closest('.delete-banner-btn');
+                    if (deleteBtn) {
+                        const id = deleteBtn.dataset.id;
                         if (confirm('Delete banner?')) {
                             await supabase.from('banners').delete().eq('id', id);
                         }
-                    });
+                    }
                 });
             }
 
             async function renderProductsList() {
+                const listDiv = document.getElementById('productsList');
+                if (!listDiv) return;
                 let html = '';
                 products.forEach(prod => {
-                    html += `<div class="prod-list-item">
+                    html += `<div class="prod-list-item" data-prod-id="${prod.id}">
                         <img src="${prod.image}" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
                         <span>${prod.name} (KSh ${prod.price})</span>
                         <button class="edit-prod-admin-btn" data-id="${prod.id}" style="margin-left:auto; background:none; border:none; color:var(--tokped-green);"><i class="fas fa-edit"></i></button>
                         <button class="delete-prod-admin-btn" data-id="${prod.id}" style="background:none; border:none; color:#c0392b;"><i class="fas fa-trash"></i></button>
                     </div>`;
                 });
-                productsListDiv.innerHTML = html;
-                attachProductAdminListeners();
-            }
-
-            function attachProductAdminListeners() {
-                document.querySelectorAll('.edit-prod-admin-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const id = e.currentTarget.dataset.id;
-                        const prod = products.find(p => p.id === id);
+                listDiv.innerHTML = html;
+                listDiv.addEventListener('click', async (e) => {
+                    const editBtn = e.target.closest('.edit-prod-admin-btn');
+                    if (editBtn) {
+                        const prodId = editBtn.dataset.id;
+                        const prod = products.find(p => p.id === prodId);
                         if (prod) {
-                            currentProductId = id;
-                            prodName.value = prod.name || '';
-                            prodPrice.value = prod.price || '';
-                            prodCost.value = prod.costPrice || '';
-                            prodOriginalPrice.value = prod.originalPrice || '';
-                            prodCommission.value = prod.commission_percent || 10;
-                            prodStock.value = prod.stock || 10;
-                            prodReturnPolicy.value = prod.return_policy || 'Free return within 7 days';
-                            prodOfficial.checked = prod.is_official_store || false;
-                            prodNonReturn.checked = prod.is_non_returnable || false;
-                            prodImage.value = prod.image || '';
-                            prodImages.value = (prod.images || []).join(', ');
-                            prodDescription.value = prod.description || '';
-                            prodAffiliateLink.value = prod.affiliate_link || '';
-                            prodRating.value = prod.rating || 4.5;
-                            prodSold.value = prod.sold || 0;
-                            prodBadgeImage.value = prod.badgeImage || '';
-                            prodBadgeText.value = prod.badgeText || '';
-
+                            currentProductId = prodId;
+                            // populate edit modal
+                            document.getElementById('prodName').value = prod.name || '';
+                            document.getElementById('prodBrand').value = prod.brand || '';
+                            document.getElementById('prodColor').value = prod.color || '';
+                            document.getElementById('prodSize').value = prod.size || '';
+                            document.getElementById('prodPrice').value = prod.price || '';
+                            document.getElementById('prodCost').value = prod.costPrice || '';
+                            document.getElementById('prodOriginalPrice').value = prod.originalPrice || '';
+                            document.getElementById('prodCommission').value = prod.commission_percent || 10;
+                            document.getElementById('prodStock').value = prod.stock || 10;
+                            document.getElementById('prodReturnPolicy').value = prod.return_policy || 'Free return within 7 days';
+                            document.getElementById('prodOfficial').checked = prod.is_official_store || false;
+                            document.getElementById('prodNonReturn').checked = prod.is_non_returnable || false;
+                            document.getElementById('prodImage').value = prod.image || '';
+                            document.getElementById('prodImages').value = (prod.images || []).join(', ');
+                            document.getElementById('prodDescription').value = prod.description || '';
+                            document.getElementById('prodAffiliateLink').value = prod.affiliate_link || '';
                             let catOptions = '';
                             categories.forEach(c => catOptions += `<option value="${c.id}" ${prod.category === c.id ? 'selected' : ''}>${c.name}</option>`);
-                            prodCategory.innerHTML = catOptions;
-                            productEditModal.style.display = 'flex';
+                            document.getElementById('prodCategory').innerHTML = catOptions;
+                            document.getElementById('prodRating').value = prod.rating || 4.5;
+                            document.getElementById('prodSold').value = prod.sold || 0;
+                            document.getElementById('prodBadgeImage').value = prod.badgeImage || '';
+                            document.getElementById('prodBadgeText').value = prod.badgeText || '';
+                            document.getElementById('productEditModal').style.display = 'flex';
                         }
-                    });
-                });
-                document.querySelectorAll('.delete-prod-admin-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const id = e.currentTarget.dataset.id;
+                    }
+                    const deleteBtn = e.target.closest('.delete-prod-admin-btn');
+                    if (deleteBtn) {
+                        const prodId = deleteBtn.dataset.id;
                         if (confirm('Delete product?')) {
-                            await supabase.from('products').delete().eq('id', id);
+                            await supabase.from('products').delete().eq('id', prodId);
                         }
-                    });
+                    }
                 });
             }
 
             async function renderAdminOrders() {
+                const listDiv = document.getElementById('adminOrdersList');
+                if (!listDiv) return;
                 let html = '';
                 orders.forEach(order => {
                     const statusClass = `status-${order.status.replace('_', '-')}`;
@@ -2361,20 +2660,22 @@
                         </select>
                     </div>`;
                 });
-                adminOrdersListDiv.innerHTML = html;
-                document.querySelectorAll('.order-status-select').forEach(select => {
-                    select.addEventListener('change', async (e) => {
+                listDiv.innerHTML = html;
+                listDiv.addEventListener('change', async (e) => {
+                    if (e.target.classList.contains('order-status-select')) {
                         const orderId = e.target.dataset.orderId;
                         const newStatus = e.target.value;
                         await supabase.from('orders').update({ status: newStatus }).eq('id', orderId);
-                    });
+                    }
                 });
             }
 
             async function renderUsersList() {
+                const listDiv = document.getElementById('usersList');
+                if (!listDiv) return;
                 let html = '';
                 profiles.forEach(prof => {
-                    html += `<div class="user-list-item">
+                    html += `<div class="user-list-item" data-user-id="${prof.user_id}">
                         <div><strong>${prof.email}</strong> (role: ${prof.role}, seller: ${prof.seller_status || 'none'})</div>
                         <div style="display:flex; gap:8px; margin-top:4px;">
                             <button class="make-admin-btn" data-id="${prof.user_id}" style="background:none; border:1px solid var(--tokped-green); padding:4px 8px; border-radius:4px;">Make Admin</button>
@@ -2384,32 +2685,33 @@
                         </div>
                     </div>`;
                 });
-                usersListDiv.innerHTML = html;
-                document.querySelectorAll('.make-admin-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const userId = e.target.dataset.id;
+                listDiv.innerHTML = html;
+                listDiv.addEventListener('click', async (e) => {
+                    const makeAdminBtn = e.target.closest('.make-admin-btn');
+                    if (makeAdminBtn) {
+                        const userId = makeAdminBtn.dataset.id;
                         await supabase.from('profiles').update({ role: 'admin' }).eq('user_id', userId);
-                    });
-                });
-                document.querySelectorAll('.approve-seller-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const userId = e.target.dataset.id;
+                    }
+                    const approveBtn = e.target.closest('.approve-seller-btn');
+                    if (approveBtn) {
+                        const userId = approveBtn.dataset.id;
                         await supabase.from('profiles').update({ role: 'seller', seller_status: 'approved' }).eq('user_id', userId);
-                    });
-                });
-                document.querySelectorAll('.reject-seller-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const userId = e.target.dataset.id;
+                    }
+                    const rejectBtn = e.target.closest('.reject-seller-btn');
+                    if (rejectBtn) {
+                        const userId = rejectBtn.dataset.id;
                         await supabase.from('profiles').update({ seller_status: 'rejected' }).eq('user_id', userId);
-                    });
+                    }
                 });
             }
 
             async function renderSellerApplications() {
+                const listDiv = document.getElementById('sellerApplicationsList');
+                if (!listDiv) return;
                 const pending = profiles.filter(p => p.seller_status === 'pending');
                 let html = '';
                 pending.forEach(prof => {
-                    html += `<div class="user-list-item">
+                    html += `<div class="user-list-item" data-user-id="${prof.user_id}">
                         <div>${prof.email} applied to become seller.</div>
                         <div style="display:flex; gap:8px; margin-top:4px;">
                             <button class="approve-seller-btn" data-id="${prof.user_id}" style="background:green; color:white; border:none; padding:4px 8px; border-radius:4px;">Approve</button>
@@ -2418,27 +2720,28 @@
                     </div>`;
                 });
                 if (pending.length === 0) html = '<p>No pending applications.</p>';
-                sellerApplicationsListDiv.innerHTML = html;
-                // Reattach listeners (same as above)
-                document.querySelectorAll('.approve-seller-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const userId = e.target.dataset.id;
+                listDiv.innerHTML = html;
+                listDiv.addEventListener('click', async (e) => {
+                    const approveBtn = e.target.closest('.approve-seller-btn');
+                    if (approveBtn) {
+                        const userId = approveBtn.dataset.id;
                         await supabase.from('profiles').update({ role: 'seller', seller_status: 'approved' }).eq('user_id', userId);
-                    });
-                });
-                document.querySelectorAll('.reject-seller-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const userId = e.target.dataset.id;
+                    }
+                    const rejectBtn = e.target.closest('.reject-seller-btn');
+                    if (rejectBtn) {
+                        const userId = rejectBtn.dataset.id;
                         await supabase.from('profiles').update({ seller_status: 'rejected' }).eq('user_id', userId);
-                    });
+                    }
                 });
             }
 
             async function renderReviewsList() {
+                const listDiv = document.getElementById('reviewsList');
+                if (!listDiv) return;
                 let html = '';
                 reviews.forEach(rev => {
                     const user = profiles.find(p => p.user_id === rev.user_id);
-                    html += `<div class="review-list-item">
+                    html += `<div class="review-list-item" data-review-id="${rev.id}">
                         <div><strong>${user?.email || 'Unknown'}</strong> rated ${rev.rating} stars</div>
                         <div>${rev.comment}</div>
                         <div style="font-size:0.7rem; color:#999;">Order #${rev.order_id?.slice(-6)}</div>
@@ -2446,24 +2749,23 @@
                     </div>`;
                 });
                 if (reviews.length === 0) html = '<p>No reviews yet.</p>';
-                reviewsListDiv.innerHTML = html;
-                document.querySelectorAll('.delete-review-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const id = e.currentTarget.dataset.id;
+                listDiv.innerHTML = html;
+                listDiv.addEventListener('click', async (e) => {
+                    const deleteBtn = e.target.closest('.delete-review-btn');
+                    if (deleteBtn) {
+                        const id = deleteBtn.dataset.id;
                         if (confirm('Delete review?')) {
                             await supabase.from('reviews').delete().eq('id', id);
                         }
-                    });
+                    }
                 });
             }
 
             async function renderAnalytics() {
-                // Revenue = sum of total_amount of delivered orders
                 const deliveredOrders = orders.filter(o => o.status === 'delivered');
                 const revenue = deliveredOrders.reduce((acc, o) => acc + o.total_amount, 0);
                 document.getElementById('totalRevenue').innerText = revenue;
 
-                // Profit = sum of (price - cost) for sold items
                 let profit = 0;
                 deliveredOrders.forEach(order => {
                     const items = JSON.parse(order.items || '[]');
@@ -2476,18 +2778,15 @@
                 });
                 document.getElementById('totalProfit').innerText = profit;
 
-                // Total sold items
                 const totalSold = deliveredOrders.reduce((acc, o) => {
                     const items = JSON.parse(o.items || '[]');
                     return acc + items.reduce((sum, i) => sum + i.quantity, 0);
                 }, 0);
                 document.getElementById('totalSold').innerText = totalSold;
 
-                // Pending orders count
                 const pendingOrders = orders.filter(o => o.status === 'ordered').length;
                 document.getElementById('ordersByStatus').innerText = pendingOrders;
 
-                // Status breakdown
                 const statusCounts = orders.reduce((acc, o) => {
                     acc[o.status] = (acc[o.status] || 0) + 1;
                     return acc;
@@ -2503,26 +2802,33 @@
             function openProductDetail(prodId) {
                 const prod = products.find(p => p.id === prodId);
                 if (!prod) return;
-                detailProductName.innerText = prod.name;
-                detailMainImage.src = prod.image;
-                detailDescription.innerText = prod.description || 'No description';
-                detailPrice.innerText = `KSh ${prod.price.toLocaleString()}`;
+                document.getElementById('detailProductName').innerText = prod.name;
+                document.getElementById('detailMainImage').src = prod.image;
+                document.getElementById('detailDescription').innerText = prod.description || 'No description';
+                document.getElementById('detailPrice').innerText = `KSh ${prod.price.toLocaleString()}`;
                 if (prod.originalPrice && prod.originalPrice > prod.price) {
-                    detailOriginalPrice.innerText = `KSh ${prod.originalPrice.toLocaleString()}`;
+                    document.getElementById('detailOriginalPrice').innerText = `KSh ${prod.originalPrice.toLocaleString()}`;
                     const discount = Math.round((1 - prod.price/prod.originalPrice)*100);
-                    detailDiscount.innerText = `-${discount}%`;
-                    detailDiscount.style.display = 'inline-block';
+                    document.getElementById('detailDiscount').innerText = `-${discount}%`;
+                    document.getElementById('detailDiscount').style.display = 'inline-block';
                 } else {
-                    detailOriginalPrice.innerText = '';
-                    detailDiscount.style.display = 'none';
+                    document.getElementById('detailOriginalPrice').innerText = '';
+                    document.getElementById('detailDiscount').style.display = 'none';
                 }
-                detailOfficial.style.display = prod.is_official_store ? 'inline-block' : 'none';
-                detailNonReturn.style.display = prod.is_non_returnable ? 'inline-block' : 'none';
+                document.getElementById('detailOfficial').style.display = prod.is_official_store ? 'inline-block' : 'none';
+                document.getElementById('detailNonReturn').style.display = prod.is_non_returnable ? 'inline-block' : 'none';
                 const inStock = prod.stock > 0;
-                detailInStock.style.display = inStock ? 'inline-block' : 'none';
-                detailOutStock.style.display = !inStock ? 'inline-block' : 'none';
-                detailStock.innerText = inStock ? `In stock (${prod.stock} available)` : 'Out of stock';
-                detailReturnPolicy.innerText = prod.return_policy || 'Free return within 7 days';
+                document.getElementById('detailInStock').style.display = inStock ? 'inline-block' : 'none';
+                document.getElementById('detailOutStock').style.display = !inStock ? 'inline-block' : 'none';
+                document.getElementById('detailStock').innerText = inStock ? `In stock (${prod.stock} available)` : 'Out of stock';
+                document.getElementById('detailReturnPolicy').innerText = prod.return_policy || 'Free return within 7 days';
+
+                // Attributes
+                let attrHtml = '';
+                if (prod.brand) attrHtml += `<span>Brand: ${prod.brand}</span>`;
+                if (prod.color) attrHtml += `<span>Color: ${prod.color}</span>`;
+                if (prod.size) attrHtml += `<span>Size: ${prod.size}</span>`;
+                document.getElementById('detailAttributes').innerHTML = attrHtml;
 
                 let galleryHtml = '';
                 if (prod.images && Array.isArray(prod.images)) {
@@ -2530,33 +2836,33 @@
                         galleryHtml += `<img src="${img}" class="gallery-image" onclick="document.getElementById('detailMainImage').src='${img}'" loading="lazy">`;
                     });
                 }
-                detailGallery.innerHTML = galleryHtml;
+                document.getElementById('detailGallery').innerHTML = galleryHtml;
 
                 if (prod.affiliate_link) {
-                    affiliateLinkBtn.href = prod.affiliate_link;
-                    affiliateLinkBtn.style.display = 'flex';
+                    document.getElementById('affiliateLinkBtn').href = prod.affiliate_link;
+                    document.getElementById('affiliateLinkBtn').style.display = 'flex';
                 } else {
-                    affiliateLinkBtn.style.display = 'none';
+                    document.getElementById('affiliateLinkBtn').style.display = 'none';
                 }
 
                 if (currentUser) {
                     const refLink = `${window.location.origin}${window.location.pathname}?ref=${currentUser.id}&product=${prod.id}`;
-                    copyReferralLinkBtn.onclick = () => {
+                    document.getElementById('copyReferralLink').onclick = () => {
                         navigator.clipboard.writeText(refLink);
                         alert('Referral link copied to clipboard!');
                     };
-                    copyReferralLinkBtn.style.display = 'flex';
+                    document.getElementById('copyReferralLink').style.display = 'flex';
                 } else {
-                    copyReferralLinkBtn.style.display = 'none';
+                    document.getElementById('copyReferralLink').style.display = 'none';
                 }
 
-                detailAddToCart.dataset.id = prodId;
-                detailAddToCart.disabled = !inStock;
-                detailModal.style.display = 'flex';
+                document.getElementById('detailAddToCart').dataset.id = prodId;
+                document.getElementById('detailAddToCart').disabled = !inStock;
+                document.getElementById('productDetailModal').style.display = 'flex';
             }
 
-            // ========== EVENT LISTENERS ==========
-            categoryContainer.addEventListener('click', (e) => {
+            // ========== EVENT LISTENERS (using delegation where possible) ==========
+            document.getElementById('categoryContainer')?.addEventListener('click', (e) => {
                 const chip = e.target.closest('.chip');
                 if (!chip) return;
                 const catId = chip.dataset.catId;
@@ -2566,10 +2872,10 @@
                 renderProducts();
             });
 
-            productGrid.addEventListener('click', (e) => {
-                // Handle edit button
+            document.getElementById('productGrid')?.addEventListener('click', (e) => {
                 const editBtn = e.target.closest('.edit-btn');
                 if (editBtn) {
+                    e.stopPropagation();
                     const prodId = editBtn.dataset.id;
                     const prod = products.find(p => p.id === prodId);
                     if (!prod) return;
@@ -2577,36 +2883,38 @@
                         alert('You can only edit your own products.');
                         return;
                     }
-                    // Open edit modal
                     currentProductId = prodId;
-                    prodName.value = prod.name || '';
-                    prodPrice.value = prod.price || '';
-                    prodCost.value = prod.costPrice || '';
-                    prodOriginalPrice.value = prod.originalPrice || '';
-                    prodCommission.value = prod.commission_percent || 10;
-                    prodStock.value = prod.stock || 10;
-                    prodReturnPolicy.value = prod.return_policy || 'Free return within 7 days';
-                    prodOfficial.checked = prod.is_official_store || false;
-                    prodNonReturn.checked = prod.is_non_returnable || false;
-                    prodImage.value = prod.image || '';
-                    prodImages.value = (prod.images || []).join(', ');
-                    prodDescription.value = prod.description || '';
-                    prodAffiliateLink.value = prod.affiliate_link || '';
-                    prodRating.value = prod.rating || 4.5;
-                    prodSold.value = prod.sold || 0;
-                    prodBadgeImage.value = prod.badgeImage || '';
-                    prodBadgeText.value = prod.badgeText || '';
-
+                    // populate edit modal
+                    document.getElementById('prodName').value = prod.name || '';
+                    document.getElementById('prodBrand').value = prod.brand || '';
+                    document.getElementById('prodColor').value = prod.color || '';
+                    document.getElementById('prodSize').value = prod.size || '';
+                    document.getElementById('prodPrice').value = prod.price || '';
+                    document.getElementById('prodCost').value = prod.costPrice || '';
+                    document.getElementById('prodOriginalPrice').value = prod.originalPrice || '';
+                    document.getElementById('prodCommission').value = prod.commission_percent || 10;
+                    document.getElementById('prodStock').value = prod.stock || 10;
+                    document.getElementById('prodReturnPolicy').value = prod.return_policy || 'Free return within 7 days';
+                    document.getElementById('prodOfficial').checked = prod.is_official_store || false;
+                    document.getElementById('prodNonReturn').checked = prod.is_non_returnable || false;
+                    document.getElementById('prodImage').value = prod.image || '';
+                    document.getElementById('prodImages').value = (prod.images || []).join(', ');
+                    document.getElementById('prodDescription').value = prod.description || '';
+                    document.getElementById('prodAffiliateLink').value = prod.affiliate_link || '';
                     let catOptions = '';
                     categories.forEach(c => catOptions += `<option value="${c.id}" ${prod.category === c.id ? 'selected' : ''}>${c.name}</option>`);
-                    prodCategory.innerHTML = catOptions;
-                    productEditModal.style.display = 'flex';
+                    document.getElementById('prodCategory').innerHTML = catOptions;
+                    document.getElementById('prodRating').value = prod.rating || 4.5;
+                    document.getElementById('prodSold').value = prod.sold || 0;
+                    document.getElementById('prodBadgeImage').value = prod.badgeImage || '';
+                    document.getElementById('prodBadgeText').value = prod.badgeText || '';
+                    document.getElementById('productEditModal').style.display = 'flex';
                     return;
                 }
 
-                // Handle delete button
                 const deleteBtn = e.target.closest('.delete-btn');
                 if (deleteBtn) {
+                    e.stopPropagation();
                     const prodId = deleteBtn.dataset.id;
                     const prod = products.find(p => p.id === prodId);
                     if (!prod) return;
@@ -2620,9 +2928,9 @@
                     return;
                 }
 
-                // Handle add to cart button
                 const addBtn = e.target.closest('.add-to-cart-btn');
                 if (addBtn) {
+                    e.stopPropagation();
                     const prodId = addBtn.dataset.id;
                     const prod = products.find(p => p.id === prodId);
                     if (prod.stock <= 0) {
@@ -2637,7 +2945,6 @@
                     return;
                 }
 
-                // Handle product card click (open detail)
                 const card = e.target.closest('.product-card');
                 if (card) {
                     const prodId = card.dataset.productId;
@@ -2645,10 +2952,10 @@
                 }
             });
 
-            cartIcon.addEventListener('click', () => { renderCartModal(); cartModal.style.display = 'flex'; });
-            closeCartBtn.addEventListener('click', () => cartModal.style.display = 'none');
+            document.getElementById('cartIcon')?.addEventListener('click', () => { renderCartModal(); document.getElementById('cartModal').style.display = 'flex'; });
+            document.getElementById('closeCartBtn')?.addEventListener('click', () => { document.getElementById('cartModal').style.display = 'none'; });
 
-            cartItemsList.addEventListener('click', (e) => {
+            document.getElementById('cartItemsList')?.addEventListener('click', (e) => {
                 const itemDiv = e.target.closest('.cart-item');
                 if (!itemDiv) return;
                 const prodId = itemDiv.dataset.id;
@@ -2669,7 +2976,7 @@
                 }
             });
 
-            cartWhatsappBtn.addEventListener('click', () => {
+            document.getElementById('cartWhatsappBtn')?.addEventListener('click', () => {
                 if (cart.length === 0) return alert('Cart empty');
                 let msg = 'Hello, I want to order:%0A';
                 let total = 0;
@@ -2681,10 +2988,11 @@
                 window.open(`https://wa.me/${settings.wa_number}?text=${msg}`, '_blank');
             });
 
-            checkoutBtn.addEventListener('click', placeOrderWithDetails);
+            document.getElementById('checkoutBtn')?.addEventListener('click', placeOrderWithDetails);
 
-            adminBadge.addEventListener('click', async () => {
+            document.getElementById('adminModeBadge')?.addEventListener('click', async () => {
                 if (currentUserProfile?.role !== 'admin') return;
+                enhanceAdminModal();
                 await renderCategoriesList();
                 await renderBannersList();
                 await renderProductsList();
@@ -2693,39 +3001,92 @@
                 await renderSellerApplications();
                 await renderReviewsList();
                 await renderAnalytics();
-                waNumberInput.value = settings.wa_number;
-                deliveryFeeInput.value = settings.delivery_fee;
-                pickupStationsInput.value = settings.pickup_stations;
-                adminModal.style.display = 'flex';
+                await renderInstrumentsList();
+                await renderClaimsList();
+                document.getElementById('adminModal').style.display = 'flex';
             });
-            closeAdminModal.addEventListener('click', () => adminModal.style.display = 'none');
+            document.getElementById('closeAdminModal')?.addEventListener('click', () => { document.getElementById('adminModal').style.display = 'none'; });
 
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-                    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
-                    if (tab.dataset.tab === 'analytics') renderAnalytics();
-                    if (tab.dataset.tab === 'orders') renderAdminOrders();
-                    if (tab.dataset.tab === 'users') renderUsersList();
-                    if (tab.dataset.tab === 'reviews') renderReviewsList();
-                    if (tab.dataset.tab === 'sellers') renderSellerApplications();
-                });
+            document.getElementById('addProductBtn')?.addEventListener('click', () => {
+                if (!currentUser || (currentUserProfile?.role !== 'admin' && currentUserProfile?.role !== 'seller')) {
+                    alert('You do not have permission to add products.');
+                    return;
+                }
+                currentProductId = null;
+                document.getElementById('prodName').value = '';
+                document.getElementById('prodBrand').value = '';
+                document.getElementById('prodColor').value = '';
+                document.getElementById('prodSize').value = '';
+                document.getElementById('prodPrice').value = '';
+                document.getElementById('prodCost').value = '';
+                document.getElementById('prodOriginalPrice').value = '';
+                document.getElementById('prodCommission').value = '10';
+                document.getElementById('prodStock').value = '10';
+                document.getElementById('prodReturnPolicy').value = 'Free return within 7 days';
+                document.getElementById('prodOfficial').checked = false;
+                document.getElementById('prodNonReturn').checked = false;
+                document.getElementById('prodImage').value = '';
+                document.getElementById('prodImages').value = '';
+                document.getElementById('prodDescription').value = '';
+                document.getElementById('prodAffiliateLink').value = '';
+                let catOptions = '';
+                categories.forEach(c => catOptions += `<option value="${c.id}">${c.name}</option>`);
+                document.getElementById('prodCategory').innerHTML = catOptions;
+                if (document.getElementById('prodCategory').options.length > 0) document.getElementById('prodCategory').selectedIndex = 0;
+                document.getElementById('prodRating').value = '4.5';
+                document.getElementById('prodSold').value = '0';
+                document.getElementById('prodBadgeImage').value = '';
+                document.getElementById('prodBadgeText').value = '';
+                document.getElementById('productEditModal').style.display = 'flex';
             });
 
-            // Add category
-            addCategoryBtn.addEventListener('click', () => {
-                currentCategoryId = null;
-                catNameInput.value = '';
-                catIconInput.value = '';
-                catImageInput.value = '';
-                categoryEditModal.style.display = 'flex';
+            document.getElementById('productModalSave')?.addEventListener('click', async () => {
+                const name = document.getElementById('prodName').value.trim();
+                const price = parseFloat(document.getElementById('prodPrice').value);
+                if (!name || isNaN(price)) return alert('Name and price required');
+                const imagesArray = document.getElementById('prodImages').value.split(',').map(s => s.trim()).filter(s => s);
+                const sellerId = (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') ? currentUser.id : null;
+                const productData = {
+                    name,
+                    brand: document.getElementById('prodBrand').value.trim() || null,
+                    color: document.getElementById('prodColor').value.trim() || null,
+                    size: document.getElementById('prodSize').value.trim() || null,
+                    price,
+                    costPrice: parseFloat(document.getElementById('prodCost').value) || undefined,
+                    originalPrice: parseFloat(document.getElementById('prodOriginalPrice').value) || undefined,
+                    commission_percent: parseInt(document.getElementById('prodCommission').value) || 10,
+                    stock: parseInt(document.getElementById('prodStock').value) || 10,
+                    return_policy: document.getElementById('prodReturnPolicy').value.trim() || 'Free return within 7 days',
+                    is_official_store: document.getElementById('prodOfficial').checked,
+                    is_non_returnable: document.getElementById('prodNonReturn').checked,
+                    image: document.getElementById('prodImage').value.trim() || 'https://placehold.co/400x400/03ac0e/white?text=Product',
+                    images: imagesArray,
+                    description: document.getElementById('prodDescription').value.trim(),
+                    affiliate_link: document.getElementById('prodAffiliateLink').value.trim() || undefined,
+                    category: document.getElementById('prodCategory').value,
+                    rating: parseFloat(document.getElementById('prodRating').value) || 4.5,
+                    sold: parseInt(document.getElementById('prodSold').value) || 0,
+                    badgeImage: document.getElementById('prodBadgeImage').value.trim() || '',
+                    badgeText: document.getElementById('prodBadgeText').value.trim() || '',
+                    seller_id: sellerId
+                };
+                if (currentProductId) {
+                    const { error } = await supabase.from('products').update(productData).eq('id', currentProductId);
+                    if (error) alert('Update error: ' + error.message);
+                } else {
+                    const newId = 'prod_' + Date.now() + Math.random().toString(36).substr(2, 4);
+                    const { error } = await supabase.from('products').insert([{ id: newId, ...productData }]);
+                    if (error) alert('Insert error: ' + error.message);
+                }
+                document.getElementById('productEditModal').style.display = 'none';
             });
-            catModalSave.addEventListener('click', async () => {
-                const name = catNameInput.value.trim();
-                const icon = catIconInput.value.trim();
-                const image = catImageInput.value.trim();
+            document.getElementById('productModalCancel')?.addEventListener('click', () => { document.getElementById('productEditModal').style.display = 'none'; });
+
+            // Category modal save/cancel
+            document.getElementById('catModalSave')?.addEventListener('click', async () => {
+                const name = document.getElementById('catNameInput').value.trim();
+                const icon = document.getElementById('catIconInput').value.trim();
+                const image = document.getElementById('catImageInput').value.trim();
                 if (!name) return alert('Category name required');
                 const catData = {
                     name,
@@ -2738,22 +3099,15 @@
                     const newId = 'cat_' + Date.now() + Math.random().toString(36).substr(2, 4);
                     await supabase.from('categories').insert([{ id: newId, ...catData }]);
                 }
-                categoryEditModal.style.display = 'none';
+                document.getElementById('categoryEditModal').style.display = 'none';
             });
-            catModalCancel.addEventListener('click', () => categoryEditModal.style.display = 'none');
+            document.getElementById('catModalCancel')?.addEventListener('click', () => { document.getElementById('categoryEditModal').style.display = 'none'; });
 
-            // Add banner
-            addBannerBtn.addEventListener('click', () => {
-                currentBannerId = null;
-                bannerImageInput.value = '';
-                bannerLinkInput.value = '';
-                bannerTitleInput.value = '';
-                bannerEditModal.style.display = 'flex';
-            });
-            bannerModalSave.addEventListener('click', async () => {
-                const image = bannerImageInput.value.trim();
-                const link = bannerLinkInput.value.trim();
-                const title = bannerTitleInput.value.trim();
+            // Banner modal
+            document.getElementById('bannerModalSave')?.addEventListener('click', async () => {
+                const image = document.getElementById('bannerImageInput').value.trim();
+                const link = document.getElementById('bannerLinkInput').value.trim();
+                const title = document.getElementById('bannerTitleInput').value.trim();
                 if (!image || !title) return alert('Image and title required');
                 const bannerData = { image, link, title };
                 if (currentBannerId) {
@@ -2762,59 +3116,11 @@
                     const newId = 'ban_' + Date.now() + Math.random().toString(36).substr(2, 4);
                     await supabase.from('banners').insert([{ id: newId, ...bannerData }]);
                 }
-                bannerEditModal.style.display = 'none';
+                document.getElementById('bannerEditModal').style.display = 'none';
             });
-            bannerModalCancel.addEventListener('click', () => bannerEditModal.style.display = 'none');
+            document.getElementById('bannerModalCancel')?.addEventListener('click', () => { document.getElementById('bannerEditModal').style.display = 'none'; });
 
-            // Add product button
-            addProductBtn.addEventListener('click', () => {
-                if (!currentUser || (currentUserProfile?.role !== 'admin' && currentUserProfile?.role !== 'seller')) {
-                    alert('You do not have permission to add products.');
-                    return;
-                }
-                openProductEditForSeller();
-            });
-
-            productModalSave.addEventListener('click', async () => {
-                const name = prodName.value.trim(), price = parseFloat(prodPrice.value);
-                if (!name || isNaN(price)) return alert('Name and price required');
-                const imagesArray = prodImages.value.split(',').map(s => s.trim()).filter(s => s);
-                // Determine seller_id: null for admin, current user for seller
-                const sellerId = (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') ? currentUser.id : null;
-                const productData = {
-                    name,
-                    price,
-                    costPrice: parseFloat(prodCost.value) || undefined,
-                    originalPrice: parseFloat(prodOriginalPrice.value) || undefined,
-                    commission_percent: parseInt(prodCommission.value) || 10,
-                    stock: parseInt(prodStock.value) || 10,
-                    return_policy: prodReturnPolicy.value.trim() || 'Free return within 7 days',
-                    is_official_store: prodOfficial.checked,
-                    is_non_returnable: prodNonReturn.checked,
-                    image: prodImage.value.trim() || 'https://placehold.co/400x400/03ac0e/white?text=Product',
-                    images: imagesArray,
-                    description: prodDescription.value.trim(),
-                    affiliate_link: prodAffiliateLink.value.trim() || undefined,
-                    category: prodCategory.value,
-                    rating: parseFloat(prodRating.value) || 4.5,
-                    sold: parseInt(prodSold.value) || 0,
-                    badgeImage: prodBadgeImage.value.trim() || '',
-                    badgeText: prodBadgeText.value.trim() || '',
-                    seller_id: sellerId
-                };
-                if (currentProductId) {
-                    const { error } = await supabase.from('products').update(productData).eq('id', currentProductId);
-                    if (error) alert('Update error: ' + error.message);
-                } else {
-                    const newId = 'prod_' + Date.now() + Math.random().toString(36).substr(2, 4);
-                    const { error } = await supabase.from('products').insert([{ id: newId, ...productData }]);
-                    if (error) alert('Insert error: ' + error.message);
-                }
-                productEditModal.style.display = 'none';
-            });
-            productModalCancel.addEventListener('click', () => productEditModal.style.display = 'none');
-
-            searchInput.addEventListener('input', (e) => {
+            document.getElementById('searchInput')?.addEventListener('input', (e) => {
                 if (searchTimeout) clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => {
                     searchTerm = e.target.value;
@@ -2822,10 +3128,10 @@
                 }, 300);
             });
 
-            saveSettingsBtn.addEventListener('click', async () => {
-                const newWa = waNumberInput.value.trim();
-                const newFee = deliveryFeeInput.value.trim();
-                const newStations = pickupStationsInput.value.trim();
+            document.getElementById('saveSettingsBtn')?.addEventListener('click', async () => {
+                const newWa = document.getElementById('waNumberInput').value.trim();
+                const newFee = document.getElementById('deliveryFeeInput').value.trim();
+                const newStations = document.getElementById('pickupStationsInput').value.trim();
                 if (!newWa || !newFee || !newStations) return alert('All fields required');
                 await supabase.from('settings').upsert([
                     { key: 'wa_number', value: newWa },
@@ -2835,39 +3141,45 @@
                 settings.wa_number = newWa;
                 settings.delivery_fee = newFee;
                 settings.pickup_stations = newStations;
-                deliveryFeeDisplay.innerText = newFee;
+                document.getElementById('deliveryFeeDisplay').innerText = newFee;
                 alert('Settings updated');
             });
 
-            function openNotifModal() {
+            document.getElementById('notifIcon')?.addEventListener('click', () => {
                 renderNotifications();
-                notifModal.style.display = 'flex';
-            }
-            closeNotifBtn.addEventListener('click', () => notifModal.style.display = 'none');
+                document.getElementById('notifModal').style.display = 'flex';
+            });
+            document.getElementById('closeNotifBtn')?.addEventListener('click', () => { document.getElementById('notifModal').style.display = 'none'; });
 
+            // Auth
             function openAuthModal() {
-                authModal.style.display = 'flex';
-                authModalTitle.innerText = 'Login';
-                authLoginBtn.innerText = 'Login';
+                const authModal = document.getElementById('authModal');
+                if (authModal) {
+                    authModal.style.display = 'flex';
+                    document.getElementById('authModalTitle').innerText = 'Login';
+                    document.getElementById('authLoginBtn').innerText = 'Login';
+                }
             }
 
-            authCancel.addEventListener('click', () => authModal.style.display = 'none');
-            showSignup.addEventListener('click', (e) => {
+            document.getElementById('authCancel')?.addEventListener('click', () => { document.getElementById('authModal').style.display = 'none'; });
+            document.getElementById('showSignup')?.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (authModalTitle.innerText === 'Login') {
-                    authModalTitle.innerText = 'Sign Up';
-                    authLoginBtn.innerText = 'Sign Up';
+                const title = document.getElementById('authModalTitle');
+                const btn = document.getElementById('authLoginBtn');
+                if (title.innerText === 'Login') {
+                    title.innerText = 'Sign Up';
+                    btn.innerText = 'Sign Up';
                 } else {
-                    authModalTitle.innerText = 'Login';
-                    authLoginBtn.innerText = 'Login';
+                    title.innerText = 'Login';
+                    btn.innerText = 'Login';
                 }
             });
 
-            authLoginBtn.addEventListener('click', async () => {
-                const email = authEmail.value.trim();
-                const password = authPassword.value.trim();
+            document.getElementById('authLoginBtn')?.addEventListener('click', async () => {
+                const email = document.getElementById('authEmail').value.trim();
+                const password = document.getElementById('authPassword').value.trim();
                 if (!email || !password) return alert('Email and password required');
-                if (authModalTitle.innerText === 'Login') {
+                if (document.getElementById('authModalTitle').innerText === 'Login') {
                     await signIn(email, password);
                 } else {
                     await signUp(email, password);
@@ -2879,17 +3191,22 @@
                     openAuthModal();
                     return;
                 }
-                profileEmail.innerText = currentUser.email;
-                profileRole.innerText = currentUserProfile?.role || 'customer';
+                document.getElementById('profileEmail').innerText = currentUser.email;
+                document.getElementById('profileRole').innerText = currentUserProfile?.role || 'customer';
                 
-                sellerRequestSection.innerHTML = '';
-                if (currentUserProfile?.role === 'customer' && !currentUserProfile.seller_status) {
-                    sellerRequestSection.innerHTML = '<button class="btn-save" id="applySellerBtn" style="width:100%; margin:10px 0;">Become a Seller</button>';
-                    document.getElementById('applySellerBtn')?.addEventListener('click', openSellerApplyModal);
-                } else if (currentUserProfile?.seller_status === 'pending') {
-                    sellerRequestSection.innerHTML = '<p style="color:orange;">Seller application pending approval.</p>';
-                } else if (currentUserProfile?.seller_status === 'rejected') {
-                    sellerRequestSection.innerHTML = '<p style="color:red;">Seller application rejected. Contact admin.</p>';
+                const reqSection = document.getElementById('sellerRequestSection');
+                if (reqSection) {
+                    reqSection.innerHTML = '';
+                    if (currentUserProfile?.role === 'customer' && !currentUserProfile.seller_status) {
+                        reqSection.innerHTML = '<button class="btn-save" id="applySellerBtn" style="width:100%; margin:10px 0;">Become a Seller</button>';
+                        document.getElementById('applySellerBtn')?.addEventListener('click', () => {
+                            document.getElementById('sellerApplyModal').style.display = 'flex';
+                        });
+                    } else if (currentUserProfile?.seller_status === 'pending') {
+                        reqSection.innerHTML = '<p style="color:orange;">Seller application pending approval.</p>';
+                    } else if (currentUserProfile?.seller_status === 'rejected') {
+                        reqSection.innerHTML = '<p style="color:red;">Seller application rejected. Contact admin.</p>';
+                    }
                 }
 
                 await renderUserOrders();
@@ -2897,21 +3214,21 @@
 
                 if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
                     await renderSellerDashboard(false);
-                    sellerDashboard.style.display = 'block';
+                    document.getElementById('sellerDashboard').style.display = 'block';
                 } else {
-                    sellerDashboard.style.display = 'none';
+                    document.getElementById('sellerDashboard').style.display = 'none';
                 }
 
-                profileModal.style.display = 'flex';
+                document.getElementById('profileModal').style.display = 'flex';
             }
 
-            logoutBtn.addEventListener('click', signOut);
-            closeProfileBtn.addEventListener('click', () => profileModal.style.display = 'none');
+            document.getElementById('logoutBtn')?.addEventListener('click', signOut);
+            document.getElementById('closeProfileBtn')?.addEventListener('click', () => { document.getElementById('profileModal').style.display = 'none'; });
 
-            navItems.forEach(item => {
+            document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const nav = item.dataset.nav;
-                    navItems.forEach(n => n.classList.remove('active'));
+                    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                     item.classList.add('active');
 
                     switch (nav) {
@@ -2919,7 +3236,7 @@
                             activeCategory = null;
                             activePromo = false;
                             searchTerm = '';
-                            searchInput.value = '';
+                            document.getElementById('searchInput').value = '';
                             renderCategories();
                             renderProducts();
                             break;
@@ -2931,15 +3248,17 @@
                             break;
                         case 'sell':
                             if (currentUserProfile?.role === 'seller' && currentUserProfile.seller_status === 'approved') {
-                                openSellerDashboard();
+                                renderSellerDashboard(true);
+                                document.getElementById('sellerDashboardModal').style.display = 'flex';
                             }
                             break;
                         case 'orders':
                             renderCartModal();
-                            cartModal.style.display = 'flex';
+                            document.getElementById('cartModal').style.display = 'flex';
                             break;
                         case 'notif':
-                            openNotifModal();
+                            renderNotifications();
+                            document.getElementById('notifModal').style.display = 'flex';
                             break;
                         case 'me':
                             openProfileModal();
@@ -2948,19 +3267,64 @@
                 });
             });
 
-            // Also viewed click handler
-            alsoViewedList.addEventListener('click', (e) => {
+            document.getElementById('alsoViewedList')?.addEventListener('click', (e) => {
                 const item = e.target.closest('.also-item');
                 if (!item) return;
                 const prodId = item.dataset.productId;
                 openProductDetail(prodId);
             });
 
-            // Initial load
+            document.getElementById('closeSellerModal')?.addEventListener('click', () => { document.getElementById('sellerDashboardModal').style.display = 'none'; });
+
+            document.getElementById('sellerApplyConfirm')?.addEventListener('click', async () => {
+                if (!currentUser) return;
+                const { error } = await supabase
+                    .from('profiles')
+                    .update({ seller_status: 'pending' })
+                    .eq('user_id', currentUser.id);
+                if (error) {
+                    alert('Error: ' + error.message);
+                } else {
+                    alert('Application submitted! Admin will review.');
+                    document.getElementById('sellerApplyModal').style.display = 'none';
+                    currentUserProfile.seller_status = 'pending';
+                    refreshUI();
+                }
+            });
+            document.getElementById('sellerApplyCancel')?.addEventListener('click', () => { document.getElementById('sellerApplyModal').style.display = 'none'; });
+
+            // Close detail modal
+            document.getElementById('closeDetailBtn')?.addEventListener('click', () => {
+                document.getElementById('productDetailModal').style.display = 'none';
+            });
+            // Also close when clicking outside modal (optional)
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+
+            // Add category and banner buttons
+            document.getElementById('addCategoryBtn')?.addEventListener('click', () => {
+                currentCategoryId = null;
+                document.getElementById('catNameInput').value = '';
+                document.getElementById('catIconInput').value = '';
+                document.getElementById('catImageInput').value = '';
+                document.getElementById('categoryEditModal').style.display = 'flex';
+            });
+            document.getElementById('addBannerBtn')?.addEventListener('click', () => {
+                currentBannerId = null;
+                document.getElementById('bannerImageInput').value = '';
+                document.getElementById('bannerLinkInput').value = '';
+                document.getElementById('bannerTitleInput').value = '';
+                document.getElementById('bannerEditModal').style.display = 'flex';
+            });
+
+            // ========== INITIAL LOAD ==========
             await loadAllData();
             setupSubscriptions();
             updateCartCount();
         })();
     </script>
 </body>
-            </html>
+</html>
